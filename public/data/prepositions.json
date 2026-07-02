@@ -1,0 +1,14 @@
+{
+  "in": {
+    "rule": "較長時間 / 較大範圍",
+    "examples": ["in 2026", "in August", "in winter", "in the morning", "in the future", "in Taiwan", "in the room", "in the building", "in the kitchen"]
+  },
+  "on": {
+    "rule": "特定日期 / 某一天 / 表面",
+    "examples": ["on Monday", "on May 6th", "on my birthday", "on Friday evening", "on the table", "on the wall", "on the floor", "on the page", "on the desk"]
+  },
+  "at": {
+    "rule": "精確時間點 / 特定地點",
+    "examples": ["at 6 o'clock", "at noon", "at night", "at lunchtime", "at the moment", "at home", "at school", "at the station", "at the door"]
+  }
+}
