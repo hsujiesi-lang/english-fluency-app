@@ -110,6 +110,25 @@ export function generatePassage(topicHint = '') {
   return callClaude(PASSAGE_SYSTEM, `Generate one passage.${topicHint ? ' Topic hint: ' + topicHint : ''}`)
 }
 
+// ---- Writing module: paraphrase judging ----
+const PARAPHRASE_SYSTEM = `You judge a Mandarin-speaking university student's paraphrase attempt.
+Check: (1) did they perform the required transformation (e.g. passive voice, nominalisation, academic register)?
+(2) is the meaning preserved (no semantic drift)? (3) is the grammar correct — especially verb form after
+modals/"to", articles & plurals, and part-of-speech use?
+Explanations in Traditional Chinese; example sentences in English.
+Return pure JSON (no markdown fences):
+{ "ok": true/false, "transformationDone": true/false, "meaningPreserved": true/false,
+  "feedback": "繁中回饋（指出具體哪裡好/哪裡要改）", "betterVersion": "an improved version (only if not ok)",
+  "grammarErrors": [{"span": "erroneous text", "category": "verbForm|article|plural|posError", "correction": "fixed text"}] }`
+
+export function judgeParaphrase(instruction, source, attempt) {
+  return callClaude(
+    PARAPHRASE_SYSTEM,
+    `Task: ${instruction}\nOriginal sentence: ${source}\nStudent's paraphrase: ${attempt}`,
+    800
+  )
+}
+
 // ---- Module 4: sentence check for vocab practice ----
 const SENTENCE_SYSTEM = `You check one learner sentence using a target word. Verify: word used with correct
 part of speech and meaning; also flag the three personal error families (verb form after modal/to,

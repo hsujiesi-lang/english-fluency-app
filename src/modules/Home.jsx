@@ -62,6 +62,9 @@ export default function Home({ nav, phrases }) {
       <div className="card" onClick={() => nav('speaking')} style={{ cursor: 'pointer' }}>
         <h3>🎙️ 口說流暢度</h3><p>限時口說＋強制重講 — 練的是「說完整」</p>
       </div>
+      <div className="card" onClick={() => nav('writing')} style={{ cursor: 'pointer' }}>
+        <h3>✍️ 寫作練習</h3><p>Paraphrase 改寫 / 冠詞區分 / 詞性使用 — 動手寫</p>
+      </div>
       <div className="card" onClick={() => nav('hunter')} style={{ cursor: 'pointer' }}>
         <h3>🎯 錯誤獵人</h3><p>動詞形式 / 冠詞單複數 / 詞性 — 你的三大弱點</p>
       </div>

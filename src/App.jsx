@@ -3,6 +3,7 @@ import Home from './modules/Home.jsx'
 import DailyPhrases from './modules/DailyPhrases.jsx'
 import Speaking from './modules/Speaking.jsx'
 import ErrorHunter from './modules/ErrorHunter.jsx'
+import Writing from './modules/Writing.jsx'
 import ErrorBank from './modules/ErrorBank.jsx'
 import Vocab from './modules/Vocab.jsx'
 import Settings from './modules/Settings.jsx'
@@ -11,6 +12,7 @@ const NAV = [
   { id: 'home', label: '首頁', icon: '🏠' },
   { id: 'phrases', label: '短句', icon: '💬' },
   { id: 'speaking', label: '口說', icon: '🎙️' },
+  { id: 'writing', label: '寫作', icon: '✍️' },
   { id: 'hunter', label: '獵人', icon: '🎯' },
   { id: 'me', label: '我的', icon: '📚' },
 ]
@@ -39,6 +41,7 @@ export default function App() {
       {screen === 'home' && <Home nav={nav} phrases={phrases} />}
       {screen === 'phrases' && <DailyPhrases nav={nav} phrases={phrases} params={params} />}
       {screen === 'speaking' && <Speaking nav={nav} />}
+      {screen === 'writing' && <Writing nav={nav} />}
       {screen === 'hunter' && <ErrorHunter nav={nav} />}
       {screen === 'me' && <Me nav={nav} params={params} />}
       <nav className="bottom-nav">
