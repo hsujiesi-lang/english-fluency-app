@@ -114,10 +114,23 @@ export default function Picture({ nav }) {
 }
 
 function ImageView({ imgs }) {
+  // 主來源掛掉時自動換備援（loremflickr → picsum → 提示換一張）
+  const onErr = (e) => {
+    const img = e.target
+    const tries = Number(img.dataset.tries || 0)
+    if (tries === 0) {
+      img.dataset.tries = 1
+      img.src = images.fallbackPhotoUrl()
+    } else {
+      img.style.display = 'none'
+      img.insertAdjacentHTML('afterend',
+        '<div style="flex:1;padding:28px 12px;text-align:center;background:#fee2e2;border-radius:12px;font-size:14px;color:#dc2626">圖片載入失敗 — 請檢查網路後按「換一張圖」</div>')
+    }
+  }
   return (
     <div style={{ display: 'flex', gap: 8 }}>
       {imgs.map((src, i) => (
-        <img key={i} src={src} alt={'圖 ' + (i + 1)}
+        <img key={src} src={src} alt={'圖 ' + (i + 1)} onError={onErr}
           style={{ width: imgs.length === 2 ? '50%' : '100%', borderRadius: 12, background: '#e5e7eb', minHeight: 120, objectFit: 'cover' }} />
       ))}
     </div>

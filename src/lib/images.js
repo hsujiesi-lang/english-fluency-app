@@ -4,7 +4,21 @@
 // - Local SVG charts: draw onto canvas → PNG data URL
 // - User uploads: FileReader → data URL
 
+// 20 種情境（校園、廚房、街景…）— loremflickr 依關鍵字給真實照片。
+// picsum.photos 在使用者的網路連不上（實測 timeout），所以 loremflickr 為主、picsum 為備援。
+const SCENES = [
+  'campus', 'kitchen', 'street', 'cafe', 'park', 'market', 'library', 'train',
+  'dog', 'cat', 'beach', 'city', 'melbourne', 'food', 'classroom',
+  'supermarket', 'bicycle', 'garden', 'airport', 'concert',
+]
+
 export function randomPhotoUrl() {
+  const scene = SCENES[Math.floor(Math.random() * SCENES.length)]
+  const lock = Math.floor(Math.random() * 100000)
+  return `https://loremflickr.com/800/600/${scene}?lock=${lock}`
+}
+
+export function fallbackPhotoUrl() {
   const seed = Math.random().toString(36).slice(2, 10)
   return `https://picsum.photos/seed/${seed}/800/600`
 }
