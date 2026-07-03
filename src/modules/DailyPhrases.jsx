@@ -21,6 +21,7 @@ export default function DailyPhrases({ nav, phrases, params }) {
   if (mode === 'listen') return <ListenRead phrases={phrases} onBack={() => setMode(null)} />
   if (mode === 'translate') return <Translate phrases={phrases} onBack={() => setMode(null)} />
   if (mode === 'daily') return <MorningEvening onBack={() => setMode(null)} />
+  if (mode === 'browse') return <BrowseAll phrases={phrases} onBack={() => setMode(null)} />
 
   const dueCount = banks.duePhraseIds().length
   return (
@@ -37,8 +38,64 @@ export default function DailyPhrases({ nav, phrases, params }) {
         <h3>🌅 早安 / 晚安法</h3>
         <p>白天練 I'm going to…，晚上練過去式</p>
       </div>
+      <div className="card" onClick={() => setMode('browse')} style={{ cursor: 'pointer' }}>
+        <h3>📖 短句總覽</h3>
+        <p>120 句依主題分組全列出，可搜尋、點喇叭聽發音</p>
+      </div>
       {!speech.sttSupported() && (
         <div className="notice">⚠️ 這個瀏覽器不支援語音辨識（iOS Safari 常見）。語音題會改用打字作答；聽讀模式仍可正常使用。</div>
+      )}
+    </Screen>
+  )
+}
+
+// ---- 短句總覽（分主題全列） ----
+
+const SECTION_ICON = { routine: '🛒', home: '🧹', study: '🎓', social: '🎉' }
+
+function BrowseAll({ phrases, onBack }) {
+  const [filter, setFilter] = useState('all')
+  const [q, setQ] = useState('')
+
+  const query = q.trim().toLowerCase()
+  const match = (p) =>
+    (filter === 'all' || p.section === filter) &&
+    (!query || p.zh.toLowerCase().includes(query) || p.en.toLowerCase().includes(query))
+
+  const sections = filter === 'all' ? Object.keys(SECTIONS) : [filter]
+
+  return (
+    <Screen title="短句總覽" onBack={onBack}>
+      <div className="tabs">
+        <button className={filter === 'all' ? 'active' : ''} onClick={() => setFilter('all')}>全部</button>
+        {Object.entries(SECTIONS).map(([k, v]) => (
+          <button key={k} className={filter === k ? 'active' : ''} onClick={() => setFilter(k)}>{v}</button>
+        ))}
+      </div>
+      <input className="input" value={q} onChange={(e) => setQ(e.target.value)}
+        placeholder="🔍 搜尋中文或英文…" style={{ marginBottom: 12 }} />
+      {sections.map((sec) => {
+        const list = phrases.filter((p) => p.section === sec && match(p))
+        if (!list.length) return null
+        return (
+          <div key={sec}>
+            <h3 style={{ margin: '16px 4px 8px', fontSize: 16 }}>
+              {SECTION_ICON[sec]} {SECTIONS[sec]}（{list.length} 句）
+            </h3>
+            {list.map((p) => (
+              <div className="list-item" key={p.id} style={{ padding: '10px 12px' }}>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 14, color: 'var(--muted)' }}>{p.id}. {p.zh}</div>
+                  <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--brand)' }}>{p.en}</div>
+                </div>
+                <button className="btn ghost small" onClick={() => speech.speak(p.en.split('/')[0])}>🔊</button>
+              </div>
+            ))}
+          </div>
+        )
+      })}
+      {phrases.filter(match).length === 0 && (
+        <div className="card"><p>找不到符合「{q}」的短句</p></div>
       )}
     </Screen>
   )
