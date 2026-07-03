@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { Screen, Spinner } from '../lib/ui.jsx'
-import { ARTICLE_RULES, QUANTIFIER_NOTES, USAGE_NOTES, PREP_RULES, PV_REMINDERS } from '../data/grammarNotes.js'
+import { ARTICLE_RULES, QUANTIFIER_NOTES, USAGE_NOTES, PREP_CHEAT, PV_REMINDERS } from '../data/grammarNotes.js'
 
 const BADGE_STYLE = {
   '×': { background: 'var(--bad-soft)', color: 'var(--bad)' },
@@ -23,7 +23,7 @@ export default function GrammarNotes({ onBack }) {
         <button className={tab === 'pv' ? 'active' : ''} onClick={() => setTab('pv')}>Phrasal V.</button>
       </div>
       {tab === 'articles' && <RuleSections sections={ARTICLE_RULES} />}
-      {tab === 'prep' && <RuleSections sections={PREP_RULES} />}
+      {tab === 'prep' && <PrepCheatSheet />}
       {tab === 'quant' && <RuleSections sections={QUANTIFIER_NOTES} />}
       {tab === 'usage' && <RuleSections sections={USAGE_NOTES} />}
       {tab === 'pv' && <PhrasalTable />}
@@ -59,6 +59,40 @@ function RuleSections({ sections }) {
       )}
     </div>
   ))
+}
+
+// IN/ON/AT 三欄圖解懶人包
+function PrepCheatSheet() {
+  return (
+    <>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
+        {PREP_CHEAT.map((col) => (
+          <div key={col.key} style={{ background: col.soft, borderRadius: 14, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ background: col.color, color: 'white', textAlign: 'center', fontWeight: 800, fontSize: 20, padding: '8px 0' }}>
+              {col.key}
+            </div>
+            <div style={{ padding: '8px 8px 4px', flex: 1 }}>
+              {col.items.map((it) => (
+                <div key={it.en} style={{ marginBottom: 8 }}>
+                  <div style={{ fontSize: 13, fontWeight: 700 }}>
+                    <span style={{ color: col.color }}>{it.en.split(' ')[0]}</span>{' '}
+                    {it.en.split(' ').slice(1).join(' ')}
+                  </div>
+                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>（{it.zh}）</div>
+                </div>
+              ))}
+            </div>
+            <div style={{ borderTop: `2px solid ${col.color}`, margin: '0 8px', padding: '6px 0 8px', fontSize: 11, fontWeight: 700, color: col.color, textAlign: 'center' }}>
+              {col.rule}
+            </div>
+          </div>
+        ))}
+      </div>
+      <p style={{ fontSize: 13, color: 'var(--muted)', textAlign: 'center', marginTop: 10 }}>
+        「寫作 → 📍 介係詞」的題目就是從這張表出的
+      </p>
+    </>
+  )
 }
 
 function PhrasalTable() {

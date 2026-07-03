@@ -138,29 +138,57 @@ export const USAGE_NOTES = [
   },
 ]
 
-export const PREP_RULES = [
+// IN/ON/AT 圖解懶人包（三欄對照，含中文）— 出題（notionSeed 的 PREP_CLOZE）完全對應這張表
+export const PREP_CHEAT = [
   {
-    title: 'IN — 較長時間 / 較大範圍',
-    badge: 'in',
-    rows: [
-      ['時間', 'in 2026 / in August / in winter / in the morning / in the future'],
-      ['空間', 'in Taiwan / in the room / in the building / in the kitchen'],
+    key: 'IN',
+    color: '#d5638f',
+    soft: '#fbeef3',
+    rule: '較長時間 / 較大範圍',
+    items: [
+      { en: 'in 2026', zh: '在 2026 年' },
+      { en: 'in August', zh: '在 8 月' },
+      { en: 'in winter', zh: '在冬天' },
+      { en: 'in the morning', zh: '在早上' },
+      { en: 'in the future', zh: '在未來' },
+      { en: 'in Taiwan', zh: '在台灣' },
+      { en: 'in the room', zh: '在房間裡' },
+      { en: 'in the building', zh: '在建築物裡' },
+      { en: 'in the kitchen', zh: '在廚房裡' },
     ],
   },
   {
-    title: 'ON — 特定日期 / 某一天 / 表面',
-    badge: 'on',
-    rows: [
-      ['時間', 'on Monday / on May 6th / on my birthday / on Friday evening'],
-      ['表面', 'on the table / on the wall / on the floor / on the page / on the desk'],
+    key: 'ON',
+    color: '#dd8a4e',
+    soft: '#fdf3ea',
+    rule: '特定日期 / 某一天 / 表面',
+    items: [
+      { en: 'on Monday', zh: '在星期一' },
+      { en: 'on May 6th', zh: '在 5 月 6 日' },
+      { en: 'on my birthday', zh: '在我的生日' },
+      { en: 'on Friday evening', zh: '在星期五晚上' },
+      { en: 'on the table', zh: '在桌子上' },
+      { en: 'on the wall', zh: '在牆上' },
+      { en: 'on the floor', zh: '在地板上' },
+      { en: 'on the page', zh: '在頁面上' },
+      { en: 'on the desk', zh: '在書桌上' },
     ],
   },
   {
-    title: 'AT — 精確時間點 / 特定地點',
-    badge: 'at',
-    rows: [
-      ['時間', "at 6 o'clock / at noon / at night / at lunchtime / at the moment"],
-      ['地點', 'at home / at school / at the station / at the door'],
+    key: 'AT',
+    color: '#4fa3b8',
+    soft: '#edf6f8',
+    rule: '精確時間點 / 特定地點',
+    items: [
+      { en: "at 6 o'clock", zh: '在六點鐘' },
+      { en: 'at noon', zh: '在正午' },
+      { en: 'at night', zh: '在夜晚' },
+      { en: 'at lunchtime', zh: '在午餐時間' },
+      { en: 'at the moment', zh: '在此刻' },
+      { en: 'at home', zh: '在家' },
+      { en: 'at school', zh: '在學校' },
+      { en: 'at the station', zh: '在車站' },
+      { en: 'at the door', zh: '在門口' },
     ],
   },
 ]

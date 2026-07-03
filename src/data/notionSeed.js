@@ -99,6 +99,8 @@ export const PREP_CLOZE = [
   { text: 'My family lives ___ Taiwan.', blanks: [{ answer: ['in'], why: 'in + 國家/城市（較大範圍）' }] },
   { text: 'The tutor is waiting ___ the room.', blanks: [{ answer: ['in'], why: 'in + 空間內部' }] },
   { text: 'I left my keys ___ the kitchen.', blanks: [{ answer: ['in'], why: 'in + 空間內部' }] },
+  { text: 'The study rooms ___ the building are all booked.', blanks: [{ answer: ['in'], why: 'in the building（在建築物裡）' }] },
+  { text: 'My laptop is ___ the desk next to the window.', blanks: [{ answer: ['on'], why: 'on the desk（表面）' }] },
   { text: 'My first class is ___ Monday.', blanks: [{ answer: ['on'], why: 'on + 星期幾（某一天）' }] },
   { text: 'The essay is due ___ May 6th.', blanks: [{ answer: ['on'], why: 'on + 特定日期' }] },
   { text: 'We had a big dinner ___ my birthday.', blanks: [{ answer: ['on'], why: 'on + 特定的一天（my birthday）' }] },
