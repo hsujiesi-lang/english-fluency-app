@@ -89,6 +89,35 @@ export const USAGE_CLOZE = [
   { text: 'We chat ___ about our lives in Melbourne.', blanks: [{ answer: ['every day'], why: 'every day（分開寫）當副詞 = 每天' }] },
 ]
 
+// ---- 介係詞 IN/ON/AT（規格書附錄 B 題庫，放進完整句子情境）----
+export const PREP_CLOZE = [
+  { text: 'My exchange program starts ___ 2026.', blanks: [{ answer: ['in'], why: 'in + 年份（較長時間）' }] },
+  { text: 'Semester two begins ___ August.', blanks: [{ answer: ['in'], why: 'in + 月份' }] },
+  { text: 'It gets dark early ___ winter in Melbourne.', blanks: [{ answer: ['in'], why: 'in + 季節' }] },
+  { text: 'I study best ___ the morning.', blanks: [{ answer: ['in'], why: 'in the morning / afternoon / evening' }] },
+  { text: '___ the future, I want to work in psychology.', blanks: [{ answer: ['in'], why: 'in the future（較長時間）' }] },
+  { text: 'My family lives ___ Taiwan.', blanks: [{ answer: ['in'], why: 'in + 國家/城市（較大範圍）' }] },
+  { text: 'The tutor is waiting ___ the room.', blanks: [{ answer: ['in'], why: 'in + 空間內部' }] },
+  { text: 'I left my keys ___ the kitchen.', blanks: [{ answer: ['in'], why: 'in + 空間內部' }] },
+  { text: 'My first class is ___ Monday.', blanks: [{ answer: ['on'], why: 'on + 星期幾（某一天）' }] },
+  { text: 'The essay is due ___ May 6th.', blanks: [{ answer: ['on'], why: 'on + 特定日期' }] },
+  { text: 'We had a big dinner ___ my birthday.', blanks: [{ answer: ['on'], why: 'on + 特定的一天（my birthday）' }] },
+  { text: "Let's catch up ___ Friday evening.", blanks: [{ answer: ['on'], why: 'on + 星期幾＋時段（Friday evening）' }] },
+  { text: 'Your coffee is ___ the table.', blanks: [{ answer: ['on'], why: 'on + 表面' }] },
+  { text: "There's a poster ___ the wall.", blanks: [{ answer: ['on'], why: 'on + 表面（牆面）' }] },
+  { text: "Don't leave your bag ___ the floor.", blanks: [{ answer: ['on'], why: 'on + 表面（地板）' }] },
+  { text: 'The answer is ___ page 12.', blanks: [{ answer: ['on'], why: 'on the page' }] },
+  { text: 'The lecture starts ___ 6 o\'clock.', blanks: [{ answer: ['at'], why: 'at + 精確時間點' }] },
+  { text: "Let's meet ___ noon at the library.", blanks: [{ answer: ['at'], why: 'at noon / at night / at lunchtime' }] },
+  { text: "I can't sleep well ___ night.", blanks: [{ answer: ['at'], why: 'at night（固定用法）' }] },
+  { text: 'The café is busiest ___ lunchtime.', blanks: [{ answer: ['at'], why: 'at lunchtime' }] },
+  { text: "She's not available ___ the moment.", blanks: [{ answer: ['at'], why: 'at the moment（此刻）' }] },
+  { text: "I'm staying ___ home today.", blanks: [{ answer: ['at'], why: 'at home（特定地點）' }] },
+  { text: 'I forgot my laptop charger ___ school.', blanks: [{ answer: ['at'], why: 'at school（妳的筆記：at my school，不是 in）' }] },
+  { text: "I'll wait for you ___ the station.", blanks: [{ answer: ['at'], why: 'at + 特定地點（車站）' }] },
+  { text: 'Someone is knocking ___ the door.', blanks: [{ answer: ['at'], why: 'at the door' }] },
+]
+
 // ---- 錯誤獵人加強判斷題（她的真實錯誤模式）----
 export const JUDGE_EXTRA = [
   { kind: 'judge', sentence: 'My apartment locates in the CBD.', correct: false, fixed: 'My apartment is located in the CBD.', rule: 'be located：不能說 locates（妳 Notion 裡的真實錯誤）' },

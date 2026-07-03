@@ -4,7 +4,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Screen, Spinner, pick, shuffle, onDoubleEnter } from '../lib/ui.jsx'
 import { ARTICLE_CLOZE, POS_CLOZE, PARAPHRASE_TASKS } from '../data/writingSeed.js'
-import { ARTICLE_EXTRA, USAGE_CLOZE, PV_NOTES } from '../data/notionSeed.js'
+import { ARTICLE_EXTRA, USAGE_CLOZE, PREP_CLOZE, PV_NOTES } from '../data/notionSeed.js'
 import GrammarNotes from './GrammarNotes.jsx'
 import * as banks from '../lib/banks.js'
 import * as claude from '../lib/claude.js'
@@ -27,6 +27,13 @@ export default function Writing({ nav }) {
       <ClozeSession key="pos" title="詞性使用" onBack={() => setSection(null)}
         intro="把字根改成句子裡該用的正確詞形"
         pool={POS_CLOZE} mode="pos" />
+    )
+  }
+  if (section === 'prep') {
+    return (
+      <ClozeSession key="prep" title="介係詞 IN / ON / AT" onBack={() => setSection(null)}
+        intro="自己打 in / on / at，不給選項"
+        pool={PREP_CLOZE} mode="prep" />
     )
   }
   if (section === 'usage') {
@@ -59,6 +66,10 @@ export default function Writing({ nav }) {
       <div className="card" onClick={() => setSection('pos')} style={{ cursor: 'pointer' }}>
         <h3>🔤 詞性使用</h3>
         <p>給字根，寫出句子裡該用的正確詞形</p>
+      </div>
+      <div className="card" onClick={() => setSection('prep')} style={{ cursor: 'pointer' }}>
+        <h3>📍 介係詞 IN / ON / AT</h3>
+        <p>時間與地點的三大介係詞 — 25 題情境挖空</p>
       </div>
       <div className="card" onClick={() => setSection('usage')} style={{ cursor: 'pointer' }}>
         <h3>⚖️ 用法辨析</h3>
@@ -114,7 +125,7 @@ function ClozeSession({ title, intro, pool, mode, onBack }) {
         return out
       }
       banks.addError({
-        type: mode === 'article' ? 'article' : 'posError',
+        type: mode === 'article' ? 'article' : mode === 'prep' ? 'prep' : 'posError',
         originalText: fillSentence(blanks.map((bb, idx) => (idx === k ? (norm(values[k]) || '？') : bb.answer[0]))),
         correction: fillSentence(blanks.map((bb) => bb.answer[0])),
         sourceModule: 'writing',
@@ -159,7 +170,7 @@ function ClozeSession({ title, intro, pool, mode, onBack }) {
                   onKeyDown={(e) => { if (e.key === 'Enter' && !blanks.some((_, j) => !(values[j] || '').trim())) check() }}
                   autoCapitalize="off" autoCorrect="off"
                   style={{
-                    width: mode === 'article' ? 64 : 150,
+                    width: mode === 'article' || mode === 'prep' ? 64 : 150,
                     margin: '0 4px', padding: '6px 8px', fontSize: 17, fontFamily: 'inherit',
                     border: '2px solid ' + (checked ? (checked[k] ? 'var(--good)' : 'var(--bad)') : 'var(--brand)'),
                     borderRadius: 8, textAlign: 'center',

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { Screen, Spinner } from '../lib/ui.jsx'
-import { ARTICLE_RULES, QUANTIFIER_NOTES, USAGE_NOTES, PV_REMINDERS } from '../data/grammarNotes.js'
+import { ARTICLE_RULES, QUANTIFIER_NOTES, USAGE_NOTES, PREP_RULES, PV_REMINDERS } from '../data/grammarNotes.js'
 
 const BADGE_STYLE = {
   '×': { background: 'var(--bad-soft)', color: 'var(--bad)' },
@@ -17,11 +17,13 @@ export default function GrammarNotes({ onBack }) {
     <Screen title="文法筆記" sub="妳的 Notion 整理，隨時查（出題也是照這些規則）" onBack={onBack}>
       <div className="tabs">
         <button className={tab === 'articles' ? 'active' : ''} onClick={() => setTab('articles')}>冠詞</button>
+        <button className={tab === 'prep' ? 'active' : ''} onClick={() => setTab('prep')}>介係詞</button>
         <button className={tab === 'quant' ? 'active' : ''} onClick={() => setTab('quant')}>量詞</button>
         <button className={tab === 'usage' ? 'active' : ''} onClick={() => setTab('usage')}>用法</button>
         <button className={tab === 'pv' ? 'active' : ''} onClick={() => setTab('pv')}>Phrasal V.</button>
       </div>
       {tab === 'articles' && <RuleSections sections={ARTICLE_RULES} />}
+      {tab === 'prep' && <RuleSections sections={PREP_RULES} />}
       {tab === 'quant' && <RuleSections sections={QUANTIFIER_NOTES} />}
       {tab === 'usage' && <RuleSections sections={USAGE_NOTES} />}
       {tab === 'pv' && <PhrasalTable />}

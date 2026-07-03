@@ -138,6 +138,33 @@ export const USAGE_NOTES = [
   },
 ]
 
+export const PREP_RULES = [
+  {
+    title: 'IN — 較長時間 / 較大範圍',
+    badge: 'in',
+    rows: [
+      ['時間', 'in 2026 / in August / in winter / in the morning / in the future'],
+      ['空間', 'in Taiwan / in the room / in the building / in the kitchen'],
+    ],
+  },
+  {
+    title: 'ON — 特定日期 / 某一天 / 表面',
+    badge: 'on',
+    rows: [
+      ['時間', 'on Monday / on May 6th / on my birthday / on Friday evening'],
+      ['表面', 'on the table / on the wall / on the floor / on the page / on the desk'],
+    ],
+  },
+  {
+    title: 'AT — 精確時間點 / 特定地點',
+    badge: 'at',
+    rows: [
+      ['時間', "at 6 o'clock / at noon / at night / at lunchtime / at the moment"],
+      ['地點', 'at home / at school / at the station / at the door'],
+    ],
+  },
+]
+
 export const PV_REMINDERS = [
   ['catch up with', '「進度」或「敘舊」都可以，看受詞；＝落後之後追上'],
   ['keep up with', '持續跟上（≠ catch up with）'],

@@ -12,6 +12,7 @@ const TYPE_LABEL = {
   article: '冠詞',
   plural: '單複數',
   posError: '詞性誤用',
+  prep: '介係詞',
   fluency: '流暢度',
 }
 
