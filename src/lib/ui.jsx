@@ -68,6 +68,19 @@ export function Spinner({ label = '思考中…' }) {
   )
 }
 
+// Textarea helper: pressing Enter twice in a row (blank line) submits.
+// At the second Enter keydown, the value still ends with the first "\n".
+export function onDoubleEnter(submit) {
+  return (e) => {
+    if (e.key !== 'Enter' || e.shiftKey) return
+    const v = e.target.value
+    if (v.trim() && /\n\s*$/.test(v)) {
+      e.preventDefault()
+      submit()
+    }
+  }
+}
+
 export function shuffle(arr) {
   const a = [...arr]
   for (let i = a.length - 1; i > 0; i--) {

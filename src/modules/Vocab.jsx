@@ -1,7 +1,7 @@
 // 模組 4：單字庫 — 按詞性分類；spelling / meaning / usage 三種練法
 
 import React, { useState } from 'react'
-import { Screen, Spinner, shuffle } from '../lib/ui.jsx'
+import { Screen, Spinner, shuffle, onDoubleEnter } from '../lib/ui.jsx'
 import * as banks from '../lib/banks.js'
 import * as speech from '../lib/speech.js'
 import * as claude from '../lib/claude.js'
@@ -193,7 +193,8 @@ function Practice({ due, onDone, embedded }) {
             <p style={{ color: 'var(--muted)' }}>用「<b>{item.zhMeaning}</b>」對應的英文字造一個句子</p>
             {!result && (
               <>
-                <textarea className="input" rows={2} value={input} onChange={(e) => setInput(e.target.value)} placeholder="Write a sentence…" />
+                <textarea className="input" rows={2} value={input} onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={onDoubleEnter(submitMeaning)} placeholder="Write a sentence…（連按兩次 Enter 提交）" />
                 <div className="btn-row">
                   <button className="btn" onClick={submitMeaning} disabled={!input.trim() || checking}>
                     {checking ? '檢查中…' : '提交'}

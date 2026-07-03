@@ -2,7 +2,7 @@
 // 與「口說版」（只評流暢度 + 強制重講）。五句鷹架可在設定開關。Lv1-4 難度階梯。
 
 import React, { useEffect, useRef, useState } from 'react'
-import { Screen, TimerBar, useCountdown, Spinner } from '../lib/ui.jsx'
+import { Screen, TimerBar, useCountdown, Spinner, onDoubleEnter } from '../lib/ui.jsx'
 import * as images from '../lib/images.js'
 import * as speech from '../lib/speech.js'
 import * as claude from '../lib/claude.js'
@@ -218,7 +218,8 @@ function WritingRun({ level, imgs, onExit }) {
             <p style={{ color: 'var(--muted)', fontSize: 13 }}>剩 {Math.floor(left / 60)}:{String(left % 60).padStart(2, '0')}　{LEVELS[level].label}</p>
             <ScaffoldHints />
             <textarea className="input" rows={7} autoFocus value={text} onChange={(e) => setText(e.target.value)}
-              placeholder={level === 1 ? 'This picture shows…\nThere are…\n…' : 'Write here…'} />
+              onKeyDown={onDoubleEnter(submit)}
+              placeholder={(level === 1 ? 'This picture shows…\nThere are…\n…' : 'Write here…') + '\n（連按兩次 Enter 提交）'} />
             <div className="btn-row">
               <button className="btn" onClick={submit} disabled={!text.trim()}>提交批改</button>
             </div>

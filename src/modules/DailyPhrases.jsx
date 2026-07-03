@@ -1,7 +1,7 @@
 // 模組 5：每日短句（120 句）— 聽讀 / 中翻英 / 早安晚安法
 
 import React, { useEffect, useRef, useState } from 'react'
-import { Screen, TimerBar, useCountdown, Spinner, pick, shuffle } from '../lib/ui.jsx'
+import { Screen, TimerBar, useCountdown, Spinner, pick, shuffle, onDoubleEnter } from '../lib/ui.jsx'
 import * as speech from '../lib/speech.js'
 import * as store from '../lib/storage.js'
 import * as banks from '../lib/banks.js'
@@ -336,7 +336,8 @@ export function MorningEvening({ onBack, embedded }) {
             </button>
           )}
           <textarea className="input" rows={2} style={{ marginTop: 10 }} value={text}
-            onChange={(e) => setText(e.target.value)} placeholder={canSpeak ? '或直接輸入…' : '輸入你的答案…'} />
+            onChange={(e) => setText(e.target.value)} onKeyDown={onDoubleEnter(save)}
+            placeholder={(canSpeak ? '或直接輸入…' : '輸入你的答案…') + '（連按兩次 Enter 提交）'} />
           <div className="btn-row">
             <button className="btn" onClick={save} disabled={!(text || transcript).trim()}>存入今日紀錄</button>
           </div>

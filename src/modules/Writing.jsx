@@ -2,7 +2,7 @@
 // 全部主動產出（打字），沒有選擇題。答錯自動進錯誤庫。
 
 import React, { useMemo, useState } from 'react'
-import { Screen, Spinner, pick } from '../lib/ui.jsx'
+import { Screen, Spinner, pick, onDoubleEnter } from '../lib/ui.jsx'
 import { ARTICLE_CLOZE, POS_CLOZE, PARAPHRASE_TASKS } from '../data/writingSeed.js'
 import * as banks from '../lib/banks.js'
 import * as claude from '../lib/claude.js'
@@ -129,6 +129,7 @@ function ClozeSession({ title, intro, pool, mode, onBack }) {
                   value={values[k] || ''}
                   disabled={!!checked}
                   onChange={(e) => setValues((v) => { const nv = [...v]; nv[k] = e.target.value; return nv })}
+                  onKeyDown={(e) => { if (e.key === 'Enter' && !blanks.some((_, j) => !(values[j] || '').trim())) check() }}
                   autoCapitalize="off" autoCorrect="off"
                   style={{
                     width: mode === 'article' ? 64 : 150,
@@ -262,7 +263,8 @@ function ParaphraseSession({ onBack }) {
         {!verdict && (
           <>
             <textarea className="input" rows={3} value={text} onChange={(e) => setText(e.target.value)}
-              placeholder="把改寫後的句子完整打出來…" autoCapitalize="sentences" />
+              onKeyDown={onDoubleEnter(submit)}
+              placeholder="把改寫後的句子完整打出來…（連按兩次 Enter 提交）" autoCapitalize="sentences" />
             <div className="btn-row">
               <button className="btn secondary" onClick={() => setShowHint(true)} disabled={showHint}>💡 提示</button>
               <button className="btn" onClick={submit} disabled={!text.trim() || judging}>
