@@ -5,6 +5,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Screen, Spinner, pick, shuffle, onDoubleEnter } from '../lib/ui.jsx'
 import { ARTICLE_CLOZE, POS_CLOZE, PARAPHRASE_TASKS } from '../data/writingSeed.js'
 import { ARTICLE_EXTRA, USAGE_CLOZE, PV_NOTES } from '../data/notionSeed.js'
+import GrammarNotes from './GrammarNotes.jsx'
 import * as banks from '../lib/banks.js'
 import * as claude from '../lib/claude.js'
 import * as store from '../lib/storage.js'
@@ -41,6 +42,9 @@ export default function Writing({ nav }) {
   if (section === 'paraphrase') {
     return <ParaphraseSession onBack={() => setSection(null)} />
   }
+  if (section === 'notes') {
+    return <GrammarNotes onBack={() => setSection(null)} />
+  }
 
   return (
     <Screen title="寫作練習" sub="動手寫，不是用看的 — 每個 section 各練一種弱點">
@@ -63,6 +67,10 @@ export default function Writing({ nav }) {
       <div className="card" onClick={() => setSection('phrasal')} style={{ cursor: 'pointer' }}>
         <h3>🧩 Phrasal Verbs</h3>
         <p>妳 Notion 整理的 118 個 — 看中文回想、打出來</p>
+      </div>
+      <div className="card" onClick={() => setSection('notes')} style={{ cursor: 'pointer', border: '1.5px dashed var(--brand)' }}>
+        <h3>📚 文法筆記（查閱）</h3>
+        <p>冠詞規則表、量詞、用法、phrasal verb 全表 — 妳的 Notion 原始整理</p>
       </div>
       {!claude.hasApiKey() && (
         <div className="notice">未設定 API 金鑰：冠詞與詞性照常全功能；Paraphrase 會用參考答案比對＋自我核對（設定金鑰後有 AI 逐句回饋）。</div>
