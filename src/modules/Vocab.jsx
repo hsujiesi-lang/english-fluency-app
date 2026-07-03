@@ -71,6 +71,9 @@ export default function Vocab({ nav, embedded }) {
 
 function AddForm({ onDone, embedded }) {
   const [f, setF] = useState({ word: '', partOfSpeech: 'noun', zhMeaning: '', example: '', errorType: 'meaning' })
+  const [generating, setGenerating] = useState(false)
+  const [genMsg, setGenMsg] = useState('')
+  const canAI = claude.hasApiKey()
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value })
   const save = () => {
     if (!f.word.trim() || !f.zhMeaning.trim()) return
@@ -78,11 +81,46 @@ function AddForm({ onDone, embedded }) {
     onDone()
   }
 
+  const generate = async () => {
+    const w = f.word.trim()
+    if (!w || generating) return
+    setGenerating(true)
+    setGenMsg('')
+    try {
+      const r = await claude.enrichVocab(w)
+      setF((prev) => ({
+        ...prev,
+        word: r.word || w,
+        partOfSpeech: POS_LABEL[r.partOfSpeech] ? r.partOfSpeech : prev.partOfSpeech,
+        zhMeaning: r.zhMeaning || prev.zhMeaning,
+        example: r.example || prev.example,
+      }))
+      setGenMsg(r.corrected && r.corrected.toLowerCase() !== w.toLowerCase()
+        ? `✨ 已生成（拼字已修正：${w} → ${r.corrected}）— 可再手動修改`
+        : '✨ 已生成 — 可再手動修改')
+    } catch (e) {
+      setGenMsg('生成失敗（' + e.message.slice(0, 50) + '），請手動填寫')
+    }
+    setGenerating(false)
+  }
+
   const body = (
     <div className="card">
       <h3>新增單字</h3>
       <label className="field">單字 / 片語</label>
-      <input className="input" value={f.word} onChange={set('word')} placeholder="e.g. implement" />
+      <input className="input" value={f.word} onChange={set('word')} placeholder="e.g. implement"
+        autoCapitalize="off" autoCorrect="off"
+        onKeyDown={(e) => { if (e.key === 'Enter' && canAI) generate() }} />
+      {canAI ? (
+        <div className="btn-row">
+          <button className="btn" onClick={generate} disabled={!f.word.trim() || generating}>
+            {generating ? '生成中…' : '✨ 自動生成意思、詞性、例句'}
+          </button>
+        </div>
+      ) : (
+        <div className="notice">設定 API 金鑰後，輸入單字可一鍵自動生成以下欄位。</div>
+      )}
+      {genMsg && <div className={'feedback-block ' + (genMsg.startsWith('生成失敗') ? 'bad' : 'good')}>{genMsg}</div>}
       <label className="field">詞性</label>
       <select className="input" value={f.partOfSpeech} onChange={set('partOfSpeech')}>
         {Object.entries(POS_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}

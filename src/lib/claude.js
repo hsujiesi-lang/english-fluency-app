@@ -175,6 +175,21 @@ export function judgeParaphrase(instruction, source, attempt) {
   )
 }
 
+// ---- Module 4: auto-fill a vocab entry from a single word ----
+const ENRICH_SYSTEM = `You create one vocabulary card for a Traditional-Chinese-speaking university student
+in Melbourne (management/psychology/sociology major). Given one English word or phrase:
+- If it is misspelled, silently use the corrected spelling and set "corrected" to it.
+- Choose the most useful part of speech for academic + daily use.
+- zhMeaning: concise Traditional Chinese, add brief usage note if the word is easily confused.
+- example: one natural sentence at university level showing typical usage.
+Return pure JSON (no markdown fences):
+{ "word": "final spelling", "corrected": "same as word, or the fixed spelling if input was misspelled",
+  "partOfSpeech": "noun|verb|adj|adv|phrasalVerb", "zhMeaning": "繁中意思", "example": "English sentence" }`
+
+export function enrichVocab(word) {
+  return callClaude(ENRICH_SYSTEM, `Word: ${word}`, 400)
+}
+
 // ---- Module 4: sentence check for vocab practice ----
 const SENTENCE_SYSTEM = `You check one learner sentence using a target word. Verify: word used with correct
 part of speech and meaning; also flag the three personal error families (verb form after modal/to,
