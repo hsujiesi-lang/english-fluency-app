@@ -4,6 +4,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Screen, TimerBar, useCountdown, Spinner, pick, shuffle } from '../lib/ui.jsx'
 import { VERB_FORM_DRILLS, DETECTION_PASSAGES, POS_ITEMS } from '../data/errorHunterSeed.js'
+import { JUDGE_EXTRA, PASSAGE_EXTRA } from '../data/notionSeed.js'
 import * as banks from '../lib/banks.js'
 import * as claude from '../lib/claude.js'
 import * as store from '../lib/storage.js'
@@ -16,8 +17,8 @@ export default function ErrorHunter({ nav }) {
 
   const build = () => {
     const items = [
-      ...pick(VERB_FORM_DRILLS, 5).map((d) => ({ kind: 'verb', data: d })),
-      { kind: 'passage', data: pick(DETECTION_PASSAGES, 1)[0] },
+      ...pick([...VERB_FORM_DRILLS, ...JUDGE_EXTRA], 5).map((d) => ({ kind: 'verb', data: d })),
+      { kind: 'passage', data: pick([...DETECTION_PASSAGES, ...PASSAGE_EXTRA], 1)[0] },
       ...pick(POS_ITEMS, 4).map((d) => ({ kind: 'pos', data: d })),
     ]
     // 快打在前熱身，偵錯題壓軸前段，詞性收尾

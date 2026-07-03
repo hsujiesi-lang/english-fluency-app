@@ -1,0 +1,1070 @@
+[
+ {
+  "verb": "sit down",
+  "zhMeaning": "坐下",
+  "examples": [
+   "Please sit down and relax.",
+   "We sat down to eat dinner.",
+   "He told me to sit down and wait."
+  ]
+ },
+ {
+  "verb": "stand up (for)",
+  "zhMeaning": "站起來",
+  "examples": [
+   "Please stand up when the teacher enters.",
+   "He stood up to give her his seat.",
+   "I stood up for myself in that argument."
+  ]
+ },
+ {
+  "verb": "wake up",
+  "zhMeaning": "醒來",
+  "examples": [
+   "I usually wake up at 7 a.m.",
+   "She woke up very late today.",
+   "The noise woke me up last night."
+  ]
+ },
+ {
+  "verb": "pick up",
+  "zhMeaning": "撿起／接人／學會",
+  "examples": [
+   "Can you pick up the pen?",
+   "I need to pick up my friend.",
+   "She picked up English fast."
+  ]
+ },
+ {
+  "verb": "put down",
+  "zhMeaning": "放下",
+  "examples": [
+   "Please put down your phone.",
+   "He put down the box.",
+   "Don’t put yourself down."
+  ]
+ },
+ {
+  "verb": "turn on",
+  "zhMeaning": "打開（電源）",
+  "examples": [
+   "Please turn on the light.",
+   "He turned on the TV.",
+   "Can you turn on the AC?"
+  ]
+ },
+ {
+  "verb": "turn off",
+  "zhMeaning": "關掉（電源）",
+  "examples": [
+   "Turn off the lights before leaving.",
+   "She turned off her phone.",
+   "I always turn off the heater at night."
+  ]
+ },
+ {
+  "verb": "look for",
+  "zhMeaning": "尋找",
+  "examples": [
+   "I’m looking for my keys.",
+   "She is looking for a new place.",
+   "We’ve been looking for him all day."
+  ]
+ },
+ {
+  "verb": "look after",
+  "zhMeaning": "照顧",
+  "examples": [
+   "Can you look after my cat?",
+   "She looks after her brother.",
+   "Who will look after the plants?"
+  ]
+ },
+ {
+  "verb": "take off",
+  "zhMeaning": "脫掉／起飛",
+  "examples": [
+   "Please take off your shoes.",
+   "The plane took off on time.",
+   "He took off his jacket."
+  ]
+ },
+ {
+  "verb": "put on",
+  "zhMeaning": "穿上／播放",
+  "examples": [
+   "She put on her coat.",
+   "Don’t put on too much makeup.",
+   "He put on some music."
+  ]
+ },
+ {
+  "verb": "break down",
+  "zhMeaning": "故障／情緒崩潰",
+  "examples": [
+   "My car broke down.",
+   "She broke down and cried.",
+   "The machine broke down again."
+  ]
+ },
+ {
+  "verb": "work out",
+  "zhMeaning": "運動／解決",
+  "examples": [
+   "I work out every week.",
+   "Everything will work out.",
+   "They worked out the problem."
+  ]
+ },
+ {
+  "verb": "throw away",
+  "zhMeaning": "丟掉",
+  "examples": [
+   "He threw away the papers.",
+   "Don’t throw away food.",
+   "I threw away the receipt."
+  ]
+ },
+ {
+  "verb": "turn up",
+  "zhMeaning": "出現／調大音量",
+  "examples": [
+   "He didn’t turn up today.",
+   "Turn up the volume.",
+   "She turned up at the party."
+  ]
+ },
+ {
+  "verb": "turn down",
+  "zhMeaning": "拒絕／調小音量",
+  "examples": [
+   "She turned down the job.",
+   "Turn down the music.",
+   "He turned down my offer."
+  ]
+ },
+ {
+  "verb": "get up",
+  "zhMeaning": "起床／站起來",
+  "examples": [
+   "I get up early.",
+   "She got up and left.",
+   "He can’t get up without coffee."
+  ]
+ },
+ {
+  "verb": "give up (v+ing)",
+  "zhMeaning": "放棄",
+  "examples": [
+   "Don’t give up your dreams.",
+   "He gave up smoking.",
+   "I won’t give up easily."
+  ]
+ },
+ {
+  "verb": "run out of",
+  "zhMeaning": "用完、耗盡",
+  "examples": [
+   "We ran out of milk.",
+   "She ran out of time.",
+   "The milk ran out easily"
+  ]
+ },
+ {
+  "verb": "fill in",
+  "zhMeaning": "填寫",
+  "examples": [
+   "Please fill in the form.",
+   "She filled in her details.",
+   "Can you fill in for me tomorrow?"
+  ]
+ },
+ {
+  "verb": "enroll in",
+  "zhMeaning": "註冊、選修（課程）",
+  "examples": [
+   "I plan to enroll in Psychology next semester.",
+   "She enrolled in two subjects this year.",
+   "He has enrolled in an online course."
+  ]
+ },
+ {
+  "verb": "assign",
+  "zhMeaning": "指派；指定（作業）",
+  "examples": [
+   "The teacher will assign homework today.",
+   "She assigned me a group project.",
+   "They have assigned different roles to each member."
+  ]
+ },
+ {
+  "verb": "participate in",
+  "zhMeaning": "參與",
+  "examples": [
+   "Students are encouraged to participate in discussions.",
+   "He participated in the workshop last week.",
+   "She has participated in many extracurricular activities."
+  ]
+ },
+ {
+  "verb": "handle",
+  "zhMeaning": "處理；應付",
+  "examples": [
+   "I can handle this task on my own.",
+   "She handled the situation calmly.",
+   "He has handled similar problems before."
+  ]
+ },
+ {
+  "verb": "involve",
+  "zhMeaning": "涉及；包含",
+  "examples": [
+   "The project involves a lot of teamwork.",
+   "The job involved working with clients.",
+   "The task has involved careful planning."
+  ]
+ },
+ {
+  "verb": "collaborate with (someone) on",
+  "zhMeaning": "與⋯合作",
+  "examples": [
+   "We need to collaborate with other departments.",
+   "She collaborated with her classmates on the project.",
+   "They have collaborated with international researchers."
+  ]
+ },
+ {
+  "verb": "lie (to sb)",
+  "zhMeaning": "說謊；欺騙",
+  "examples": [
+   "Don’t lie to your parents.",
+   "He lied about his age.",
+   "She has lied to me before."
+  ]
+ },
+ {
+  "verb": "lie down (on)",
+  "zhMeaning": "躺下",
+  "examples": [
+   "You should lie down and rest.",
+   "He lay down on the sofa.",
+   "She has lain down for a while."
+  ]
+ },
+ {
+  "verb": "scroll through",
+  "zhMeaning": "滑動瀏覽",
+  "examples": [
+   "I like to scroll through social media at night.",
+   "She scrolled through the photos quickly.",
+   "He has scrolled through all the messages."
+  ]
+ },
+ {
+  "verb": "deal with",
+  "zhMeaning": "處理；應付",
+  "examples": [
+   "I don’t know how to deal with this problem.",
+   "She dealt with the complaint calmly.",
+   "He has dealt with similar situations before."
+  ]
+ },
+ {
+  "verb": "figure out",
+  "zhMeaning": "弄清楚；想明白",
+  "examples": [
+   "I need to figure out the answer.",
+   "She finally figured out the solution.",
+   "They have figured out how it works."
+  ]
+ },
+ {
+  "verb": "carry out",
+  "zhMeaning": "執行；進行",
+  "examples": [
+   "The team will carry out the plan.",
+   "They carried out the experiment yesterday.",
+   "The task has been carried out successfully."
+  ]
+ },
+ {
+  "verb": "focus on",
+  "zhMeaning": "專注於",
+  "examples": [
+   "Try to focus on your studies.",
+   "He focused on finishing the report.",
+   "She has focused on improving her English."
+  ]
+ },
+ {
+  "verb": "point out",
+  "zhMeaning": "指出",
+  "examples": [
+   "She pointed out my mistake.",
+   "The teacher pointed out the key idea.",
+   "He has pointed out several problems."
+  ]
+ },
+ {
+  "verb": "run into",
+  "zhMeaning": "偶然遇到；碰到",
+  "examples": [
+   "I ran into my tutor at the café.",
+   "She ran into some trouble.",
+   "They have run into difficulties before."
+  ]
+ },
+ {
+  "verb": "set up",
+  "zhMeaning": "建立；安排",
+  "examples": [
+   "We need to set up a meeting.",
+   "He set up his own business.",
+   "They have set up a new system."
+  ]
+ },
+ {
+  "verb": "bring up",
+  "zhMeaning": "提出（話題）；養育",
+  "examples": [
+   "She brought up an important question.",
+   "He was brought up by his grandparents.",
+   "They have brought up this issue before."
+  ]
+ },
+ {
+  "verb": "catch up with",
+  "zhMeaning": "追上；敘舊",
+  "examples": [
+   "I need to catch up with my classmates.",
+   "She caught up with her studies after the break.",
+   "We have caught up with each other over coffee."
+  ],
+  "priority": true
+ },
+ {
+  "verb": "fall behind",
+  "zhMeaning": "落後",
+  "examples": [
+   "Don’t fall behind in class.",
+   "He fell behind after missing a week.",
+   "She has fallen behind on her assignments."
+  ]
+ },
+ {
+  "verb": "look into",
+  "zhMeaning": "調查；深入了解",
+  "examples": [
+   "The school will look into the issue.",
+   "She looked into the course requirements.",
+   "They have looked into the problem carefully."
+  ]
+ },
+ {
+  "verb": "come across",
+  "zhMeaning": "偶然遇到；發現",
+  "examples": [
+   "I came across an interesting article.",
+   "She came across her old teacher yesterday.",
+   "He has come across this idea before."
+  ]
+ },
+ {
+  "verb": "end up",
+  "zhMeaning": "最後變成",
+  "examples": [
+   "We may end up staying late.",
+   "He ended up choosing psychology.",
+   "She has ended up in Melbourne."
+  ]
+ },
+ {
+  "verb": "keep up with",
+  "zhMeaning": "跟上",
+  "examples": [
+   "It’s hard to keep up with the workload.",
+   "She kept up with the fast pace.",
+   "He has kept up with all the readings."
+  ],
+  "priority": true
+ },
+ {
+  "verb": "put off",
+  "zhMeaning": "延後；拖延",
+  "examples": [
+   "Don’t put off your homework.",
+   "They put off the meeting.",
+   "She has put off making a decision."
+  ]
+ },
+ {
+  "verb": "show up",
+  "zhMeaning": "出現",
+  "examples": [
+   "He didn’t show up to class.",
+   "She showed up late.",
+   "They have shown up every week."
+  ]
+ },
+ {
+  "verb": "take up",
+  "zhMeaning": "開始從事；佔據",
+  "examples": [
+   "She wants to take up a new hobby.",
+   "The course took up most of his time.",
+   "He has taken up yoga recently."
+  ]
+ },
+ {
+  "verb": "check out",
+  "zhMeaning": "查看；退房",
+  "examples": [
+   "You should check out this article.",
+   "She checked out the library book.",
+   "They have checked out of the hotel."
+  ]
+ },
+ {
+  "verb": "spend + time/money + V-ing",
+  "zhMeaning": "花時間／金錢做某事",
+  "examples": [
+   "I spend a lot of time studying psychology.",
+   "She spent money buying new books.",
+   "He has spent years preparing for this goal."
+  ]
+ },
+ {
+  "verb": "go over",
+  "zhMeaning": "複習；檢查",
+  "examples": [
+   "Let’s go over the notes together.",
+   "She went over her essay carefully.",
+   "He has gone over the details twice."
+  ]
+ },
+ {
+  "verb": "hand in",
+  "zhMeaning": "繳交",
+  "examples": [
+   "Please hand in your assignment today.",
+   "She handed in the report late.",
+   "He has handed in all his work."
+  ]
+ },
+ {
+  "verb": "carry on (v+ing)",
+  "zhMeaning": "繼續",
+  "examples": [
+   "Please carry on with your presentation.",
+   "They carried on despite the noise.",
+   "She has carried on working under pressure."
+  ]
+ },
+ {
+  "verb": "cut down on",
+  "zhMeaning": "減少",
+  "examples": [
+   "I’m trying to cut down on sugar.",
+   "He cut down on screen time.",
+   "She has cut down on late nights."
+  ]
+ },
+ {
+  "verb": "get used to",
+  "zhMeaning": "習慣",
+  "examples": [
+   "You’ll get used to university life.",
+   "She got used to speaking English daily.",
+   "He has gotten used to the workload."
+  ]
+ },
+ {
+  "verb": "look back on",
+  "zhMeaning": "回顧",
+  "examples": [
+   "I like to look back on my first year.",
+   "She looked back on her childhood fondly.",
+   "He has looked back on those days often."
+  ]
+ },
+ {
+  "verb": "miss out on",
+  "zhMeaning": "錯過",
+  "examples": [
+   "Don’t miss out on this opportunity.",
+   "She missed out on the scholarship.",
+   "They have missed out on many events."
+  ],
+  "priority": true
+ },
+ {
+  "verb": "take care of",
+  "zhMeaning": "照顧；處理",
+  "examples": [
+   "I’ll take care of the problem.",
+   "She took care of her sister.",
+   "He has taken care of everything already."
+  ]
+ },
+ {
+  "verb": "bring about",
+  "zhMeaning": "導致；引起",
+  "examples": [
+   "The policy will bring about change.",
+   "The event brought about new ideas.",
+   "Technology has brought about major improvements."
+  ]
+ },
+ {
+  "verb": "mind + V-ing",
+  "zhMeaning": "介意做某事",
+  "examples": [
+   "Would you mind sharing your notes?",
+   "Do you mind waiting for a moment?",
+   "He didn’t mind helping me after class."
+  ]
+ },
+ {
+  "verb": "avoid + V-ing",
+  "zhMeaning": "避免做某事",
+  "examples": [
+   "Try to avoid leaving it until the last minute.",
+   "She avoided answering the question directly.",
+   "He has avoided missing any lectures."
+  ]
+ },
+ {
+  "verb": "recommend + V-ing / that-clause",
+  "zhMeaning": "建議",
+  "examples": [
+   "The tutor recommended reading this article.",
+   "I recommend taking notes during lectures.",
+   "She recommended that we start early."
+  ]
+ },
+ {
+  "verb": "suggest + V-ing / that-clause",
+  "zhMeaning": "建議",
+  "examples": [
+   "I suggest joining the student union.",
+   "He suggested meeting after class.",
+   "She suggested that we revise together."
+  ]
+ },
+ {
+  "verb": "assist + with / in V-ing",
+  "zhMeaning": "協助",
+  "examples": [
+   "Could you assist me with this enrolment form?",
+   "She assisted in organising the event.",
+   "The staff have assisted students with registration."
+  ]
+ },
+ {
+  "verb": "help + (to) V",
+  "zhMeaning": "幫助做某事",
+  "examples": [
+   "Can you help me find the library?",
+   "She helped us to understand the topic.",
+   "This guide has helped students improve their writing."
+  ]
+ },
+ {
+  "verb": "enquire + about",
+  "zhMeaning": "詢問（正式）",
+  "examples": [
+   "I’m enquiring about the scholarship details.",
+   "She enquired about course requirements.",
+   "He has enquired about changing his major."
+  ]
+ },
+ {
+  "verb": "manage + to V",
+  "zhMeaning": "成功做到",
+  "examples": [
+   "I managed to finish the essay on time.",
+   "She managed to balance work and study.",
+   "He has managed to adapt to university life."
+  ]
+ },
+ {
+  "verb": "wonder + if / whether",
+  "zhMeaning": "想知道（委婉）",
+  "examples": [
+   "I was wondering if you could give me feedback.",
+   "She wondered whether the class was compulsory.",
+   "I’m wondering if it’s possible to reschedule."
+  ]
+ },
+ {
+  "verb": "apply for",
+  "zhMeaning": "申請",
+  "examples": [
+   "I plan to apply for a scholarship.",
+   "She applied for an extension yesterday.",
+   "He has applied for several internships."
+  ]
+ },
+ {
+  "verb": "be responsible for",
+  "zhMeaning": "對⋯負責",
+  "examples": [
+   "I am responsible for this section.",
+   "She was responsible for organising the meeting.",
+   "He has been responsible for managing the project."
+  ]
+ },
+ {
+  "verb": "be required to + V",
+  "zhMeaning": "被要求做某事",
+  "examples": [
+   "Students are required to attend tutorials.",
+   "We were required to submit the essay online.",
+   "She has been required to complete extra training."
+  ]
+ },
+ {
+  "verb": "be allowed to + V",
+  "zhMeaning": "被允許做某事",
+  "examples": [
+   "You are allowed to use a dictionary.",
+   "He was allowed to leave early.",
+   "Students have been allowed to resubmit their work."
+  ]
+ },
+ {
+  "verb": "be involved in",
+  "zhMeaning": "參與；涉及",
+  "examples": [
+   "She is involved in several clubs.",
+   "He was involved in the research project.",
+   "They have been involved in community activities."
+  ]
+ },
+ {
+  "verb": "take responsibility for",
+  "zhMeaning": "承擔責任",
+  "examples": [
+   "I will take responsibility for the mistake.",
+   "She took responsibility for the delay.",
+   "He has taken responsibility for leading the group."
+  ]
+ },
+ {
+  "verb": "prepare for",
+  "zhMeaning": "為⋯做準備",
+  "examples": [
+   "I need to prepare for the exam.",
+   "She prepared for the presentation all week.",
+   "He has prepared for university life well."
+  ]
+ },
+ {
+  "verb": "struggle with",
+  "zhMeaning": "為⋯感到吃力",
+  "examples": [
+   "I struggle with academic writing.",
+   "She struggled with time management.",
+   "He has struggled with this subject before."
+  ]
+ },
+ {
+  "verb": "be capable of + V-ing",
+  "zhMeaning": "有能力做某事",
+  "examples": [
+   "She is capable of handling pressure.",
+   "He was capable of completing the task alone.",
+   "They have been capable of adapting quickly."
+  ]
+ },
+ {
+  "verb": "aim to + V",
+  "zhMeaning": "目標是；力求",
+  "examples": [
+   "I aim to improve my English this year.",
+   "She aimed to finish early.",
+   "He has aimed to pursue a psychology major."
+  ]
+ },
+ {
+  "verb": "phase out",
+  "zhMeaning": "逐步淘汰",
+  "examples": [
+   "The school plans to phase out the old system.",
+   "They phased out paper forms last year.",
+   "The feature has been phased out completely."
+  ]
+ },
+ {
+  "verb": "follow up on",
+  "zhMeaning": "追蹤；跟進",
+  "examples": [
+   "I’ll follow up on your request.",
+   "She followed up on the email yesterday.",
+   "He has followed up on the issue several times."
+  ],
+  "priority": true
+ },
+ {
+  "verb": "step down",
+  "zhMeaning": "辭職；卸任",
+  "examples": [
+   "The manager decided to step down.",
+   "He stepped down after the incident.",
+   "She has stepped down from her role."
+  ]
+ },
+ {
+  "verb": "step in (to)",
+  "zhMeaning": "介入；出面",
+  "examples": [
+   "The tutor had to step in.",
+   "She stepped in to help the group.",
+   "Staff have stepped in when problems occurred."
+  ],
+  "priority": true
+ },
+ {
+  "verb": "sort out",
+  "zhMeaning": "解決；整理",
+  "examples": [
+   "Let’s sort out the schedule.",
+   "He sorted out the problem quickly.",
+   "They have sorted out all the details."
+  ]
+ },
+ {
+  "verb": "come up with",
+  "zhMeaning": "想出（點子）",
+  "examples": [
+   "We need to come up with a solution.",
+   "She came up with a great idea.",
+   "They have come up with several options."
+  ]
+ },
+ {
+  "verb": "hold back",
+  "zhMeaning": "抑制；阻止",
+  "examples": [
+   "Don’t hold back your opinions.",
+   "He held back his anger.",
+   "She has held back important information."
+  ]
+ },
+ {
+  "verb": "carry through",
+  "zhMeaning": "貫徹；完成",
+  "examples": [
+   "We must carry through the plan.",
+   "She carried through her promise.",
+   "They have carried through the project successfully."
+  ]
+ },
+ {
+  "verb": "wind down",
+  "zhMeaning": "放鬆；逐漸結束",
+  "examples": [
+   "I like to wind down before bed.",
+   "The event wound down in the evening.",
+   "He has wound down after a busy week."
+  ]
+ },
+ {
+  "verb": "set aside",
+  "zhMeaning": "留出（時間／金錢）；暫時不管",
+  "examples": [
+   "Try to set aside some time to revise.",
+   "She set aside money for tuition.",
+   "He has set aside his personal feelings."
+  ]
+ },
+ {
+  "verb": "stick to",
+  "zhMeaning": "堅持；遵守",
+  "examples": [
+   "You should stick to your study plan.",
+   "He stuck to the rules strictly.",
+   "She has stuck to her original decision."
+  ]
+ },
+ {
+  "verb": "back out (of)",
+  "zhMeaning": "反悔；退出",
+  "examples": [
+   "Don’t back out of the agreement.",
+   "He backed out at the last minute.",
+   "She has backed out of the project."
+  ]
+ },
+ {
+  "verb": "drop by",
+  "zhMeaning": "順道拜訪",
+  "examples": [
+   "Feel free to drop by my office.",
+   "She dropped by after class.",
+   "He has dropped by several times this week."
+  ]
+ },
+ {
+  "verb": "put up with",
+  "zhMeaning": "忍受",
+  "examples": [
+   "I can’t put up with the noise.",
+   "She put up with the workload.",
+   "He has put up with a lot of pressure."
+  ]
+ },
+ {
+  "verb": "reach out to",
+  "zhMeaning": "主動聯絡",
+  "examples": [
+   "You should reach out to your tutor.",
+   "She reached out to the support team.",
+   "He has reached out to several professors."
+  ]
+ },
+ {
+  "verb": "fall apart",
+  "zhMeaning": "崩潰；散開",
+  "examples": [
+   "Everything may fall apart without planning.",
+   "The group fell apart under stress.",
+   "Their plan has fallen apart completely."
+  ]
+ },
+ {
+  "verb": "pull through",
+  "zhMeaning": "渡過難關；康復",
+  "examples": [
+   "She will pull through this semester.",
+   "He pulled through after the illness.",
+   "They have pulled through a difficult time."
+  ]
+ },
+ {
+  "verb": "check in with",
+  "zhMeaning": "向⋯確認；關心",
+  "examples": [
+   "I’ll check in with you later.",
+   "She checked in with her supervisor.",
+   "He has checked in with the team regularly."
+  ],
+  "priority": true
+ },
+ {
+  "verb": "wrap up",
+  "zhMeaning": "結束；總結",
+  "examples": [
+   "Let’s wrap up the discussion.",
+   "The lecturer wrapped up early.",
+   "They have wrapped up the project successfully."
+  ]
+ },
+ {
+  "verb": "pursue",
+  "zhMeaning": "追求（目標／學業／職涯）",
+  "examples": [
+   "She wants to pursue a degree in psychology.",
+   "He pursued his academic interests seriously.",
+   "She has pursued this goal for years."
+  ]
+ },
+ {
+  "verb": "purchase",
+  "zhMeaning": "購買（正式）",
+  "examples": [
+   "I need to purchase a new laptop.",
+   "She purchased the textbook online.",
+   "He has purchased study materials already."
+  ]
+ },
+ {
+  "verb": "sign up for",
+  "zhMeaning": "報名參加",
+  "examples": [
+   "I plan to sign up for the workshop.",
+   "She signed up for a short course.",
+   "He has signed up for several activities."
+  ]
+ },
+ {
+  "verb": "look forward to (Ving)",
+  "zhMeaning": "期待",
+  "examples": [
+   "I look forward to meeting you.",
+   "She looked forward to the semester break.",
+   "He has looked forward to this opportunity."
+  ]
+ },
+ {
+  "verb": "pay for",
+  "zhMeaning": "付錢",
+  "examples": [
+   "I’ll pay for the printing.",
+   "She paid for the course materials.",
+   "He has paid for the application fee."
+  ]
+ },
+ {
+  "verb": "make use of",
+  "zhMeaning": "利用 (中行)",
+  "examples": [
+   "You should make use of library resources.",
+   "She made use of the feedback.",
+   "He has made use of all available support."
+  ]
+ },
+ {
+  "verb": "take advantage of",
+  "zhMeaning": "善用；利用 （偏負）",
+  "examples": [
+   "Take advantage of office hours.",
+   "She took advantage of the opportunity.",
+   "They have taken advantage of student discounts."
+  ]
+ },
+ {
+  "verb": "work towards (n.)/ V+ing",
+  "zhMeaning": "朝⋯努力",
+  "examples": [
+   "I’m working towards my degree.",
+   "She worked towards improving her writing.",
+   "He has worked towards this achievement."
+  ]
+ },
+ {
+  "verb": "commit to (n.)/ V+ing",
+  "zhMeaning": "承諾；投入",
+  "examples": [
+   "You need to commit to the project.",
+   "She committed to regular study hours.",
+   "He has committed to finishing the course."
+  ]
+ },
+ {
+  "verb": "see through",
+  "zhMeaning": "看穿；識破",
+  "examples": [
+   "I can see through his excuse.",
+   "She saw through the lie immediately.",
+   "They have seen through the trick."
+  ]
+ },
+ {
+  "verb": "see to",
+  "zhMeaning": "負責處理",
+  "examples": [
+   "I’ll see to the arrangements.",
+   "She saw to the guests personally.",
+   "He has seen to all the details."
+  ]
+ },
+ {
+  "verb": "reply to",
+  "zhMeaning": "回覆",
+  "examples": [
+   "Please reply to this email soon.",
+   "She replied to the message politely.",
+   "He has replied to all enquiries."
+  ]
+ },
+ {
+  "verb": "get back to",
+  "zhMeaning": "回覆；回到",
+  "examples": [
+   "I’ll get back to you later.",
+   "She got back to the tutor yesterday.",
+   "He has gotten back to me already."
+  ]
+ },
+ {
+  "verb": "change into",
+  "zhMeaning": "換成（衣服）",
+  "examples": [
+   "I need to change into something comfortable.",
+   "She changed into a dress for dinner.",
+   "He has changed into his uniform."
+  ]
+ },
+ {
+  "verb": "change over to",
+  "zhMeaning": "轉換成",
+  "examples": [
+   "We will change over to online classes.",
+   "They changed over to a new system.",
+   "The company has changed over to digital files."
+  ]
+ },
+ {
+  "verb": "switch on",
+  "zhMeaning": "打開（電源）",
+  "examples": [
+   "Please switch on the lights.",
+   "He switched on the computer.",
+   "She has switched on the heater."
+  ]
+ },
+ {
+  "verb": "switch off",
+  "zhMeaning": "關掉（電源）",
+  "examples": [
+   "Remember to switch off your phone.",
+   "She switched off the TV.",
+   "He has switched off all the lights."
+  ]
+ },
+ {
+  "verb": "shift to",
+  "zhMeaning": "轉向；改變重心",
+  "examples": [
+   "The focus will shift to group work.",
+   "The company shifted to remote work.",
+   "Attention has shifted to student wellbeing."
+  ]
+ },
+ {
+  "verb": "shift away from",
+  "zhMeaning": "遠離；不再採用",
+  "examples": [
+   "Schools are shifting away from rote learning.",
+   "She shifted away from social media.",
+   "The industry has shifted away from old methods."
+  ]
+ },
+ {
+  "verb": "train for",
+  "zhMeaning": "為⋯訓練",
+  "examples": [
+   "He is training for a marathon.",
+   "She trained for the competition all year.",
+   "They have trained for this challenge seriously."
+  ]
+ },
+ {
+  "verb": "train in",
+  "zhMeaning": "受訓於（領域）",
+  "examples": [
+   "She is training in psychology.",
+   "He trained in customer service.",
+   "They have trained in first aid."
+  ]
+ },
+ {
+  "verb": "look up to",
+  "zhMeaning": "欽佩；敬仰",
+  "examples": [
+   "I really look up to my mentor.",
+   "She looked up to her older sister.",
+   "He has always looked up to his teacher."
+  ]
+ },
+ {
+  "verb": "be inspired by",
+  "zhMeaning": "受到啟發",
+  "examples": [
+   "I’m inspired by her dedication.",
+   "She was inspired by the lecture.",
+   "He has been inspired by many great thinkers."
+  ]
+ }
+]

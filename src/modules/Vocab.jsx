@@ -6,6 +6,7 @@ import * as banks from '../lib/banks.js'
 import * as speech from '../lib/speech.js'
 import * as claude from '../lib/claude.js'
 import * as store from '../lib/storage.js'
+import { SPELLING_IMPORT } from '../data/notionSeed.js'
 
 const POS_LABEL = {
   noun: '名詞', verb: '動詞', adj: '形容詞', adv: '副詞', phrasalVerb: 'Phrasal V.',
@@ -38,6 +39,15 @@ export default function Vocab({ nav, embedded }) {
           練習到期單字（{due.length}）
         </button>
       </div>
+      {!store.get('notionSpellingImported', false) && (
+        <button className="btn secondary big" style={{ marginBottom: 12 }} onClick={() => {
+          SPELLING_IMPORT.forEach((w) => banks.addVocab({ ...w, errorType: 'spelling' }))
+          store.set('notionSpellingImported', true)
+          refresh()
+        }}>
+          📥 匯入 Notion 拼字清單（{SPELLING_IMPORT.length} 字 → 聽音拼寫練習）
+        </button>
+      )}
       <div className="tabs">
         <button className={posTab === 'all' ? 'active' : ''} onClick={() => setPosTab('all')}>全部</button>
         {Object.entries(POS_LABEL).map(([k, v]) => (

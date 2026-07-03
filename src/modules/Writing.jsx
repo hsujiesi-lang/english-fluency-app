@@ -1,9 +1,10 @@
 // 寫作模組 — 三個獨立 section：Paraphrase 改寫 / 冠詞區分 / 詞性使用
 // 全部主動產出（打字），沒有選擇題。答錯自動進錯誤庫。
 
-import React, { useMemo, useState } from 'react'
-import { Screen, Spinner, pick, onDoubleEnter } from '../lib/ui.jsx'
+import React, { useEffect, useMemo, useState } from 'react'
+import { Screen, Spinner, pick, shuffle, onDoubleEnter } from '../lib/ui.jsx'
 import { ARTICLE_CLOZE, POS_CLOZE, PARAPHRASE_TASKS } from '../data/writingSeed.js'
+import { ARTICLE_EXTRA, USAGE_CLOZE, PV_NOTES } from '../data/notionSeed.js'
 import * as banks from '../lib/banks.js'
 import * as claude from '../lib/claude.js'
 import * as store from '../lib/storage.js'
@@ -17,7 +18,7 @@ export default function Writing({ nav }) {
     return (
       <ClozeSession key="articles" title="冠詞區分" onBack={() => setSection(null)}
         intro="把 a / an / the 填進空格；不需要冠詞就填 ×"
-        pool={ARTICLE_CLOZE} mode="article" />
+        pool={[...ARTICLE_CLOZE, ...ARTICLE_EXTRA]} mode="article" />
     )
   }
   if (section === 'pos') {
@@ -26,6 +27,16 @@ export default function Writing({ nav }) {
         intro="把字根改成句子裡該用的正確詞形"
         pool={POS_CLOZE} mode="pos" />
     )
+  }
+  if (section === 'usage') {
+    return (
+      <ClozeSession key="usage" title="用法辨析" onBack={() => setSection(null)}
+        intro="妳 Notion 筆記裡的易錯用法 — 打出正確的字"
+        pool={USAGE_CLOZE} mode="usage" />
+    )
+  }
+  if (section === 'phrasal') {
+    return <PhrasalSession onBack={() => setSection(null)} />
   }
   if (section === 'paraphrase') {
     return <ParaphraseSession onBack={() => setSection(null)} />
@@ -44,6 +55,14 @@ export default function Writing({ nav }) {
       <div className="card" onClick={() => setSection('pos')} style={{ cursor: 'pointer' }}>
         <h3>🔤 詞性使用</h3>
         <p>給字根，寫出句子裡該用的正確詞形</p>
+      </div>
+      <div className="card" onClick={() => setSection('usage')} style={{ cursor: 'pointer' }}>
+        <h3>⚖️ 用法辨析</h3>
+        <p>near/nearby、for vs to have、six hundred… — 妳 Notion 的易錯用法</p>
+      </div>
+      <div className="card" onClick={() => setSection('phrasal')} style={{ cursor: 'pointer' }}>
+        <h3>🧩 Phrasal Verbs</h3>
+        <p>妳 Notion 整理的 118 個 — 看中文回想、打出來</p>
       </div>
       {!claude.hasApiKey() && (
         <div className="notice">未設定 API 金鑰：冠詞與詞性照常全功能；Paraphrase 會用參考答案比對＋自我核對（設定金鑰後有 AI 逐句回饋）。</div>
@@ -64,7 +83,7 @@ function ClozeSession({ title, intro, pool, mode, onBack }) {
 
   const item = items[i]
   const parts = useMemo(() => item.text.split('___'), [item])
-  const blanks = mode === 'article' ? item.blanks : [{ answer: item.answer, why: item.why }]
+  const blanks = mode === 'pos' ? [{ answer: item.answer, why: item.why }] : item.blanks
 
   const norm = (s) => (s || '').trim().toLowerCase().replace(/^x$|^沒有$|^無$|^-$/, '×')
 
@@ -158,6 +177,146 @@ function ClozeSession({ title, intro, pool, mode, onBack }) {
             <button className="btn big" onClick={next}>下一題 →</button>
           </>
         )}
+      </div>
+    </Screen>
+  )
+}
+
+// ---- Phrasal Verbs（Notion 匯入的 118 個，主動回想打字）----
+
+const PV_ROUND = 8
+
+function PhrasalSession({ onBack }) {
+  const [all, setAll] = useState(null)
+  const [items, setItems] = useState(null)
+  const [i, setI] = useState(0)
+  const [input, setInput] = useState('')
+  const [result, setResult] = useState(null)
+  const [score, setScore] = useState(0)
+  const [done, setDone] = useState(false)
+  const [browse, setBrowse] = useState(false)
+  const [q, setQ] = useState('')
+
+  useEffect(() => {
+    fetch(import.meta.env.BASE_URL + 'data/phrasal-verbs.json')
+      .then((r) => r.json())
+      .then((data) => {
+        setAll(data)
+        // 每回合：優先放「一直忘」的（最多 3 個），其餘隨機
+        const prio = pick(data.filter((d) => d.priority), 3)
+        const rest = pick(data.filter((d) => !prio.includes(d)), PV_ROUND - prio.length)
+        setItems(shuffle([...prio, ...rest]))
+      })
+      .catch(() => setAll([]))
+  }, [])
+
+  if (!items) return <Screen title="Phrasal Verbs" onBack={onBack}><Spinner label="載入題庫…" /></Screen>
+
+  // 正規化：去括號內容、小寫、只留 + 之前的主體
+  const normVerb = (s) => s.toLowerCase().split('+')[0].replace(/\(.*?\)/g, '').replace(/[^a-z\s]/g, ' ').replace(/\s+/g, ' ').trim()
+  const acceptable = (item) => {
+    const base = normVerb(item.verb)
+    const withParen = item.verb.toLowerCase().replace(/[()]/g, '').replace(/\s+/g, ' ').trim().split('+')[0].trim()
+    return [base, withParen]
+  }
+
+  const item = items[i]
+  // 找一個包含原形的例句來挖空；找不到就用純回想模式
+  const maskInfo = (() => {
+    const base = normVerb(item.verb)
+    for (const ex of item.examples || []) {
+      const idx = ex.toLowerCase().indexOf(base)
+      if (idx >= 0) return { masked: ex.slice(0, idx) + '＿'.repeat(4) + ex.slice(idx + base.length), found: true }
+    }
+    return { masked: null, found: false }
+  })()
+
+  const submit = () => {
+    if (result) return
+    const ans = normVerb(input)
+    const ok = acceptable(item).some((a) => a === ans || normVerb(a) === ans)
+    setResult({ ok })
+    if (ok) setScore((s) => s + 1)
+    else {
+      banks.addError({
+        type: 'posError',
+        originalText: `${item.zhMeaning} → ${input || '（沒作答）'}`,
+        correction: item.verb,
+        sourceModule: 'writing',
+        note: PV_NOTES[item.verb] || `${item.verb}＝${item.zhMeaning}`,
+      })
+    }
+    store.logActivity('writing')
+  }
+
+  const next = () => {
+    setInput('')
+    setResult(null)
+    if (i + 1 >= items.length) setDone(true)
+    else setI(i + 1)
+  }
+
+  if (browse) {
+    const query = q.trim().toLowerCase()
+    const list = (all || []).filter((d) => !query || d.verb.toLowerCase().includes(query) || d.zhMeaning.toLowerCase().includes(query))
+    return (
+      <Screen title="Phrasal Verbs 清單" onBack={() => setBrowse(false)}>
+        <input className="input" value={q} onChange={(e) => setQ(e.target.value)} placeholder="🔍 搜尋…" style={{ marginBottom: 12 }} />
+        {list.map((d) => (
+          <div className="list-item" key={d.verb} style={{ padding: '10px 12px' }}>
+            <div style={{ flex: 1 }}>
+              <b style={{ color: 'var(--brand)' }}>{d.verb}</b>{d.priority && <span className="tag warn" style={{ marginLeft: 6 }}>一直忘</span>}
+              <div style={{ fontSize: 14, color: 'var(--muted)' }}>{d.zhMeaning}</div>
+              {d.examples?.[0] && <div style={{ fontSize: 13, fontStyle: 'italic', color: 'var(--muted)' }}>{d.examples[0]}</div>}
+            </div>
+          </div>
+        ))}
+      </Screen>
+    )
+  }
+
+  if (done) {
+    return (
+      <Screen title="Phrasal Verbs" onBack={onBack}>
+        <div className="card" style={{ textAlign: 'center' }}>
+          <h3>本回合完成 🎉</h3>
+          <p style={{ fontSize: 40, fontWeight: 800, color: 'var(--brand)', margin: 8 }}>{score} / {items.length}</p>
+          <p>答錯的已進錯誤庫</p>
+        </div>
+        <button className="btn big" onClick={onBack}>返回寫作選單</button>
+      </Screen>
+    )
+  }
+
+  return (
+    <Screen title="Phrasal Verbs" sub={`${i + 1} / ${items.length} 題`} onBack={onBack}>
+      <div className="card">
+        {item.priority && <span className="tag warn">一直忘 ⚠️</span>}
+        <p className="big-question">{item.zhMeaning}</p>
+        {maskInfo.found && <p style={{ color: 'var(--muted)', fontStyle: 'italic' }}>{maskInfo.masked}</p>}
+        {!result ? (
+          <>
+            <input className="input" autoFocus autoCapitalize="off" autoCorrect="off" value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && input.trim() && submit()}
+              placeholder="打出對應的 phrasal verb…" />
+            <div className="btn-row">
+              <button className="btn" onClick={submit} disabled={!input.trim()}>提交</button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className={'feedback-block ' + (result.ok ? 'good' : 'bad')}>
+              <b>{result.ok ? '✅ 正確！' : '❌ 答案：'}</b> <b>{item.verb}</b>
+              {PV_NOTES[item.verb] && <p style={{ margin: '6px 0 0' }}>💡 {PV_NOTES[item.verb]}</p>}
+              {(item.examples || []).slice(0, 2).map((ex, k) => (
+                <p key={k} style={{ margin: '4px 0 0', fontStyle: 'italic', fontSize: 14 }}>{ex}</p>
+              ))}
+            </div>
+            <button className="btn big" onClick={next}>下一題 →</button>
+          </>
+        )}
+        <button className="btn ghost small" style={{ marginTop: 8 }} onClick={() => setBrowse(true)}>📖 看全部清單</button>
       </div>
     </Screen>
   )
