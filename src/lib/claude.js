@@ -13,7 +13,8 @@ export function hasApiKey() {
   return !!getApiKey()
 }
 
-async function callClaude(system, userText, maxTokens = 1500) {
+// userContent: string, or an array of content blocks (for vision requests)
+async function callClaude(system, userContent, maxTokens = 1500) {
   const key = getApiKey()
   if (!key) throw new Error('NO_API_KEY')
   const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -28,7 +29,7 @@ async function callClaude(system, userText, maxTokens = 1500) {
       model: MODEL,
       max_tokens: maxTokens,
       system,
-      messages: [{ role: 'user', content: userText }],
+      messages: [{ role: 'user', content: userContent }],
     }),
   })
   if (!res.ok) {
@@ -108,6 +109,51 @@ Every "span" must appear verbatim exactly once in "passage".`
 
 export function generatePassage(topicHint = '') {
   return callClaude(PASSAGE_SYSTEM, `Generate one passage.${topicHint ? ' Topic hint: ' + topicHint : ''}`)
+}
+
+// ---- Module 8: picture description ----
+
+// dataUrls: array of "data:image/...;base64,..." strings (1 or 2 images)
+function imageBlocks(dataUrls) {
+  return dataUrls.map((d) => {
+    const [meta, data] = d.split(',')
+    const mediaType = meta.match(/data:(.*?);/)[1]
+    return { type: 'image', source: { type: 'base64', media_type: mediaType, data } }
+  })
+}
+
+const PICTURE_WRITING_SYSTEM = `You are a strict accuracy coach reviewing a picture description written by a
+Mandarin-speaking university student. Focus on exactly three error families:
+(1) verb form after modals and "to", (2) articles & plurals & countability,
+(3) part-of-speech misuse. Flag every instance. Also judge whether the description
+matches what the image actually shows. Explanations in Traditional Chinese.
+Return pure JSON (no markdown fences):
+{ "errors": [{"span": "exact erroneous text", "category": "verbForm|article|plural|posError", "correction": "fixed text", "ruleReminder": "繁中規則提醒"}],
+  "contentAccuracy": { "score": 0-100, "comment": "繁中：描述與畫面相符程度，指出不符處" },
+  "taskCheck": { "done": true/false, "comment": "繁中：是否達成本關要求（句數/連接詞/比較結構/學術語氣）" },
+  "praise": "繁中一句：寫得好的地方" }`
+
+export function checkPictureWriting(dataUrls, text, levelRequirement) {
+  return callClaude(PICTURE_WRITING_SYSTEM, [
+    ...imageBlocks(dataUrls),
+    { type: 'text', text: `Level requirement: ${levelRequirement}\nStudent's description:\n${text}` },
+  ], 2000)
+}
+
+const PICTURE_SPEAKING_SYSTEM = `You are a fluency coach. The learner described this picture out loud; the transcript
+comes from speech recognition. Evaluate ONLY: sentence completeness, breakdown points, naturalness,
+and whether the description matches the image (contentAccuracy).
+DO NOT correct articles, plurals, or minor grammar — ignore them entirely.
+Respond in Traditional Chinese for explanations, English for example sentences.
+Return pure JSON (no markdown fences):
+{ "completenessScore": 0-100, "breakdowns": [{"position": "quote", "likelyCause": "繁中", "fix": "English example"}],
+  "naturalnessTips": ["繁中建議"], "contentAccuracy": { "score": 0-100, "comment": "繁中" }, "encouragement": "繁中" }`
+
+export function evaluatePictureSpeaking(dataUrls, transcript, attempt = 1) {
+  return callClaude(PICTURE_SPEAKING_SYSTEM, [
+    ...imageBlocks(dataUrls),
+    { type: 'text', text: `Attempt #${attempt} transcript (ignore punctuation):\n${transcript}` },
+  ], 1500)
 }
 
 // ---- Writing module: paraphrase judging ----

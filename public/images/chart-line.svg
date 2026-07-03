@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#ffffff"/>
+  <text x="400" y="50" font-family="Helvetica, Arial" font-size="26" font-weight="bold" text-anchor="middle" fill="#1e1e2e">Average Sleep Hours of First-Year Students</text>
+  <line x1="90" y1="500" x2="740" y2="500" stroke="#333" stroke-width="2"/>
+  <line x1="90" y1="500" x2="90" y2="100" stroke="#333" stroke-width="2"/>
+  <text x="40" y="300" font-family="Helvetica, Arial" font-size="16" fill="#333" transform="rotate(-90 40 300)" text-anchor="middle">Hours of sleep</text>
+  <g font-family="Helvetica, Arial" font-size="14" fill="#666" text-anchor="end">
+    <text x="82" y="505">4</text><text x="82" y="405">5</text><text x="82" y="305">6</text><text x="82" y="205">7</text><text x="82" y="105">8</text>
+  </g>
+  <g stroke="#eee" stroke-width="1">
+    <line x1="90" y1="400" x2="740" y2="400"/><line x1="90" y1="300" x2="740" y2="300"/><line x1="90" y1="200" x2="740" y2="200"/><line x1="90" y1="100" x2="740" y2="100"/>
+  </g>
+  <polyline points="140,180 230,220 320,260 410,340 500,420 590,300 680,160" fill="none" stroke="#4f46e5" stroke-width="4"/>
+  <g fill="#4f46e5">
+    <circle cx="140" cy="180" r="7"/><circle cx="230" cy="220" r="7"/><circle cx="320" cy="260" r="7"/><circle cx="410" cy="340" r="7"/><circle cx="500" cy="420" r="7"/><circle cx="590" cy="300" r="7"/><circle cx="680" cy="160" r="7"/>
+  </g>
+  <g font-family="Helvetica, Arial" font-size="15" fill="#333" text-anchor="middle">
+    <text x="140" y="530">Mon</text><text x="230" y="530">Tue</text><text x="320" y="530">Wed</text><text x="410" y="530">Thu</text><text x="500" y="530">Fri</text><text x="590" y="530">Sat</text><text x="680" y="530">Sun</text>
+  </g>
+  <text x="500" y="450" font-family="Helvetica, Arial" font-size="14" fill="#dc2626" text-anchor="middle">lowest: 4.8 h</text>
+  <text x="680" y="140" font-family="Helvetica, Arial" font-size="14" fill="#16a34a" text-anchor="middle">highest: 7.4 h</text>
+</svg>

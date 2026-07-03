@@ -65,6 +65,16 @@ export default function Settings({ embedded }) {
       </div>
 
       <div className="card">
+        <h3>🖼️ 圖片描述</h3>
+        <label className="field">五句鷹架提示（This picture shows… / There is…）</label>
+        <select className="input" value={s.scaffold === false ? 'off' : 'on'}
+          onChange={(e) => save({ scaffold: e.target.value === 'on' })}>
+          <option value="on">開（顯示提示）</option>
+          <option value="off">關（進階：不看提示）</option>
+        </select>
+      </div>
+
+      <div className="card">
         <h3>💾 資料</h3>
         <p>所有紀錄（錯誤庫、單字庫、進度）都存在這台裝置。換裝置前先匯出。</p>
         <div className="btn-row">

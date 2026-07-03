@@ -14,13 +14,16 @@ export default function Home({ nav, phrases }) {
   const dailyKey = store.todayStr() + (new Date().getHours() >= 20 ? ':pm' : ':am')
   const dailyDone = !!store.get('dailyAnswers', {})[dailyKey]
 
+  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000)
+  const picMode = dayOfYear % 2 === 0 ? '寫作版' : '口說版'
   const steps = [
     { id: 1, label: '早安 / 晚安法 1 題', mins: 2, done: dailyDone, go: null },
-    { id: 2, label: '每日短句：聽讀 5 ＋ 中翻英 5', mins: 6, done: (act.phrases || 0) >= 10, go: () => nav('phrases') },
-    { id: 3, label: '口說流暢度 2 題（含重講）', mins: 12, done: (act.speaking || 0) >= 4, go: () => nav('speaking') },
-    { id: 4, label: '錯誤獵人 10 題', mins: 7, done: (act.hunter || 0) >= 10, go: () => nav('hunter') },
+    { id: 2, label: '每日短句：聽讀 5 ＋ 中翻英 5', mins: 5, done: (act.phrases || 0) >= 10, go: () => nav('phrases') },
+    { id: 3, label: '口說流暢度 1 題（含重講）', mins: 7, done: (act.speaking || 0) >= 2, go: () => nav('speaking') },
+    { id: 4, label: `圖片描述 1 題（今日：${picMode}）`, mins: 8, done: (act.picture || 0) >= 1, go: () => nav('picture') },
+    { id: 5, label: '錯誤獵人 8 題', mins: 5, done: (act.hunter || 0) >= 8, go: () => nav('hunter') },
     {
-      id: 5, label: `錯誤庫 / 單字庫到期複習${dueErr + dueVoc > 0 ? `（${dueErr + dueVoc} 項）` : ''}`,
+      id: 6, label: `錯誤庫 / 單字庫到期複習${dueErr + dueVoc > 0 ? `（${dueErr + dueVoc} 項）` : ''}`,
       mins: 3,
       done: dueErr + dueVoc === 0 || (act.errorBank || 0) + (act.vocab || 0) > 0,
       go: () => nav('me', { tab: dueErr > 0 ? 'errors' : 'vocab' }),
@@ -32,7 +35,7 @@ export default function Home({ nav, phrases }) {
     <Screen title="英文練習" sub="每天 30 分鐘，把知道的變成說得出的">
       <div className="stat-grid">
         <div className="stat"><div className="num">🔥 {streak}</div><div className="lbl">連續天數</div></div>
-        <div className="stat"><div className="num">{doneCount}/5</div><div className="lbl">今日進度</div></div>
+        <div className="stat"><div className="num">{doneCount}/{steps.length}</div><div className="lbl">今日進度</div></div>
         <div className="stat"><div className="num">{dueErr + dueVoc}</div><div className="lbl">待複習</div></div>
       </div>
 
@@ -45,7 +48,7 @@ export default function Home({ nav, phrases }) {
             onClick={s.done || !s.go ? undefined : s.go}
             style={{
               display: 'flex', alignItems: 'center', gap: 10, padding: '10px 0',
-              borderBottom: s.id < 5 ? '1px solid #f0f0f4' : 'none',
+              borderBottom: s.id < steps.length ? '1px solid #f0f0f4' : 'none',
               cursor: s.done || !s.go ? 'default' : 'pointer',
               opacity: s.done ? 0.55 : 1,
             }}>
@@ -64,6 +67,9 @@ export default function Home({ nav, phrases }) {
       </div>
       <div className="card" onClick={() => nav('writing')} style={{ cursor: 'pointer' }}>
         <h3>✍️ 寫作練習</h3><p>Paraphrase 改寫 / 冠詞區分 / 詞性使用 — 動手寫</p>
+      </div>
+      <div className="card" onClick={() => nav('picture')} style={{ cursor: 'pointer' }}>
+        <h3>🖼️ 圖片描述</h3><p>看圖限時輸出（寫 5 句 / 口說 60 秒）— 綜合弱點訓練</p>
       </div>
       <div className="card" onClick={() => nav('hunter')} style={{ cursor: 'pointer' }}>
         <h3>🎯 錯誤獵人</h3><p>動詞形式 / 冠詞單複數 / 詞性 — 你的三大弱點</p>

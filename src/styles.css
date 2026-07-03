@@ -94,7 +94,7 @@ html, body {
   border: none;
   background: none;
   padding: 8px 0 10px;
-  font-size: 11px;
+  font-size: 10px;
   font-family: inherit;
   color: var(--muted);
   cursor: pointer;
