@@ -24,8 +24,10 @@ export function speak(text, { rate = 1.0, lang } = {}) {
     u.lang = lang || getLang()
     u.rate = rate
     const voices = speechSynthesis.getVoices()
-    const v = voices.find((v) => v.lang === u.lang) || voices.find((v) => v.lang.startsWith('en'))
-    if (v) u.voice = v
+    const base = u.lang.split('-')[0]
+    const v = voices.find((v) => v.lang === u.lang)
+      || voices.find((v) => v.lang.replace('_', '-').startsWith(base))
+    if (v) u.voice = v // 找不到就交給瀏覽器依 u.lang 選預設聲音
     u.onend = resolve
     u.onerror = resolve
     speechSynthesis.speak(u)

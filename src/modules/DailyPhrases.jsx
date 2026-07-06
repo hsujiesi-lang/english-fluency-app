@@ -56,6 +56,14 @@ const SECTION_ICON = { routine: '🛒', home: '🧹', study: '🎓', social: '�
 function BrowseAll({ phrases, onBack }) {
   const [filter, setFilter] = useState('all')
   const [q, setQ] = useState('')
+  // 連續播放
+  const [playing, setPlaying] = useState(false)
+  const [playIdx, setPlayIdx] = useState(-1)
+  const [playMode, setPlayMode] = useState('zh-en') // 'zh-en' | 'en'
+  const [rate, setRate] = useState(1.0)
+  const stopRef = useRef(false)
+  const optsRef = useRef({})
+  optsRef.current = { playMode, rate }
 
   const query = q.trim().toLowerCase()
   const match = (p) =>
@@ -63,6 +71,40 @@ function BrowseAll({ phrases, onBack }) {
     (!query || p.zh.toLowerCase().includes(query) || p.en.toLowerCase().includes(query))
 
   const sections = filter === 'all' ? Object.keys(SECTIONS) : [filter]
+  const flatList = sections.flatMap((sec) => phrases.filter((p) => p.section === sec && match(p)))
+
+  const sleepMs = (ms) => new Promise((r) => setTimeout(r, ms))
+  // 各裝置 TTS 品質不一：單句最多等 12 秒，避免卡死整個播放
+  const speakSafe = (text, opts) => Promise.race([speech.speak(text, opts), sleepMs(12000)])
+
+  async function playAll() {
+    setPlaying(true)
+    stopRef.current = false
+    for (let k = 0; k < flatList.length; k++) {
+      if (stopRef.current) break
+      setPlayIdx(k)
+      document.getElementById('ph-' + flatList[k].id)?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+      const { playMode: m, rate: r } = optsRef.current
+      if (m === 'zh-en') {
+        await speakSafe(flatList[k].zh, { lang: 'zh-TW', rate: r })
+        if (stopRef.current) break
+        await sleepMs(300)
+      }
+      await speakSafe(flatList[k].en.split('/')[0], { rate: r })
+      await sleepMs(600)
+    }
+    setPlaying(false)
+    setPlayIdx(-1)
+  }
+
+  const stopAll = () => {
+    stopRef.current = true
+    speech.stopSpeaking()
+    setPlaying(false)
+    setPlayIdx(-1)
+  }
+
+  useEffect(() => () => { stopRef.current = true; speech.stopSpeaking() }, [])
 
   return (
     <Screen title="短句總覽" onBack={onBack}>
@@ -73,7 +115,26 @@ function BrowseAll({ phrases, onBack }) {
         ))}
       </div>
       <input className="input" value={q} onChange={(e) => setQ(e.target.value)}
-        placeholder="🔍 搜尋中文或英文…" style={{ marginBottom: 12 }} />
+        placeholder="🔍 搜尋中文或英文…" style={{ marginBottom: 10 }} />
+      <div className="card" style={{ padding: '10px 14px', position: 'sticky', top: 8, zIndex: 10 }}>
+        <div className="btn-row" style={{ margin: 0 }}>
+          {!playing ? (
+            <button className="btn good" onClick={playAll} disabled={flatList.length === 0}>
+              ▶️ 播放全部（{flatList.length} 句）
+            </button>
+          ) : (
+            <button className="btn bad" onClick={stopAll}>
+              ⏹ 停止（{playIdx + 1} / {flatList.length}）
+            </button>
+          )}
+          <button className="btn secondary" onClick={() => setPlayMode(playMode === 'zh-en' ? 'en' : 'zh-en')}>
+            {playMode === 'zh-en' ? '中→英' : '只英文'}
+          </button>
+          <button className="btn secondary" onClick={() => setRate(rate === 1.0 ? 0.7 : 1.0)}>
+            {rate}x
+          </button>
+        </div>
+      </div>
       {sections.map((sec) => {
         const list = phrases.filter((p) => p.section === sec && match(p))
         if (!list.length) return null
@@ -83,17 +144,24 @@ function BrowseAll({ phrases, onBack }) {
               {SECTION_ICON[sec]} {SECTIONS[sec]}（{list.length} 句）
             </h3>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-              {list.map((p) => (
-                <div className="list-item" key={p.id}
-                  style={{ padding: '8px 10px', marginBottom: 0, alignItems: 'flex-start' }}>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 13, color: 'var(--muted)' }}>{p.id}. {p.zh}</div>
-                    <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--brand)' }}>{p.en}</div>
+              {list.map((p) => {
+                const isNow = playing && flatList[playIdx]?.id === p.id
+                return (
+                  <div className="list-item" key={p.id} id={'ph-' + p.id}
+                    style={{
+                      padding: '8px 10px', marginBottom: 0, alignItems: 'flex-start',
+                      outline: isNow ? '2.5px solid var(--brand)' : 'none',
+                      background: isNow ? 'var(--brand-soft)' : 'var(--card)',
+                    }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 13, color: 'var(--muted)' }}>{p.id}. {p.zh}</div>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--brand)' }}>{p.en}</div>
+                    </div>
+                    <button className="btn ghost small" style={{ padding: '4px 6px' }}
+                      onClick={() => speech.speak(p.en.split('/')[0])}>🔊</button>
                   </div>
-                  <button className="btn ghost small" style={{ padding: '4px 6px' }}
-                    onClick={() => speech.speak(p.en.split('/')[0])}>🔊</button>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
         )
