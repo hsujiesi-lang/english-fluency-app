@@ -82,15 +82,19 @@ function BrowseAll({ phrases, onBack }) {
             <h3 style={{ margin: '16px 4px 8px', fontSize: 16 }}>
               {SECTION_ICON[sec]} {SECTIONS[sec]}（{list.length} 句）
             </h3>
-            {list.map((p) => (
-              <div className="list-item" key={p.id} style={{ padding: '10px 12px' }}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 14, color: 'var(--muted)' }}>{p.id}. {p.zh}</div>
-                  <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--brand)' }}>{p.en}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+              {list.map((p) => (
+                <div className="list-item" key={p.id}
+                  style={{ padding: '8px 10px', marginBottom: 0, alignItems: 'flex-start' }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 13, color: 'var(--muted)' }}>{p.id}. {p.zh}</div>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--brand)' }}>{p.en}</div>
+                  </div>
+                  <button className="btn ghost small" style={{ padding: '4px 6px' }}
+                    onClick={() => speech.speak(p.en.split('/')[0])}>🔊</button>
                 </div>
-                <button className="btn ghost small" onClick={() => speech.speak(p.en.split('/')[0])}>🔊</button>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         )
       })}
