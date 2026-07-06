@@ -7,7 +7,19 @@
 ```bash
 npm install
 npm run dev        # http://localhost:8771
-npm run build      # 產出 dist/（可部署到 GitHub Pages）
+npm run build      # 產出 dist/
+```
+
+## 部署（GitHub Pages）
+
+線上網址：https://hsujiesi-lang.github.io/english-fluency-app/
+
+```bash
+npm run build
+cd dist && git init -q && git checkout -q -b gh-pages && git add -A \
+  && git commit -q -m Deploy \
+  && git push -f https://github.com/hsujiesi-lang/english-fluency-app.git gh-pages
+cd .. && rm -rf dist/.git
 ```
 
 ## v1 模組
