@@ -1,7 +1,7 @@
 // 模組 4：單字庫 — 按詞性分類；spelling / meaning / usage 三種練法
 
 import React, { useState } from 'react'
-import { Screen, Spinner, shuffle, onDoubleEnter, useDoubleEnterNext } from '../lib/ui.jsx'
+import { Screen, Spinner, shuffle, onDoubleEnter, useDoubleEnterNext, WrongList } from '../lib/ui.jsx'
 import * as banks from '../lib/banks.js'
 import * as speech from '../lib/speech.js'
 import * as claude from '../lib/claude.js'
@@ -167,6 +167,8 @@ function Practice({ due, onDone, embedded }) {
   const [result, setResult] = useState(null) // {correct, detail?}
   const [input, setInput] = useState('')
   const [checking, setChecking] = useState(false)
+  const [wrongs, setWrongs] = useState([])
+  const [done, setDone] = useState(false)
   const item = due[i]
   const posOptions = React.useMemo(() => shuffle(Object.keys(POS_LABEL)), [item?.id])
   useDoubleEnterNext(!!result, () => next())
@@ -183,14 +185,35 @@ function Practice({ due, onDone, embedded }) {
   const grade = (correct, detail = '') => {
     setResult({ correct, detail })
     banks.reviewVocab(item.id, correct)
+    if (!correct) {
+      setWrongs((w) => [...w, {
+        q: `${ERR_LABEL[item.errorType]}：${item.zhMeaning}`,
+        your: input,
+        right: item.word,
+        why: detail || item.example,
+      }])
+    }
     store.logActivity('vocab')
   }
 
   const next = () => {
     setResult(null)
     setInput('')
-    if (i + 1 >= due.length) onDone()
+    if (i + 1 >= due.length) setDone(true)
     else setI(i + 1)
+  }
+
+  if (done) {
+    return (
+      <div className="card" style={{ textAlign: 'center' }}>
+        <h3>單字練習完成 🎉</h3>
+        <p style={{ fontSize: 40, fontWeight: 800, color: 'var(--brand)', margin: 8 }}>
+          {due.length - wrongs.length} / {due.length}
+        </p>
+        <WrongList items={wrongs} />
+        <button className="btn big" onClick={onDone}>返回單字庫</button>
+      </div>
+    )
   }
 
   const submitSpelling = () => {

@@ -106,6 +106,29 @@ export function useDoubleEnterNext(active, onNext) {
   }, [active])
 }
 
+// 回合結束時的錯題總覽。items: [{q, your, right, why}]
+export function WrongList({ items }) {
+  if (!items || items.length === 0) {
+    return <div className="feedback-block good" style={{ textAlign: 'left' }}>🎯 本回合全對，沒有錯題！</div>
+  }
+  return (
+    <div style={{ textAlign: 'left' }}>
+      <h3 style={{ margin: '14px 0 8px', fontSize: 16 }}>❌ 本回合錯題（{items.length}）</h3>
+      {items.map((w, k) => (
+        <div key={k} className="feedback-block bad" style={{ margin: '8px 0' }}>
+          <div style={{ fontSize: 14, fontWeight: 700 }}>{w.q}</div>
+          {w.your != null && String(w.your).trim() !== '' && (
+            <div style={{ fontSize: 14 }}>妳的答案:<s style={{ marginLeft: 4 }}>{w.your}</s></div>
+          )}
+          <div style={{ fontSize: 14 }}>正解:<b style={{ marginLeft: 4, color: 'var(--good)' }}>{w.right}</b></div>
+          {w.why && <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 2 }}>{w.why}</div>}
+        </div>
+      ))}
+      <p style={{ fontSize: 13, color: 'var(--muted)' }}>這些都已存進錯誤庫，之後會排程複習</p>
+    </div>
+  )
+}
+
 export function shuffle(arr) {
   const a = [...arr]
   for (let i = a.length - 1; i > 0; i--) {

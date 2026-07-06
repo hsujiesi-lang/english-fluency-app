@@ -2,7 +2,7 @@
 // 全部主動產出（打字），沒有選擇題。答錯自動進錯誤庫。
 
 import React, { useEffect, useMemo, useState } from 'react'
-import { Screen, Spinner, pick, shuffle, onDoubleEnter, useDoubleEnterNext } from '../lib/ui.jsx'
+import { Screen, Spinner, pick, shuffle, onDoubleEnter, useDoubleEnterNext, WrongList } from '../lib/ui.jsx'
 import { ARTICLE_CLOZE, POS_CLOZE, PARAPHRASE_TASKS } from '../data/writingSeed.js'
 import { ARTICLE_EXTRA, USAGE_CLOZE, PREP_CLOZE, PV_NOTES } from '../data/notionSeed.js'
 import GrammarNotes from './GrammarNotes.jsx'
@@ -99,6 +99,7 @@ function ClozeSession({ title, intro, pool, mode, onBack }) {
   const [checked, setChecked] = useState(null) // per-blank boolean[]
   const [score, setScore] = useState({ right: 0, total: 0 })
   const [done, setDone] = useState(false)
+  const [wrongs, setWrongs] = useState([])
 
   const item = items[i]
   const parts = useMemo(() => item.text.split('___'), [item])
@@ -113,6 +114,15 @@ function ClozeSession({ title, intro, pool, mode, onBack }) {
     setChecked(results)
     const right = results.filter(Boolean).length
     setScore((s) => ({ right: s.right + right, total: s.total + results.length }))
+    setWrongs((w) => [
+      ...w,
+      ...results.map((ok, k) => ok ? null : {
+        q: item.text.replace(/___/g, '＿＿'),
+        your: values[k],
+        right: blanks[k].answer.join(' / '),
+        why: blanks[k].why,
+      }).filter(Boolean),
+    ])
     store.logActivity('writing')
     // 答錯 → 錯誤庫
     results.forEach((ok, k) => {
@@ -149,7 +159,7 @@ function ClozeSession({ title, intro, pool, mode, onBack }) {
         <div className="card" style={{ textAlign: 'center' }}>
           <h3>本回合完成 🎉</h3>
           <p style={{ fontSize: 40, fontWeight: 800, color: 'var(--brand)', margin: 8 }}>{score.right} / {score.total}</p>
-          <p>答錯的空格已進錯誤庫，會回來考妳</p>
+          <WrongList items={wrongs} />
         </div>
         <button className="btn big" onClick={onBack}>返回寫作選單</button>
       </Screen>
@@ -217,6 +227,7 @@ function PhrasalSession({ onBack }) {
   const [done, setDone] = useState(false)
   const [browse, setBrowse] = useState(false)
   const [q, setQ] = useState('')
+  const [wrongs, setWrongs] = useState([])
 
   useEffect(() => {
     fetch(import.meta.env.BASE_URL + 'data/phrasal-verbs.json')
@@ -268,6 +279,12 @@ function PhrasalSession({ onBack }) {
         sourceModule: 'writing',
         note: PV_NOTES[item.verb] || `${item.verb}＝${item.zhMeaning}`,
       })
+      setWrongs((w) => [...w, {
+        q: item.zhMeaning,
+        your: input,
+        right: item.verb,
+        why: PV_NOTES[item.verb] || (item.examples || [])[0],
+      }])
     }
     store.logActivity('writing')
   }
@@ -306,7 +323,7 @@ function PhrasalSession({ onBack }) {
         <div className="card" style={{ textAlign: 'center' }}>
           <h3>本回合完成 🎉</h3>
           <p style={{ fontSize: 40, fontWeight: 800, color: 'var(--brand)', margin: 8 }}>{score} / {items.length}</p>
-          <p>答錯的已進錯誤庫</p>
+          <WrongList items={wrongs} />
         </div>
         <button className="btn big" onClick={onBack}>返回寫作選單</button>
       </Screen>
@@ -360,8 +377,11 @@ function ParaphraseSession({ onBack }) {
   const [showHint, setShowHint] = useState(false)
   const [score, setScore] = useState(0)
   const [done, setDone] = useState(false)
+  const [wrongs, setWrongs] = useState([])
 
   const item = items[i]
+  const recordWrong = (attempt, why) =>
+    setWrongs((w) => [...w, { q: item.source, your: attempt, right: item.refs[0], why }])
 
   useDoubleEnterNext(!!verdict && !verdict.selfGrade && !done, () => next())
 
@@ -395,6 +415,7 @@ function ParaphraseSession({ onBack }) {
         const v = await claude.judgeParaphrase(item.instruction, item.source, attempt)
         setVerdict({ ...v, refs: item.refs })
         if (v.ok) setScore((s) => s + 1)
+        else recordWrong(attempt, v.feedback)
         // 文法錯誤寫入錯誤庫
         for (const g of v.grammarErrors || []) {
           banks.addError({
@@ -417,6 +438,7 @@ function ParaphraseSession({ onBack }) {
   const selfMark = (ok) => {
     setVerdict((v) => ({ ...v, selfGrade: false, ok, feedback: ok ? '很好，繼續！' : '把參考答案唸一次再往下' }))
     if (ok) setScore((s) => s + 1)
+    else recordWrong(text.trim(), `${KIND_LABEL[item.kind]}練習`)
   }
 
   const next = () => {
@@ -433,6 +455,7 @@ function ParaphraseSession({ onBack }) {
         <div className="card" style={{ textAlign: 'center' }}>
           <h3>本回合完成 🎉</h3>
           <p style={{ fontSize: 40, fontWeight: 800, color: 'var(--brand)', margin: 8 }}>{score} / {items.length}</p>
+          <WrongList items={wrongs} />
         </div>
         <button className="btn big" onClick={onBack}>返回寫作選單</button>
       </Screen>

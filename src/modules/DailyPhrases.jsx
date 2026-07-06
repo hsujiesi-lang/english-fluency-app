@@ -1,7 +1,7 @@
 // 模組 5：每日短句（120 句）— 聽讀 / 中翻英 / 早安晚安法
 
 import React, { useEffect, useRef, useState } from 'react'
-import { Screen, TimerBar, useCountdown, Spinner, pick, shuffle, onDoubleEnter, useDoubleEnterNext } from '../lib/ui.jsx'
+import { Screen, TimerBar, useCountdown, Spinner, pick, shuffle, onDoubleEnter, useDoubleEnterNext, WrongList } from '../lib/ui.jsx'
 import * as speech from '../lib/speech.js'
 import * as store from '../lib/storage.js'
 import * as banks from '../lib/banks.js'
@@ -274,6 +274,7 @@ function Translate({ phrases, onBack }) {
   const [typed, setTyped] = useState('')
   const [verdict, setVerdict] = useState(null) // {ok, reason?, betterVersion?}
   const [score, setScore] = useState(0)
+  const [wrongs, setWrongs] = useState([])
   const recRef = useRef(null)
   const canSpeak = speech.sttSupported()
   const [left, , timer] = useCountdown(() => finishAnswer())
@@ -291,6 +292,7 @@ function Translate({ phrases, onBack }) {
     setQueue(shuffle(round))
     setI(0)
     setScore(0)
+    setWrongs([])
     setPhase('idle')
   }
 
@@ -340,6 +342,7 @@ function Translate({ phrases, onBack }) {
     setVerdict(v)
     setPhase('result')
     if (v.ok) setScore((s) => s + 1)
+    else setWrongs((w) => [...w, { q: p.zh, your: answer || '（沒作答）', right: p.en, why: v.reason }])
     // SRS: wrong → into queue; queued item reviewed either way
     const inQueue = banks.getPhraseQueue()[String(p.id)]
     if (!v.ok) {
@@ -364,6 +367,7 @@ function Translate({ phrases, onBack }) {
           <h3>本回合完成 🎉</h3>
           <p style={{ fontSize: 40, fontWeight: 800, color: 'var(--brand)', margin: 8 }}>{score} / {queue.length}</p>
           <p>說不出的句子已加入複習佇列</p>
+          <WrongList items={wrongs} />
         </div>
         <div className="btn-row">
           <button className="btn big" onClick={startRound}>再來一回合</button>

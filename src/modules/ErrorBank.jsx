@@ -1,7 +1,7 @@
 // 模組 3：個人錯誤庫 — 自動收集 + 間隔重複複習（變形出題）
 
 import React, { useEffect, useState } from 'react'
-import { Screen, Spinner, shuffle, useDoubleEnterNext } from '../lib/ui.jsx'
+import { Screen, Spinner, shuffle, useDoubleEnterNext, WrongList } from '../lib/ui.jsx'
 import * as banks from '../lib/banks.js'
 import * as claude from '../lib/claude.js'
 import * as store from '../lib/storage.js'
@@ -73,6 +73,8 @@ function ReviewSession({ due, onDone, embedded }) {
   const [loading, setLoading] = useState(false)
   const [answered, setAnswered] = useState(null) // 'right' | 'wrong'
   const [options, setOptions] = useState([])
+  const [wrongs, setWrongs] = useState([])
+  const [finished, setFinished] = useState(false)
 
   const item = due[i]
 
@@ -118,6 +120,7 @@ function ReviewSession({ due, onDone, embedded }) {
     if (answered) return
     const correct = choice === question.right
     setAnswered(correct ? 'right' : 'wrong')
+    if (!correct) setWrongs((w) => [...w, { q: question.wrong, your: choice === question.wrong ? '選了錯誤版本' : choice, right: question.right, why: item.note }])
     banks.reviewError(item.id, correct)
     store.logActivity('errorBank')
   }
@@ -125,13 +128,28 @@ function ReviewSession({ due, onDone, embedded }) {
   const answerFluency = (managed) => {
     if (answered) return
     setAnswered(managed ? 'right' : 'wrong')
+    if (!managed) setWrongs((w) => [...w, { q: `流暢度：「${item.originalText}…」`, right: item.correction || '把句子說完整', why: item.note }])
     banks.reviewError(item.id, managed)
     store.logActivity('errorBank')
   }
 
   const next = () => {
-    if (i + 1 >= due.length) onDone()
+    if (i + 1 >= due.length) setFinished(true)
     else setI(i + 1)
+  }
+
+  if (finished) {
+    const body = (
+      <div className="card" style={{ textAlign: 'center' }}>
+        <h3>複習完成 🎉</h3>
+        <p style={{ fontSize: 40, fontWeight: 800, color: 'var(--brand)', margin: 8 }}>
+          {due.length - wrongs.length} / {due.length}
+        </p>
+        <WrongList items={wrongs} />
+        <button className="btn big" onClick={onDone}>返回錯誤庫</button>
+      </div>
+    )
+    return embedded ? body : <Screen title="錯誤複習">{body}</Screen>
   }
 
   const body = (

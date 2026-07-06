@@ -2,7 +2,7 @@
 // 每日混合 10 題；答錯自動寫入個人錯誤庫。
 
 import React, { useEffect, useRef, useState } from 'react'
-import { Screen, TimerBar, useCountdown, Spinner, pick, shuffle, useDoubleEnterNext } from '../lib/ui.jsx'
+import { Screen, TimerBar, useCountdown, Spinner, pick, shuffle, useDoubleEnterNext, WrongList } from '../lib/ui.jsx'
 import { VERB_FORM_DRILLS, DETECTION_PASSAGES, POS_ITEMS } from '../data/errorHunterSeed.js'
 import { JUDGE_EXTRA, PASSAGE_EXTRA } from '../data/notionSeed.js'
 import * as banks from '../lib/banks.js'
@@ -14,6 +14,8 @@ export default function ErrorHunter({ nav }) {
   const [i, setI] = useState(0)
   const [score, setScore] = useState({ right: 0, total: 0 })
   const [done, setDone] = useState(false)
+  const [wrongs, setWrongs] = useState([])
+  const addWrong = (w) => setWrongs((ws) => [...ws, w])
 
   const build = () => {
     const items = [
@@ -26,6 +28,7 @@ export default function ErrorHunter({ nav }) {
     setI(0)
     setScore({ right: 0, total: 0 })
     setDone(false)
+    setWrongs([])
   }
 
   useEffect(build, [])
@@ -40,7 +43,7 @@ export default function ErrorHunter({ nav }) {
           <p style={{ fontSize: 40, fontWeight: 800, color: 'var(--brand)', margin: 8 }}>
             {score.right} / {score.total}
           </p>
-          <p>答錯的都存進錯誤庫了，明天會回來考你</p>
+          <WrongList items={wrongs} />
         </div>
         <div className="btn-row">
           <button className="btn secondary" onClick={() => nav('me', { tab: 'errors' })}>看錯誤庫</button>
@@ -65,9 +68,9 @@ export default function ErrorHunter({ nav }) {
 
   return (
     <Screen title="錯誤獵人" sub={`第 ${i + 1} / ${session.length} 題`}>
-      {item.kind === 'verb' && <VerbDrill key={i} drill={item.data} onResult={onResult} next={next} />}
-      {item.kind === 'passage' && <PassageQ key={i} seed={item.data} onResult={onResult} next={next} />}
-      {item.kind === 'pos' && <PosQ key={i} q={item.data} onResult={onResult} next={next} />}
+      {item.kind === 'verb' && <VerbDrill key={i} drill={item.data} onResult={onResult} next={next} addWrong={addWrong} />}
+      {item.kind === 'passage' && <PassageQ key={i} seed={item.data} onResult={onResult} next={next} addWrong={addWrong} />}
+      {item.kind === 'pos' && <PosQ key={i} q={item.data} onResult={onResult} next={next} addWrong={addWrong} />}
     </Screen>
   )
 }
@@ -76,7 +79,7 @@ export default function ErrorHunter({ nav }) {
 
 const DRILL_SECONDS = 10
 
-function VerbDrill({ drill, onResult, next }) {
+function VerbDrill({ drill, onResult, next, addWrong }) {
   const [answered, setAnswered] = useState(null) // {chosen, correct}
   const answeredRef = useRef(false)
   const [left, , timer] = useCountdown(() => answer(null))
@@ -95,6 +98,14 @@ function VerbDrill({ drill, onResult, next }) {
     setAnswered({ chosen: choice, correct })
     onResult(correct)
     if (!correct) {
+      addWrong({
+        q: drill.sentence,
+        your: drill.kind === 'fill'
+          ? (choice || '（時間到沒作答）')
+          : (choice === null ? '（時間到沒作答）' : choice ? '判斷成「正確」' : '判斷成「有錯」'),
+        right: drill.kind === 'fill' ? drill.answer : (drill.fixed || '句子本來就正確'),
+        why: drill.rule,
+      })
       banks.addError({
         type: 'verbForm',
         originalText: drill.kind === 'fill'
@@ -145,7 +156,7 @@ function VerbDrill({ drill, onResult, next }) {
 
 const PASSAGE_SECONDS = 90
 
-function PassageQ({ seed, onResult, next }) {
+function PassageQ({ seed, onResult, next, addWrong }) {
   const [data, setData] = useState(null)
   const [marked, setMarked] = useState(new Set())
   const [graded, setGraded] = useState(null)
@@ -214,6 +225,7 @@ function PassageQ({ seed, onResult, next }) {
     }
     const falseMarks = [...mk].filter((idx) => !spanRanges.some((s) => tokenInSpan(tokens[idx], s))).length
     for (const s of missed) {
+      addWrong({ q: `（偵錯題沒抓到）${s.span}`, right: s.correction, why: s.ruleReminder })
       banks.addError({
         type: s.category,
         originalText: s.span,
@@ -276,7 +288,7 @@ function PassageQ({ seed, onResult, next }) {
 
 // ---- 題型 3：詞性辨析 ----
 
-function PosQ({ q, onResult, next }) {
+function PosQ({ q, onResult, next, addWrong }) {
   const [answered, setAnswered] = useState(null)
   const [options] = useState(() => shuffle(q.options))
   const [sentence, setSentence] = useState('')
@@ -291,6 +303,7 @@ function PosQ({ q, onResult, next }) {
     setAnswered({ chosen: choice, correct })
     onResult(correct)
     if (!correct) {
+      addWrong({ q: q.sentence.replace('___', '＿＿'), your: choice, right: q.answer, why: q.explain })
       banks.addError({
         type: 'posError',
         originalText: q.sentence.replace('___', choice),
