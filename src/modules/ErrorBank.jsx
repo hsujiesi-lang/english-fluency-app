@@ -1,7 +1,7 @@
 // 模組 3：個人錯誤庫 — 自動收集 + 間隔重複複習（變形出題）
 
 import React, { useEffect, useState } from 'react'
-import { Screen, Spinner, shuffle } from '../lib/ui.jsx'
+import { Screen, Spinner, shuffle, useDoubleEnterNext } from '../lib/ui.jsx'
 import * as banks from '../lib/banks.js'
 import * as claude from '../lib/claude.js'
 import * as store from '../lib/storage.js'
@@ -41,20 +41,20 @@ export default function ErrorBank({ nav, embedded }) {
       {errors.length === 0 && (
         <div className="card"><p>還沒有紀錄。去玩「錯誤獵人」或「口說流暢度」，犯的錯會自動存進來。</p></div>
       )}
-      <div style={{ marginTop: 14 }}>
+      <div style={{ marginTop: 14, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
         {errors.map((e) => (
-          <div className="list-item" key={e.id}>
-            <div style={{ flex: 1 }}>
+          <div className="list-item" key={e.id} style={{ marginBottom: 0, alignItems: 'flex-start' }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
               <span className={'tag ' + (e.type === 'fluency' ? 'warn' : 'bad')}>{TYPE_LABEL[e.type] || e.type}</span>
-              <div style={{ marginTop: 4 }}>
+              <div style={{ marginTop: 4, fontSize: 14 }}>
                 <s style={{ color: 'var(--bad)' }}>{e.originalText}</s>
                 {e.correction && <> → <b style={{ color: 'var(--good)' }}>{e.correction}</b></>}
               </div>
               <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>
-                連對 {e.srs?.streak || 0} 次 · 間隔 {e.srs?.interval || 1} 天
+                連對 {e.srs?.streak || 0} · 間隔 {e.srs?.interval || 1} 天
               </div>
             </div>
-            <button className="btn ghost small" onClick={() => { banks.deleteError(e.id); refresh() }}>刪除</button>
+            <button className="btn ghost small" style={{ padding: '4px 6px' }} onClick={() => { banks.deleteError(e.id); refresh() }}>✕</button>
           </div>
         ))}
       </div>
@@ -103,6 +103,7 @@ function ReviewSession({ due, onDone, embedded }) {
   useEffect(() => {
     if (question && !question.fluency) setOptions(shuffle([question.right, question.wrong]))
   }, [question])
+  useDoubleEnterNext(!!answered, () => next())
 
   if (!item) {
     return (

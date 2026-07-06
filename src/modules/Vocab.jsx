@@ -1,7 +1,7 @@
 // 模組 4：單字庫 — 按詞性分類；spelling / meaning / usage 三種練法
 
 import React, { useState } from 'react'
-import { Screen, Spinner, shuffle, onDoubleEnter } from '../lib/ui.jsx'
+import { Screen, Spinner, shuffle, onDoubleEnter, useDoubleEnterNext } from '../lib/ui.jsx'
 import * as banks from '../lib/banks.js'
 import * as speech from '../lib/speech.js'
 import * as claude from '../lib/claude.js'
@@ -55,21 +55,25 @@ export default function Vocab({ nav, embedded }) {
         ))}
       </div>
       {list.length === 0 && <div className="card"><p>這個分類還沒有單字。</p></div>}
-      {list.map((v) => (
-        <div className="list-item" key={v.id}>
-          <div style={{ flex: 1 }}>
-            <b style={{ fontSize: 17 }}>{v.word}</b>
-            <span className="tag" style={{ marginLeft: 8 }}>{POS_LABEL[v.partOfSpeech]}</span>
-            <span className="tag warn">{ERR_LABEL[v.errorType]}</span>
-            <div style={{ fontSize: 14, color: 'var(--muted)' }}>{v.zhMeaning}</div>
-            {v.example && <div style={{ fontSize: 13, color: 'var(--muted)', fontStyle: 'italic' }}>{v.example}</div>}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+        {list.map((v) => (
+          <div className="list-item" key={v.id} style={{ marginBottom: 0, alignItems: 'flex-start' }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <b style={{ fontSize: 16 }}>{v.word}</b>
+              <div style={{ margin: '2px 0' }}>
+                <span className="tag">{POS_LABEL[v.partOfSpeech]}</span>
+                <span className="tag warn">{ERR_LABEL[v.errorType]}</span>
+              </div>
+              <div style={{ fontSize: 13, color: 'var(--muted)' }}>{v.zhMeaning}</div>
+              {v.example && <div style={{ fontSize: 12, color: 'var(--muted)', fontStyle: 'italic' }}>{v.example}</div>}
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <button className="btn ghost small" style={{ padding: '4px 6px' }} onClick={() => speech.speak(v.word)}>🔊</button>
+              <button className="btn ghost small" style={{ padding: '4px 6px' }} onClick={() => { banks.deleteVocab(v.id); refresh() }}>✕</button>
+            </div>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <button className="btn ghost small" onClick={() => speech.speak(v.word)}>🔊</button>
-            <button className="btn ghost small" onClick={() => { banks.deleteVocab(v.id); refresh() }}>刪除</button>
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </>
   )
 
@@ -165,6 +169,7 @@ function Practice({ due, onDone, embedded }) {
   const [checking, setChecking] = useState(false)
   const item = due[i]
   const posOptions = React.useMemo(() => shuffle(Object.keys(POS_LABEL)), [item?.id])
+  useDoubleEnterNext(!!result, () => next())
 
   if (!item) {
     return (

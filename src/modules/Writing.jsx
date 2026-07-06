@@ -2,7 +2,7 @@
 // 全部主動產出（打字），沒有選擇題。答錯自動進錯誤庫。
 
 import React, { useEffect, useMemo, useState } from 'react'
-import { Screen, Spinner, pick, shuffle, onDoubleEnter } from '../lib/ui.jsx'
+import { Screen, Spinner, pick, shuffle, onDoubleEnter, useDoubleEnterNext } from '../lib/ui.jsx'
 import { ARTICLE_CLOZE, POS_CLOZE, PARAPHRASE_TASKS } from '../data/writingSeed.js'
 import { ARTICLE_EXTRA, USAGE_CLOZE, PREP_CLOZE, PV_NOTES } from '../data/notionSeed.js'
 import GrammarNotes from './GrammarNotes.jsx'
@@ -105,6 +105,8 @@ function ClozeSession({ title, intro, pool, mode, onBack }) {
   const blanks = mode === 'pos' ? [{ answer: item.answer, why: item.why }] : item.blanks
 
   const norm = (s) => (s || '').trim().toLowerCase().replace(/^x$|^沒有$|^無$|^-$/, '×')
+
+  useDoubleEnterNext(!!checked && !done, () => next())
 
   const check = () => {
     const results = blanks.map((b, k) => b.answer.map((a) => a.toLowerCase()).includes(norm(values[k])))
@@ -229,6 +231,8 @@ function PhrasalSession({ onBack }) {
       .catch(() => setAll([]))
   }, [])
 
+  useDoubleEnterNext(!!result && !done && !browse, () => next())
+
   if (!items) return <Screen title="Phrasal Verbs" onBack={onBack}><Spinner label="載入題庫…" /></Screen>
 
   // 正規化：去括號內容、小寫、只留 + 之前的主體
@@ -281,15 +285,17 @@ function PhrasalSession({ onBack }) {
     return (
       <Screen title="Phrasal Verbs 清單" onBack={() => setBrowse(false)}>
         <input className="input" value={q} onChange={(e) => setQ(e.target.value)} placeholder="🔍 搜尋…" style={{ marginBottom: 12 }} />
-        {list.map((d) => (
-          <div className="list-item" key={d.verb} style={{ padding: '10px 12px' }}>
-            <div style={{ flex: 1 }}>
-              <b style={{ color: 'var(--brand)' }}>{d.verb}</b>{d.priority && <span className="tag warn" style={{ marginLeft: 6 }}>一直忘</span>}
-              <div style={{ fontSize: 14, color: 'var(--muted)' }}>{d.zhMeaning}</div>
-              {d.examples?.[0] && <div style={{ fontSize: 13, fontStyle: 'italic', color: 'var(--muted)' }}>{d.examples[0]}</div>}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+          {list.map((d) => (
+            <div className="list-item" key={d.verb} style={{ padding: '8px 10px', marginBottom: 0 }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <b style={{ color: 'var(--brand)', fontSize: 14 }}>{d.verb}</b>{d.priority && <span className="tag warn" style={{ marginLeft: 4 }}>一直忘</span>}
+                <div style={{ fontSize: 13, color: 'var(--muted)' }}>{d.zhMeaning}</div>
+                {d.examples?.[0] && <div style={{ fontSize: 12, fontStyle: 'italic', color: 'var(--muted)' }}>{d.examples[0]}</div>}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </Screen>
     )
   }
@@ -356,6 +362,8 @@ function ParaphraseSession({ onBack }) {
   const [done, setDone] = useState(false)
 
   const item = items[i]
+
+  useDoubleEnterNext(!!verdict && !verdict.selfGrade && !done, () => next())
 
   const localMatch = (attempt) => {
     const n = (s) => s.toLowerCase().replace(/[^a-z0-9\s']/g, ' ').replace(/\s+/g, ' ').trim()

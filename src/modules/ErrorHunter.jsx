@@ -2,7 +2,7 @@
 // 每日混合 10 題；答錯自動寫入個人錯誤庫。
 
 import React, { useEffect, useRef, useState } from 'react'
-import { Screen, TimerBar, useCountdown, Spinner, pick, shuffle } from '../lib/ui.jsx'
+import { Screen, TimerBar, useCountdown, Spinner, pick, shuffle, useDoubleEnterNext } from '../lib/ui.jsx'
 import { VERB_FORM_DRILLS, DETECTION_PASSAGES, POS_ITEMS } from '../data/errorHunterSeed.js'
 import { JUDGE_EXTRA, PASSAGE_EXTRA } from '../data/notionSeed.js'
 import * as banks from '../lib/banks.js'
@@ -83,6 +83,7 @@ function VerbDrill({ drill, onResult, next }) {
   const [options] = useState(() => (drill.kind === 'fill' ? shuffle(drill.options) : null))
 
   useEffect(() => { timer.start(DRILL_SECONDS) }, [])
+  useDoubleEnterNext(!!answered, next)
 
   function answer(choice) {
     if (answeredRef.current) return
@@ -174,6 +175,7 @@ function PassageQ({ seed, onResult, next }) {
   useEffect(() => {
     if (data && !graded) timer.start(PASSAGE_SECONDS)
   }, [data])
+  useDoubleEnterNext(!!graded, next)
 
   if (!data) return <div className="card"><Spinner label="準備偵錯短文…" /></div>
 
@@ -280,6 +282,8 @@ function PosQ({ q, onResult, next }) {
   const [sentence, setSentence] = useState('')
   const [checking, setChecking] = useState(false)
   const [sentFeedback, setSentFeedback] = useState(null)
+
+  useDoubleEnterNext(!!answered, next)
 
   const answer = (choice) => {
     if (answered) return

@@ -117,18 +117,20 @@ function PhrasalTable() {
       </div>
       <input className="input" value={q} onChange={(e) => setQ(e.target.value)}
         placeholder={`🔍 搜尋 ${all.length} 個 phrasal verbs…`} style={{ marginBottom: 10 }} />
-      {list.map((d) => (
-        <div className="list-item" key={d.verb} style={{ padding: '10px 12px' }}>
-          <div style={{ flex: 1 }}>
-            <b style={{ color: 'var(--brand)' }}>{d.verb}</b>
-            {d.priority && <span className="tag warn" style={{ marginLeft: 6 }}>一直忘</span>}
-            <span style={{ marginLeft: 8, fontSize: 14 }}>{d.zhMeaning}</span>
-            {(d.examples || []).slice(0, 2).map((ex, k) => (
-              <div key={k} style={{ fontSize: 13, fontStyle: 'italic', color: 'var(--muted)', marginTop: 2 }}>{ex}</div>
-            ))}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+        {list.map((d) => (
+          <div className="list-item" key={d.verb} style={{ padding: '8px 10px', marginBottom: 0 }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <b style={{ color: 'var(--brand)', fontSize: 14 }}>{d.verb}</b>
+              {d.priority && <span className="tag warn" style={{ marginLeft: 4 }}>一直忘</span>}
+              <div style={{ fontSize: 13 }}>{d.zhMeaning}</div>
+              {d.examples?.[0] && (
+                <div style={{ fontSize: 12, fontStyle: 'italic', color: 'var(--muted)', marginTop: 2 }}>{d.examples[0]}</div>
+              )}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </>
   )
 }

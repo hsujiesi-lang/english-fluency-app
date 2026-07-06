@@ -1,7 +1,7 @@
 // 模組 5：每日短句（120 句）— 聽讀 / 中翻英 / 早安晚安法
 
 import React, { useEffect, useRef, useState } from 'react'
-import { Screen, TimerBar, useCountdown, Spinner, pick, shuffle, onDoubleEnter } from '../lib/ui.jsx'
+import { Screen, TimerBar, useCountdown, Spinner, pick, shuffle, onDoubleEnter, useDoubleEnterNext } from '../lib/ui.jsx'
 import * as speech from '../lib/speech.js'
 import * as store from '../lib/storage.js'
 import * as banks from '../lib/banks.js'
@@ -280,6 +280,8 @@ function Translate({ phrases, onBack }) {
   // latest answer text, readable from the timer-expiry callback
   const transcriptRef = useRef('')
   transcriptRef.current = canSpeak ? transcript : typed
+
+  useDoubleEnterNext(phase === 'result', () => next())
 
   const startRound = () => {
     const dueIds = new Set(banks.duePhraseIds())

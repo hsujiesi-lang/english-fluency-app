@@ -81,6 +81,31 @@ export function onDoubleEnter(submit) {
   }
 }
 
+// 答完題（回饋顯示中）連按兩次 Enter → 下一題。
+// active 為 true 時掛全域監聽；正在輸入框裡打字時不觸發。
+export function useDoubleEnterNext(active, onNext) {
+  const fnRef = useRef(onNext)
+  fnRef.current = onNext
+  const lastRef = useRef(0)
+  useEffect(() => {
+    if (!active) return
+    const h = (e) => {
+      if (e.key !== 'Enter') return
+      const tag = e.target?.tagName
+      if (tag === 'TEXTAREA' || tag === 'INPUT') return
+      const now = Date.now()
+      if (now - lastRef.current < 800) {
+        lastRef.current = 0
+        fnRef.current()
+      } else {
+        lastRef.current = now
+      }
+    }
+    window.addEventListener('keydown', h)
+    return () => { window.removeEventListener('keydown', h); lastRef.current = 0 }
+  }, [active])
+}
+
 export function shuffle(arr) {
   const a = [...arr]
   for (let i = a.length - 1; i > 0; i--) {
