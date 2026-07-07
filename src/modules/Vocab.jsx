@@ -84,10 +84,11 @@ export default function Vocab({ nav, embedded }) {
 // ---- 新增 ----
 
 function AddForm({ onDone, embedded }) {
+  const canAI = claude.hasApiKey()
   const [f, setF] = useState({ word: '', partOfSpeech: 'noun', zhMeaning: '', example: '', errorType: 'meaning' })
+  const [manual, setManual] = useState(!canAI) // 有金鑰預設極簡模式：只填單字
   const [generating, setGenerating] = useState(false)
   const [genMsg, setGenMsg] = useState('')
-  const canAI = claude.hasApiKey()
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value })
   const save = () => {
     if (!f.word.trim() || !f.zhMeaning.trim()) return
@@ -95,46 +96,70 @@ function AddForm({ onDone, embedded }) {
     onDone()
   }
 
-  const generate = async () => {
+  // 一鍵：生成意思/詞性/例句 → 直接存檔返回
+  const generateAndSave = async () => {
     const w = f.word.trim()
     if (!w || generating) return
     setGenerating(true)
     setGenMsg('')
     try {
       const r = await claude.enrichVocab(w)
-      setF((prev) => ({
-        ...prev,
+      banks.addVocab({
         word: r.word || w,
-        partOfSpeech: POS_LABEL[r.partOfSpeech] ? r.partOfSpeech : prev.partOfSpeech,
-        zhMeaning: r.zhMeaning || prev.zhMeaning,
-        example: r.example || prev.example,
-      }))
-      setGenMsg(r.corrected && r.corrected.toLowerCase() !== w.toLowerCase()
-        ? `✨ 已生成（拼字已修正：${w} → ${r.corrected}）— 可再手動修改`
-        : '✨ 已生成 — 可再手動修改')
+        partOfSpeech: POS_LABEL[r.partOfSpeech] ? r.partOfSpeech : 'noun',
+        zhMeaning: r.zhMeaning || '（生成失敗，請編輯）',
+        example: r.example || '',
+        errorType: f.errorType,
+      })
+      onDone()
+      return
     } catch (e) {
-      setGenMsg('生成失敗（' + e.message.slice(0, 50) + '），請手動填寫')
+      setGenMsg('自動生成失敗（' + e.message.slice(0, 50) + '），請改用手動填寫')
+      setManual(true)
     }
     setGenerating(false)
   }
 
-  const body = (
-    <div className="card">
-      <h3>新增單字</h3>
-      <label className="field">單字 / 片語</label>
-      <input className="input" value={f.word} onChange={set('word')} placeholder="e.g. implement"
-        autoCapitalize="off" autoCorrect="off"
-        onKeyDown={(e) => { if (e.key === 'Enter' && canAI) generate() }} />
-      {canAI ? (
-        <div className="btn-row">
-          <button className="btn" onClick={generate} disabled={!f.word.trim() || generating}>
-            {generating ? '生成中…' : '✨ 自動生成意思、詞性、例句'}
+  // 極簡模式：單字 + 練法，其他全自動
+  if (!manual) {
+    const body = (
+      <div className="card">
+        <h3>新增單字</h3>
+        <label className="field">單字 / 片語（其餘欄位自動生成）</label>
+        <input className="input" value={f.word} onChange={set('word')} placeholder="e.g. accomplishment"
+          autoFocus autoCapitalize="off" autoCorrect="off"
+          onKeyDown={(e) => { if (e.key === 'Enter') generateAndSave() }} />
+        <label className="field">你常錯在哪？（決定練法）</label>
+        <select className="input" value={f.errorType} onChange={set('errorType')}>
+          <option value="spelling">拼寫（→ 聽音拼寫）</option>
+          <option value="meaning">語意（→ 中文提示造句）</option>
+          <option value="usage">用法（→ 詞性辨析）</option>
+        </select>
+        {genMsg && <div className="feedback-block bad">{genMsg}</div>}
+        <div className="btn-row" style={{ marginTop: 14 }}>
+          <button className="btn secondary" onClick={onDone}>取消</button>
+          <button className="btn" onClick={generateAndSave} disabled={!f.word.trim() || generating}>
+            {generating ? '✨ 生成中…' : '✨ 生成並儲存'}
           </button>
         </div>
-      ) : (
-        <div className="notice">設定 API 金鑰後，輸入單字可一鍵自動生成以下欄位。</div>
-      )}
-      {genMsg && <div className={'feedback-block ' + (genMsg.startsWith('生成失敗') ? 'bad' : 'good')}>{genMsg}</div>}
+        <button className="btn ghost small" onClick={() => setManual(true)}>改用手動填寫</button>
+        <p style={{ fontSize: 12, color: 'var(--muted)' }}>拼錯也沒關係，會自動修正拼字。按 Enter 直接送出。</p>
+      </div>
+    )
+    if (embedded) return body
+    return <Screen title="新增單字" onBack={onDone}>{body}</Screen>
+  }
+
+  const body = (
+    <div className="card">
+      <h3>新增單字（手動）</h3>
+      <label className="field">單字 / 片語</label>
+      <input className="input" value={f.word} onChange={set('word')} placeholder="e.g. implement"
+        autoCapitalize="off" autoCorrect="off" />
+      {canAI
+        ? <button className="btn ghost small" onClick={() => setManual(false)}>↩︎ 回到自動生成模式</button>
+        : <div className="notice">到「設定」貼上 API 金鑰後，就能只打單字、其餘欄位自動生成。</div>}
+      {genMsg && <div className="feedback-block bad">{genMsg}</div>}
       <label className="field">詞性</label>
       <select className="input" value={f.partOfSpeech} onChange={set('partOfSpeech')}>
         {Object.entries(POS_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
