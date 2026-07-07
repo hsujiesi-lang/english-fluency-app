@@ -16,10 +16,10 @@ export function getLang() {
   return store.get('settings', {}).sttLang || 'en-AU'
 }
 
-export function speak(text, { rate = 1.0, lang } = {}) {
+let lastCancelAt = 0
+
+function speakOnce(text, { rate, lang }) {
   return new Promise((resolve) => {
-    if (!ttsSupported()) return resolve()
-    speechSynthesis.cancel()
     const u = new SpeechSynthesisUtterance(text)
     u.lang = lang || getLang()
     u.rate = rate
@@ -28,14 +28,36 @@ export function speak(text, { rate = 1.0, lang } = {}) {
     const v = voices.find((v) => v.lang === u.lang)
       || voices.find((v) => v.lang.replace('_', '-').startsWith(base))
     if (v) u.voice = v // 找不到就交給瀏覽器依 u.lang 選預設聲音
-    u.onend = resolve
-    u.onerror = resolve
+    const t0 = Date.now()
+    u.onend = () => resolve(Date.now() - t0)
+    u.onerror = () => resolve(Date.now() - t0)
+    // Chrome 已知問題：synthesis 可能卡在 paused 狀態 → 先 resume 再講
+    speechSynthesis.resume()
     speechSynthesis.speak(u)
   })
 }
 
+export async function speak(text, { rate = 1.0, lang } = {}) {
+  if (!ttsSupported()) return
+  // 只在真的有殘留語音時才 cancel，並稍等一下 —
+  // Chrome 的 cancel() 之後立刻 speak() 常會把新語音靜默吃掉
+  if (speechSynthesis.speaking || speechSynthesis.pending) {
+    speechSynthesis.cancel()
+    await new Promise((r) => setTimeout(r, 120))
+  }
+  const ms = await speakOnce(text, { rate, lang })
+  // 幾乎瞬間就「結束」＝八成沒真的播出來（被 cancel 競態吃掉）→ 重試一次。
+  // 但如果是使用者剛按了暫停（stopSpeaking），就不要重試。
+  if (ms < 60 && text.length > 2 && Date.now() - lastCancelAt > 500) {
+    await new Promise((r) => setTimeout(r, 250))
+    await speakOnce(text, { rate, lang })
+  }
+}
+
 export function stopSpeaking() {
-  if (ttsSupported()) speechSynthesis.cancel()
+  if (!ttsSupported()) return
+  lastCancelAt = Date.now()
+  speechSynthesis.cancel()
 }
 
 // Continuous recognizer with live interim results.

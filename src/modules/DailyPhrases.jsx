@@ -93,6 +93,7 @@ function BrowseAll({ phrases, onBack }) {
         await speakSafe(flatList[k].zh, { lang: 'zh-TW', rate: r })
         if (stopRef.current) break
         await sleepMs(300)
+        if (stopRef.current) break // 暫停可能落在中英之間的空檔
       }
       await speakSafe(flatList[k].en.split('/')[0], { rate: r })
       if (stopRef.current) break
