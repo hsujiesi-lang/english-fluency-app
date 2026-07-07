@@ -5,6 +5,7 @@ import Speaking from './modules/Speaking.jsx'
 import ErrorHunter from './modules/ErrorHunter.jsx'
 import Writing from './modules/Writing.jsx'
 import Picture from './modules/Picture.jsx'
+import Topics from './modules/Topics.jsx'
 import ErrorBank from './modules/ErrorBank.jsx'
 import Vocab from './modules/Vocab.jsx'
 import Settings from './modules/Settings.jsx'
@@ -45,6 +46,7 @@ export default function App() {
       {screen === 'speaking' && <Speaking nav={nav} />}
       {screen === 'writing' && <Writing nav={nav} />}
       {screen === 'picture' && <Picture nav={nav} />}
+      {screen === 'topics' && <Topics nav={nav} />}
       {screen === 'hunter' && <ErrorHunter nav={nav} />}
       {screen === 'me' && <Me nav={nav} params={params} />}
       <nav className="bottom-nav">

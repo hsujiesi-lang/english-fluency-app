@@ -71,6 +71,9 @@ export default function Home({ nav, phrases }) {
       <div className="card" onClick={() => nav('picture')} style={{ cursor: 'pointer' }}>
         <h3>🖼️ 圖片描述</h3><p>看圖限時輸出（寫 5 句 / 口說 60 秒）— 綜合弱點訓練</p>
       </div>
+      <div className="card" onClick={() => nav('topics')} style={{ cursor: 'pointer' }}>
+        <h3>🗂️ 主題單詞</h3><p>天氣 🌦️ 身體 🧍 衣服 👕 電影 🎬 情緒 💭 料理 🍳 — 列表＋練習</p>
+      </div>
       <div className="card" onClick={() => nav('hunter')} style={{ cursor: 'pointer' }}>
         <h3>🎯 錯誤獵人</h3><p>動詞形式 / 冠詞單複數 / 詞性 — 你的三大弱點</p>
       </div>
