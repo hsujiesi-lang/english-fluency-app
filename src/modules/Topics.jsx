@@ -82,23 +82,35 @@ function WordList({ topic }) {
           ? <button className="btn good" onClick={playAll}>▶️ 播放全部（中→英）</button>
           : <button className="btn bad" onClick={stop}>⏹ 停止（{playIdx + 1} / {topic.words.length}）</button>}
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-        {topic.words.map((w, k) => (
-          <div className="list-item" key={w.en}
-            style={{
-              marginBottom: 0, alignItems: 'flex-start',
-              outline: playing && playIdx === k ? '2.5px solid var(--brand)' : 'none',
-              background: playing && playIdx === k ? 'var(--brand-soft)' : 'var(--card)',
-            }}>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <b style={{ color: 'var(--brand)', fontSize: 15 }}>{w.en}</b>
-              <span style={{ marginLeft: 6, fontSize: 13 }}>{w.zh}</span>
-              <div style={{ fontSize: 12, fontStyle: 'italic', color: 'var(--muted)', marginTop: 2 }}>{w.ex}</div>
+      {(topic.groups || [undefined]).map((g) => {
+        const list = topic.words.filter((w) => w.group === g)
+        if (!list.length) return null
+        return (
+          <div key={g || 'all'}>
+            {g && <h3 style={{ margin: '14px 4px 8px', fontSize: 16 }}>{g}（{list.length}）</h3>}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+              {list.map((w) => {
+                const k = topic.words.indexOf(w)
+                return (
+                  <div className="list-item" key={w.en}
+                    style={{
+                      marginBottom: 0, alignItems: 'flex-start',
+                      outline: playing && playIdx === k ? '2.5px solid var(--brand)' : 'none',
+                      background: playing && playIdx === k ? 'var(--brand-soft)' : 'var(--card)',
+                    }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <b style={{ color: 'var(--brand)', fontSize: 15 }}>{w.en}</b>
+                      <span style={{ marginLeft: 6, fontSize: 13 }}>{w.zh}</span>
+                      <div style={{ fontSize: 12, fontStyle: 'italic', color: 'var(--muted)', marginTop: 2 }}>{w.ex}</div>
+                    </div>
+                    <button className="btn ghost small" style={{ padding: '4px 6px' }} onClick={() => speech.speak(w.en)}>🔊</button>
+                  </div>
+                )
+              })}
             </div>
-            <button className="btn ghost small" style={{ padding: '4px 6px' }} onClick={() => speech.speak(w.en)}>🔊</button>
           </div>
-        ))}
-      </div>
+        )
+      })}
     </>
   )
 }
