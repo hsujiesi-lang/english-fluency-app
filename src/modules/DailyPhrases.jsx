@@ -77,10 +77,14 @@ function BrowseAll({ phrases, onBack }) {
   // 各裝置 TTS 品質不一：單句最多等 12 秒，避免卡死整個播放
   const speakSafe = (text, opts) => Promise.race([speech.speak(text, opts), sleepMs(12000)])
 
-  async function playAll() {
+  const [pausedIdx, setPausedIdx] = useState(null) // 暫停時記住播到第幾句
+
+  async function playAll(startIdx = 0) {
     setPlaying(true)
+    setPausedIdx(null)
     stopRef.current = false
-    for (let k = 0; k < flatList.length; k++) {
+    let k = startIdx
+    for (; k < flatList.length; k++) {
       if (stopRef.current) break
       setPlayIdx(k)
       document.getElementById('ph-' + flatList[k].id)?.scrollIntoView({ block: 'center', behavior: 'smooth' })
@@ -91,19 +95,22 @@ function BrowseAll({ phrases, onBack }) {
         await sleepMs(300)
       }
       await speakSafe(flatList[k].en.split('/')[0], { rate: r })
+      if (stopRef.current) break
       await sleepMs(600)
     }
     setPlaying(false)
     setPlayIdx(-1)
+    // 中途暫停 → 記住位置（下次從同一句重播）；自然播完 → 歸零
+    setPausedIdx(stopRef.current && k < flatList.length ? k : null)
   }
 
-  const stopAll = () => {
+  const pauseAll = () => {
     stopRef.current = true
     speech.stopSpeaking()
-    setPlaying(false)
-    setPlayIdx(-1)
   }
 
+  // 換主題或搜尋時清掉暫停位置（清單變了，位置沒意義）
+  useEffect(() => { pauseAll(); setPausedIdx(null); setPlaying(false); setPlayIdx(-1) }, [filter, q])
   useEffect(() => () => { stopRef.current = true; speech.stopSpeaking() }, [])
 
   return (
@@ -119,12 +126,19 @@ function BrowseAll({ phrases, onBack }) {
       <div className="card" style={{ padding: '10px 14px', position: 'sticky', top: 8, zIndex: 10 }}>
         <div className="btn-row" style={{ margin: 0 }}>
           {!playing ? (
-            <button className="btn good" onClick={playAll} disabled={flatList.length === 0}>
-              ▶️ 播放全部（{flatList.length} 句）
-            </button>
+            <>
+              <button className="btn good" onClick={() => playAll(pausedIdx ?? 0)} disabled={flatList.length === 0}>
+                {pausedIdx != null
+                  ? `▶️ 繼續（第 ${pausedIdx + 1} / ${flatList.length} 句）`
+                  : `▶️ 播放全部（${flatList.length} 句）`}
+              </button>
+              {pausedIdx != null && (
+                <button className="btn secondary" style={{ flex: '0 0 auto' }} onClick={() => setPausedIdx(null)}>⏮ 重頭</button>
+              )}
+            </>
           ) : (
-            <button className="btn bad" onClick={stopAll}>
-              ⏹ 停止（{playIdx + 1} / {flatList.length}）
+            <button className="btn bad" onClick={pauseAll}>
+              ⏸ 暫停（{playIdx + 1} / {flatList.length}）
             </button>
           )}
           <button className="btn secondary" onClick={() => setPlayMode(playMode === 'zh-en' ? 'en' : 'zh-en')}>
