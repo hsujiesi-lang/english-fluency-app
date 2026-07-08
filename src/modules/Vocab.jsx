@@ -13,11 +13,25 @@ const POS_LABEL = {
 }
 const ERR_LABEL = { spelling: '拼寫', meaning: '語意', usage: '用法' }
 
+// 使用者指定加入的預載單字（自動匯入一次，靠 addVocab 防重複）
+const PRESET_V1 = [
+  { word: 'accomplishment', partOfSpeech: 'noun', zhMeaning: '成就、成績', example: 'Finishing the essay two days early felt like a real accomplishment.', errorType: 'spelling' },
+  { word: 'complement', partOfSpeech: 'verb', zhMeaning: '補足、與…相配（小心 ≠ compliment 讚美）', example: 'The scarf complements her outfit perfectly.', errorType: 'usage' },
+]
+
 export default function Vocab({ nav, embedded }) {
-  const [view, setView] = useState('browse') // browse | add | practice
+  const [view, setView] = useState('browse') // browse | add | practice | free
   const [posTab, setPosTab] = useState('all')
   const [, force] = useState(0)
   const refresh = () => force((n) => n + 1)
+
+  React.useEffect(() => {
+    if (!store.get('vocabPresetV1', false)) {
+      PRESET_V1.forEach((w) => banks.addVocab(w))
+      store.set('vocabPresetV1', true)
+      refresh()
+    }
+  }, [])
 
   const all = banks.getVocab()
   const due = banks.dueVocab()
@@ -25,6 +39,7 @@ export default function Vocab({ nav, embedded }) {
 
   if (view === 'add') return <AddForm onDone={() => { setView('browse'); refresh() }} embedded={embedded} />
   if (view === 'practice') return <Practice due={due} onDone={() => { setView('browse'); refresh() }} embedded={embedded} />
+  if (view === 'free') return <FreeSpelling all={all} onDone={() => { setView('browse'); refresh() }} />
 
   const body = (
     <>
@@ -39,6 +54,10 @@ export default function Vocab({ nav, embedded }) {
           練習到期單字（{due.length}）
         </button>
       </div>
+      <button className="btn secondary big" style={{ marginBottom: 12 }} disabled={all.length === 0}
+        onClick={() => setView('free')}>
+        ⌨️ 中→英拼寫練習（全部 {all.length} 字隨機抽）
+      </button>
       {!store.get('notionSpellingImported', false) && (
         <button className="btn secondary big" style={{ marginBottom: 12 }} onClick={() => {
           SPELLING_IMPORT.forEach((w) => banks.addVocab({ ...w, errorType: 'spelling' }))
@@ -183,6 +202,95 @@ function AddForm({ onDone, embedded }) {
 
   if (embedded) return body
   return <Screen title="新增單字" onBack={onDone}>{body}</Screen>
+}
+
+// ---- 自由練習：中文意思 → 拼寫英文（全部單字隨機抽，不限到期）----
+
+function FreeSpelling({ all, onDone }) {
+  const ROUND = Math.min(8, all.length)
+  const [items, setItems] = useState(() => shuffle(all).slice(0, ROUND))
+  const [i, setI] = useState(0)
+  const [input, setInput] = useState('')
+  const [result, setResult] = useState(null)
+  const [wrongs, setWrongs] = useState([])
+  const [done, setDone] = useState(false)
+
+  const w = items[i]
+  useDoubleEnterNext(!!result && !done, () => next())
+
+  const norm = (s) => s.toLowerCase().replace(/[^a-z\s-]/g, '').replace(/\s+/g, ' ').trim()
+
+  const submit = () => {
+    if (result || !input.trim()) return
+    const ok = norm(input) === norm(w.word)
+    setResult({ ok })
+    store.logActivity('vocab')
+    if (ok) {
+      speech.speak(w.word)
+    } else {
+      setWrongs((ws) => [...ws, { q: w.zhMeaning, your: input, right: w.word, why: w.example }])
+      banks.reviewVocab(w.id, false) // 拼錯 → 重設 SRS，明天回來考
+    }
+  }
+
+  const next = () => {
+    setInput('')
+    setResult(null)
+    if (i + 1 >= items.length) setDone(true)
+    else setI(i + 1)
+  }
+
+  const restart = () => {
+    setItems(shuffle(all).slice(0, ROUND))
+    setI(0); setInput(''); setResult(null); setWrongs([]); setDone(false)
+  }
+
+  if (done) {
+    return (
+      <div className="card" style={{ textAlign: 'center' }}>
+        <h3>拼寫練習完成 🎉</h3>
+        <p style={{ fontSize: 40, fontWeight: 800, color: 'var(--brand)', margin: 8 }}>
+          {items.length - wrongs.length} / {items.length}
+        </p>
+        <WrongList items={wrongs} />
+        {wrongs.length > 0 && <p style={{ fontSize: 13, color: 'var(--muted)' }}>拼錯的字已重設複習排程，明天會再考妳</p>}
+        <div className="btn-row">
+          <button className="btn secondary" onClick={onDone}>返回單字庫</button>
+          <button className="btn" onClick={restart}>再來一回合</button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="card">
+      <p className="screen-sub" style={{ margin: '0 0 8px' }}>{i + 1} / {items.length}　⌨️ 中→英拼寫</p>
+      <p className="big-question">{w.zhMeaning}</p>
+      <p style={{ color: 'var(--muted)', fontSize: 13 }}>{POS_LABEL[w.partOfSpeech]}</p>
+      {!result ? (
+        <>
+          <input className="input" autoFocus autoCapitalize="off" autoCorrect="off" value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && submit()}
+            placeholder="拼出對應的英文…" />
+          <div className="btn-row">
+            <button className="btn" onClick={submit} disabled={!input.trim()}>提交</button>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className={'feedback-block ' + (result.ok ? 'good' : 'bad')}>
+            <b>{result.ok ? '✅ 正確！' : '❌ 答案：'}</b> <b>{w.word}</b>
+            {w.example && <p style={{ margin: '4px 0 0', fontStyle: 'italic', fontSize: 14 }}>{w.example}</p>}
+          </div>
+          <div className="btn-row">
+            <button className="btn secondary" onClick={() => speech.speak(w.word, { rate: 0.85 })}>🔊 聽發音</button>
+            <button className="btn" onClick={next}>下一題 →</button>
+          </div>
+        </>
+      )}
+    </div>
+  )
 }
 
 // ---- 練習（依 errorType 決定題型） ----
