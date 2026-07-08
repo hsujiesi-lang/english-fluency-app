@@ -44,21 +44,72 @@ export default function Phrasal({ nav }) {
 
 // ---- 總列表：搜尋、釘選置頂、三態、例句 ----
 
+// 朗讀三態：turn up… turned up… turned up（無變化就只念原形）
+function speakForms(d, rate = 0.95) {
+  const clean = (s) => s.replace(/\(.*?\)/g, '').split('+')[0].replace(/\s+/g, ' ').trim()
+  const f = verbForms(d.verb)
+  const text = f && f.past !== f.base
+    ? `${clean(f.base)}. ${clean(f.past)}. ${clean(f.pp).split('/')[0]}.`
+    : clean(d.verb)
+  return speech.speak(text, { rate })
+}
+
 function PvList({ all }) {
   const [q, setQ] = useState('')
   const [, force] = useState(0)
   const pinned = getPinned()
+  // 連續播放（可暫停續播）
+  const [playing, setPlaying] = useState(false)
+  const [playIdx, setPlayIdx] = useState(-1)
+  const [pausedIdx, setPausedIdx] = useState(null)
+  const stopRef = React.useRef(false)
 
   const query = q.trim().toLowerCase()
   const match = (d) => !query || d.verb.toLowerCase().includes(query) || d.zhMeaning.toLowerCase().includes(query)
   const pinnedList = all.filter((d) => pinned.includes(d.verb) && match(d))
   const restList = all.filter((d) => !pinned.includes(d.verb) && match(d))
+  const flatList = [...pinnedList, ...restList]
+
+  const sleepMs = (ms) => new Promise((r) => setTimeout(r, ms))
+
+  async function playAll(startIdx = 0) {
+    setPlaying(true)
+    setPausedIdx(null)
+    stopRef.current = false
+    let k = startIdx
+    for (; k < flatList.length; k++) {
+      if (stopRef.current) break
+      setPlayIdx(k)
+      const d = flatList[k]
+      document.getElementById('pv-' + d.verb.replace(/[^a-z]/gi, ''))?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+      await Promise.race([speech.speak(d.zhMeaning.split('；')[0], { lang: 'zh-TW' }), sleepMs(10000)])
+      if (stopRef.current) break
+      await sleepMs(250)
+      if (stopRef.current) break
+      await Promise.race([speakForms(d), sleepMs(15000)])
+      if (stopRef.current) break
+      await sleepMs(600)
+    }
+    setPlaying(false)
+    setPlayIdx(-1)
+    setPausedIdx(stopRef.current && k < flatList.length ? k : null)
+  }
+
+  const pauseAll = () => { stopRef.current = true; speech.stopSpeaking() }
+  useEffect(() => { pauseAll(); setPausedIdx(null); setPlaying(false); setPlayIdx(-1) }, [q])
+  useEffect(() => () => { stopRef.current = true; speech.stopSpeaking() }, [])
 
   const Item = ({ d }) => {
     const forms = verbForms(d.verb)
     const isPinned = pinned.includes(d.verb)
+    const isNow = playing && flatList[playIdx] === d
     return (
-      <div className="list-item" style={{ marginBottom: 0, alignItems: 'flex-start', background: isPinned ? 'var(--warn-soft)' : 'var(--card)' }}>
+      <div className="list-item" id={'pv-' + d.verb.replace(/[^a-z]/gi, '')}
+        style={{
+          marginBottom: 0, alignItems: 'flex-start',
+          background: isNow ? 'var(--brand-soft)' : isPinned ? 'var(--warn-soft)' : 'var(--card)',
+          outline: isNow ? '2.5px solid var(--brand)' : 'none',
+        }}>
         <div style={{ flex: 1, minWidth: 0 }}>
           <b style={{ color: 'var(--brand)', fontSize: 14 }}>{d.verb}</b>
           {d.priority && <span className="tag warn" style={{ marginLeft: 4 }}>一直忘</span>}
@@ -76,7 +127,7 @@ function PvList({ all }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           <button className="btn ghost small" style={{ padding: '4px 6px', opacity: isPinned ? 1 : 0.35 }}
             onClick={() => { togglePin(d.verb); force((n) => n + 1) }}>📌</button>
-          <button className="btn ghost small" style={{ padding: '4px 6px' }} onClick={() => speech.speak(d.verb.split('+')[0].replace(/\(.*?\)/g, ''))}>🔊</button>
+          <button className="btn ghost small" style={{ padding: '4px 6px' }} onClick={() => speakForms(d)}>🔊</button>
         </div>
       </div>
     )
@@ -86,6 +137,27 @@ function PvList({ all }) {
     <>
       <input className="input" value={q} onChange={(e) => setQ(e.target.value)}
         placeholder={`🔍 搜尋 ${all.length} 個 phrasal verbs…`} style={{ marginBottom: 10 }} />
+      <div className="card" style={{ padding: '10px 14px', position: 'sticky', top: 8, zIndex: 10 }}>
+        <div className="btn-row" style={{ margin: 0 }}>
+          {!playing ? (
+            <>
+              <button className="btn good" onClick={() => playAll(pausedIdx ?? 0)} disabled={flatList.length === 0}>
+                {pausedIdx != null
+                  ? `▶️ 繼續（第 ${pausedIdx + 1} / ${flatList.length} 個）`
+                  : `▶️ 播放全部三態（${flatList.length} 個）`}
+              </button>
+              {pausedIdx != null && (
+                <button className="btn secondary" style={{ flex: '0 0 auto' }} onClick={() => setPausedIdx(null)}>⏮ 重頭</button>
+              )}
+            </>
+          ) : (
+            <button className="btn bad" onClick={pauseAll}>
+              ⏸ 暫停（{playIdx + 1} / {flatList.length}）
+            </button>
+          )}
+        </div>
+        <p style={{ margin: '6px 0 0', fontSize: 12, color: 'var(--muted)' }}>每個唸：中文 → 原形 → 過去式 → 過去分詞</p>
+      </div>
       {pinnedList.length > 0 && (
         <>
           <h3 style={{ margin: '4px 4px 8px', fontSize: 15 }}>📌 已釘選（{pinnedList.length}）</h3>
