@@ -20,6 +20,7 @@ export default function DailyPhrases({ nav, phrases, params }) {
 
   if (mode === 'listen') return <ListenRead phrases={phrases} onBack={() => setMode(null)} />
   if (mode === 'translate') return <Translate phrases={phrases} onBack={() => setMode(null)} />
+  if (mode === 'typeTranslate') return <TypeTranslate phrases={phrases} onBack={() => setMode(null)} />
   if (mode === 'daily') return <MorningEvening onBack={() => setMode(null)} />
   if (mode === 'browse') return <BrowseAll phrases={phrases} onBack={() => setMode(null)} />
 
@@ -33,6 +34,10 @@ export default function DailyPhrases({ nav, phrases, params }) {
       <div className="card" onClick={() => setMode('translate')} style={{ cursor: 'pointer' }}>
         <h3>🗣️ 中翻英</h3>
         <p>看中文 → 8 秒內說出英文 {dueCount > 0 && <span className="tag warn">待複習 {dueCount}</span>}</p>
+      </div>
+      <div className="card" onClick={() => setMode('typeTranslate')} style={{ cursor: 'pointer' }}>
+        <h3>⌨️ 中翻英（不限時）</h3>
+        <p>看中文 → 打字或按 🎤 說出英文，慢慢想、求精準</p>
       </div>
       <div className="card" onClick={() => setMode('daily')} style={{ cursor: 'pointer' }}>
         <h3>🌅 早安 / 晚安法</h3>
@@ -427,6 +432,134 @@ function Translate({ phrases, onBack }) {
             {transcriptRef.current && <p style={{ color: 'var(--muted)', fontSize: 14 }}>你說的：{transcriptRef.current}</p>}
             <div className="btn-row">
               <button className="btn secondary" onClick={() => speech.speak(p.en.split('/')[0], { rate: 0.9 })}>🔊 再聽一次</button>
+              <button className="btn" onClick={next}>下一題 →</button>
+            </div>
+          </>
+        )}
+      </div>
+    </Screen>
+  )
+}
+
+// ---- 中翻英（不限時，打字或語音自選）----
+
+function TypeTranslate({ phrases, onBack }) {
+  const [queue, setQueue] = useState(null)
+  const [i, setI] = useState(0)
+  const [input, setInput] = useState('')
+  const [recording, setRecording] = useState(false)
+  const [judging, setJudging] = useState(false)
+  const [verdict, setVerdict] = useState(null)
+  const [score, setScore] = useState(0)
+  const [wrongs, setWrongs] = useState([])
+  const [done, setDone] = useState(false)
+  const recRef = useRef(null)
+  const canSpeak = speech.sttSupported()
+
+  const startRound = () => {
+    const dueIds = new Set(banks.duePhraseIds())
+    const due = phrases.filter((p) => dueIds.has(String(p.id)))
+    const rest = phrases.filter((p) => !dueIds.has(String(p.id)))
+    setQueue(shuffle([...pick(due, ROUND_SIZE), ...pick(rest, ROUND_SIZE)].slice(0, ROUND_SIZE)))
+    setI(0); setScore(0); setWrongs([]); setDone(false)
+    setInput(''); setVerdict(null)
+  }
+
+  useEffect(startRound, [])
+  useEffect(() => () => { if (recRef.current) recRef.current.stop(); speech.stopSpeaking() }, [])
+  useDoubleEnterNext(!!verdict && !done, () => next())
+
+  if (!queue) return <Screen title="中翻英（不限時）" onBack={onBack}><Spinner /></Screen>
+  const p = queue[i]
+
+  const toggleMic = () => {
+    if (recording) { recRef.current?.stop(); recRef.current = null; setRecording(false); return }
+    setRecording(true)
+    recRef.current = speech.listen({
+      onUpdate: (t) => setInput(t),
+      onEnd: () => setRecording(false),
+      onError: () => setRecording(false),
+    })
+  }
+
+  async function submit() {
+    const answer = input.trim()
+    if (!answer || verdict || judging) return
+    if (recRef.current) { recRef.current.stop(); recRef.current = null; setRecording(false) }
+    setJudging(true)
+    let v
+    const local = speech.fuzzyMatch(answer, p.en, p.accept || [])
+    if (local.ok) {
+      v = { ok: true, reason: '符合句型！' }
+    } else if (claude.hasApiKey()) {
+      try { v = await claude.judgeTranslation(p.zh, p.en, answer) }
+      catch { v = { ok: false, reason: '和參考句差異較大（AI 比對失敗，用規則判定）', betterVersion: p.en } }
+    } else {
+      v = { ok: false, reason: '和參考句差異較大', betterVersion: p.en }
+    }
+    setJudging(false)
+    setVerdict(v)
+    store.logActivity('phrases')
+    if (v.ok) { setScore((s) => s + 1) }
+    else {
+      setWrongs((w) => [...w, { q: p.zh, your: answer, right: p.en, why: v.reason }])
+      banks.queuePhrase(String(p.id))
+      speech.speak(p.en.split('/')[0], { rate: 0.9 })
+    }
+    const inQueue = banks.getPhraseQueue()[String(p.id)]
+    if (inQueue) banks.reviewPhrase(String(p.id), v.ok)
+  }
+
+  const next = () => {
+    setInput('')
+    setVerdict(null)
+    if (i + 1 >= queue.length) setDone(true)
+    else setI(i + 1)
+  }
+
+  if (done) {
+    return (
+      <Screen title="中翻英（不限時）" onBack={onBack}>
+        <div className="card" style={{ textAlign: 'center' }}>
+          <h3>本回合完成 🎉</h3>
+          <p style={{ fontSize: 40, fontWeight: 800, color: 'var(--brand)', margin: 8 }}>{score} / {queue.length}</p>
+          <WrongList items={wrongs} />
+        </div>
+        <button className="btn big" onClick={startRound}>再來一回合</button>
+      </Screen>
+    )
+  }
+
+  return (
+    <Screen title="中翻英（不限時）" sub={`${i + 1} / ${queue.length}　答對 ${score}`} onBack={onBack}>
+      <div className="card">
+        <p className="big-question">{p.zh}</p>
+        {!verdict ? (
+          <>
+            <textarea className="input" rows={2} value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={onDoubleEnter(submit)}
+              placeholder="打出英文說法…（連按兩次 Enter 提交）" />
+            <div className="btn-row">
+              {canSpeak && (
+                <button className={'btn ' + (recording ? 'bad' : 'good')} onClick={toggleMic}>
+                  {recording ? <><span className="recording-dot" />停止語音</> : '🎤 用說的'}
+                </button>
+              )}
+              <button className="btn" onClick={submit} disabled={!input.trim() || judging}>
+                {judging ? '比對中…' : '提交'}
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="transcript">{input}</div>
+            <div className={'feedback-block ' + (verdict.ok ? 'good' : 'bad')}>
+              <b>{verdict.ok ? '✅ 正確！' : '❌ 再加油'}</b> {verdict.reason}
+              {!verdict.ok && <p style={{ margin: '6px 0 0' }}>參考：<b>{verdict.betterVersion || p.en}</b></p>}
+            </div>
+            <div className="btn-row">
+              <button className="btn secondary" onClick={() => speech.speak(p.en.split('/')[0], { rate: 0.9 })}>🔊 聽參考句</button>
               <button className="btn" onClick={next}>下一題 →</button>
             </div>
           </>
