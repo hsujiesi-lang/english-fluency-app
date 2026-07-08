@@ -12,8 +12,9 @@ import * as store from '../lib/storage.js'
 
 const ROUND = 5
 
-export default function Writing({ nav }) {
-  const [section, setSection] = useState(null)
+export default function Writing({ nav, params }) {
+  const [section, setSection] = useState(params?.section || null)
+  useEffect(() => { if (params?.section) setSection(params.section) }, [params])
 
   if (section === 'articles') {
     return (
@@ -75,9 +76,9 @@ export default function Writing({ nav }) {
         <h3>⚖️ 用法辨析</h3>
         <p>near/nearby、for vs to have、six hundred… — 妳 Notion 的易錯用法</p>
       </div>
-      <div className="card" onClick={() => setSection('phrasal')} style={{ cursor: 'pointer' }}>
+      <div className="card" onClick={() => nav('phrasal')} style={{ cursor: 'pointer' }}>
         <h3>🧩 Phrasal Verbs</h3>
-        <p>妳 Notion 整理的 118 個 — 看中文回想、打出來</p>
+        <p>已搬到底部「Phrasal」分頁 — 三態列表＋兩段式練習</p>
       </div>
       <div className="card" onClick={() => setSection('notes')} style={{ cursor: 'pointer', border: '1.5px dashed var(--brand)' }}>
         <h3>📚 文法筆記（查閱）</h3>

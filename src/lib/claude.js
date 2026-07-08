@@ -191,11 +191,13 @@ export function enrichVocab(word) {
 }
 
 // ---- Module 4: sentence check for vocab practice ----
-const SENTENCE_SYSTEM = `You check one learner sentence using a target word. Verify: word used with correct
-part of speech and meaning; also flag the three personal error families (verb form after modal/to,
-articles/plurals, POS misuse) if present. Explanations in Traditional Chinese.
+const SENTENCE_SYSTEM = `You check one learner sentence using a target word/phrase. Verify:
+(1) the target used with correct part of speech, meaning and particle;
+(2) spelling mistakes anywhere in the sentence — flag every one;
+(3) the three personal error families (verb form after modal/to, articles/plurals, POS misuse).
+Explanations in Traditional Chinese. Minor style issues alone should not fail the sentence.
 Return pure JSON (no markdown fences):
-{ "ok": true/false, "feedback": "繁中回饋", "betterVersion": "improved sentence (only if not ok)" }`
+{ "ok": true/false, "feedback": "繁中回饋（具體指出拼錯的字或文法錯誤）", "betterVersion": "improved sentence (only if not ok)" }`
 
 export function checkSentence(word, pos, sentence) {
   return callClaude(SENTENCE_SYSTEM, `Target word: ${word} (${pos})\nLearner sentence: ${sentence}`, 400)

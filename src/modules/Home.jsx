@@ -59,26 +59,29 @@ export default function Home({ nav, phrases }) {
         ))}
       </div>
 
-      <div className="card" onClick={() => nav('phrases')} style={{ cursor: 'pointer' }}>
-        <h3>💬 每日短句</h3><p>聽讀 / 中翻英 / 早安晚安法 — {phrases ? phrases.length : '…'} 句</p>
+      <div className="card" onClick={() => nav('output')} style={{ cursor: 'pointer' }}>
+        <h3>🗣️ Output 產出</h3>
+        <p>Writing（Paraphrase・圖片描述）＋ Speaking（主題對談・口說流暢度・每日短句）</p>
       </div>
-      <div className="card" onClick={() => nav('speaking')} style={{ cursor: 'pointer' }}>
-        <h3>🎙️ 口說流暢度</h3><p>限時口說＋強制重講 — 練的是「說完整」</p>
+      <div className="card" onClick={() => nav('grammar')} style={{ cursor: 'pointer' }}>
+        <h3>📐 文法</h3>
+        <p>冠詞、介係詞 IN/ON/AT、詞性、用法、錯誤獵人、文法筆記</p>
       </div>
-      <div className="card" onClick={() => nav('writing')} style={{ cursor: 'pointer' }}>
-        <h3>✍️ 寫作練習</h3><p>Paraphrase 改寫 / 冠詞區分 / 詞性使用 — 動手寫</p>
-      </div>
-      <div className="card" onClick={() => nav('picture')} style={{ cursor: 'pointer' }}>
-        <h3>🖼️ 圖片描述</h3><p>看圖限時輸出（寫 5 句 / 口說 60 秒）— 綜合弱點訓練</p>
+      <div className="card" onClick={() => nav('phrasal')} style={{ cursor: 'pointer' }}>
+        <h3>🧩 Phrasal Verbs</h3>
+        <p>118 個總列表（三態＋📌 釘選）＋兩段式練習（回想→造句）</p>
       </div>
       <div className="card" onClick={() => nav('topics')} style={{ cursor: 'pointer' }}>
-        <h3>🗂️ 主題單詞</h3><p>天氣 🌦️ 身體 🧍 衣服 👕 電影 🎬 情緒 💭 料理 🍳 — 列表＋練習</p>
+        <h3>🗂️ 主題單字</h3>
+        <p>天氣 🌦️ 身體 🧍 衣服 👕 電影 🎬 情緒 💭 化妝 💄 料理 🍳</p>
       </div>
-      <div className="card" onClick={() => nav('hunter')} style={{ cursor: 'pointer' }}>
-        <h3>🎯 錯誤獵人</h3><p>動詞形式 / 冠詞單複數 / 詞性 — 你的三大弱點</p>
+      <div className="card" onClick={() => nav('me', { tab: 'vocab' })} style={{ cursor: 'pointer' }}>
+        <h3>📗 單字庫</h3>
+        <p>自動生成單字卡＋中→英拼寫練習＋到期複習</p>
       </div>
-      <div className="card" onClick={() => nav('me')} style={{ cursor: 'pointer' }}>
-        <h3>📚 錯誤庫＆單字庫</h3><p>錯過的都會回來考你（間隔重複）</p>
+      <div className="card" onClick={() => nav('me', { tab: 'errors' })} style={{ cursor: 'pointer' }}>
+        <h3>📕 錯誤庫</h3>
+        <p>所有練習的錯誤自動收集，間隔重複回來考妳</p>
       </div>
     </Screen>
   )
