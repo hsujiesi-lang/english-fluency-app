@@ -82,10 +82,6 @@ function PvList({ all }) {
       setPlayIdx(k)
       const d = flatList[k]
       document.getElementById('pv-' + d.verb.replace(/[^a-z]/gi, ''))?.scrollIntoView({ block: 'center', behavior: 'smooth' })
-      await Promise.race([speech.speak(d.zhMeaning.split('；')[0], { lang: 'zh-TW' }), sleepMs(10000)])
-      if (stopRef.current) break
-      await sleepMs(250)
-      if (stopRef.current) break
       await Promise.race([speakForms(d), sleepMs(15000)])
       if (stopRef.current) break
       await sleepMs(600)
@@ -156,7 +152,7 @@ function PvList({ all }) {
             </button>
           )}
         </div>
-        <p style={{ margin: '6px 0 0', fontSize: 12, color: 'var(--muted)' }}>每個唸：中文 → 原形 → 過去式 → 過去分詞</p>
+        <p style={{ margin: '6px 0 0', fontSize: 12, color: 'var(--muted)' }}>每個唸：原形 → 過去式 → 過去分詞</p>
       </div>
       {pinnedList.length > 0 && (
         <>
