@@ -162,9 +162,19 @@ function PvList({ all }) {
           </div>
         </>
       )}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
-        {restList.map((d) => <Item d={d} key={d.verb} />)}
-      </div>
+      {Array.from({ length: Math.ceil(restList.length / 10) }, (_, g) => {
+        const chunk = restList.slice(g * 10, g * 10 + 10)
+        return (
+          <div key={g}>
+            <h3 style={{ margin: '16px 4px 8px', fontSize: 15, color: 'var(--muted)' }}>
+              ── {g * 10 + 1}–{g * 10 + chunk.length} ──
+            </h3>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
+              {chunk.map((d) => <Item d={d} key={d.verb} />)}
+            </div>
+          </div>
+        )
+      })}
     </>
   )
 }
