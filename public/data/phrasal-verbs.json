@@ -261,6 +261,42 @@
   ]
  },
  {
+  "verb": "scroll down",
+  "zhMeaning": "往下滑",
+  "examples": [
+   "Scroll down to see the comments.",
+   "I scrolled down to the bottom of the page.",
+   "Keep scrolling down until you find the form."
+  ]
+ },
+ {
+  "verb": "scroll up",
+  "zhMeaning": "往上滑",
+  "examples": [
+   "Scroll up to reread the first message.",
+   "She scrolled up to check the address.",
+   "I scrolled up but could not find it."
+  ]
+ },
+ {
+  "verb": "scroll past",
+  "zhMeaning": "滑過去（略過不看）",
+  "examples": [
+   "I scrolled past the ads.",
+   "He scrolled past her message by accident.",
+   "Don't scroll past the important notice."
+  ]
+ },
+ {
+  "verb": "doomscroll",
+  "zhMeaning": "無止盡地刷負面消息（口語）",
+  "examples": [
+   "I doomscrolled for an hour before bed.",
+   "Stop doomscrolling and get some sleep.",
+   "She caught herself doomscrolling again."
+  ]
+ },
+ {
   "verb": "deal with",
   "zhMeaning": "處理；應付",
   "examples": [
@@ -341,6 +377,15 @@
    "We have caught up with each other over coffee."
   ],
   "priority": true
+ },
+ {
+  "verb": "catch someone up on",
+  "zhMeaning": "跟某人補上近況／讓某人跟上進度",
+  "examples": [
+   "Can you catch me up on what I missed in class?",
+   "I'll catch you up on all the news over coffee.",
+   "She caught him up on the project status."
+  ]
  },
  {
   "verb": "fall behind",

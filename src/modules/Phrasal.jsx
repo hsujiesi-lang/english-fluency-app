@@ -157,12 +157,12 @@ function PvList({ all }) {
       {pinnedList.length > 0 && (
         <>
           <h3 style={{ margin: '4px 4px 8px', fontSize: 15 }}>📌 已釘選（{pinnedList.length}）</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 12 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, marginBottom: 12 }}>
             {pinnedList.map((d) => <Item d={d} key={d.verb} />)}
           </div>
         </>
       )}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
         {restList.map((d) => <Item d={d} key={d.verb} />)}
       </div>
     </>
