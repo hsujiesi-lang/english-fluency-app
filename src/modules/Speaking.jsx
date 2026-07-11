@@ -4,6 +4,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Screen, TimerBar, useCountdown, Spinner, pick } from '../lib/ui.jsx'
 import { SPEAKING_TOPICS } from '../data/errorHunterSeed.js'
+import { TALK_TOPICS } from '../data/talkTopics.js'
+
+// 題庫以「主題對談」的 60 個問題為主，原本的 tutorial/情境題保留混入
+const TALK_QUESTIONS = TALK_TOPICS.flatMap((t) => t.qs.map((q) => ({ type: 'talk', topicName: t.name, q })))
+const ALL_TOPICS = [...TALK_QUESTIONS, ...SPEAKING_TOPICS]
 import * as speech from '../lib/speech.js'
 import * as claude from '../lib/claude.js'
 import * as banks from '../lib/banks.js'
@@ -13,10 +18,10 @@ const PREP_SECONDS = 30
 const SPEAK_1 = 60
 const SPEAK_2 = 45
 
-const TYPE_LABEL = { tutorial: 'Tutorial 討論', scene: '情境描述', daily: '日常話題' }
+const TYPE_LABEL = { tutorial: 'Tutorial 討論', scene: '情境描述', daily: '日常話題', talk: '主題對談' }
 
 export default function Speaking({ nav }) {
-  const [topic, setTopic] = useState(() => pick(SPEAKING_TOPICS, 1)[0])
+  const [topic, setTopic] = useState(() => pick(ALL_TOPICS, 1)[0])
   const [phase, setPhase] = useState('intro') // intro | prep | speak1 | feedback1 | speak2 | feedback2
   const [t1, setT1] = useState('') // transcript attempt 1
   const [t2, setT2] = useState('')
@@ -40,7 +45,7 @@ export default function Speaking({ nav }) {
   useEffect(() => () => { if (recRef.current) recRef.current.stop() }, [])
 
   const reroll = () => setTopic((old) => {
-    const others = SPEAKING_TOPICS.filter((t) => t.q !== old.q)
+    const others = ALL_TOPICS.filter((t) => t.q !== old.q)
     return pick(others, 1)[0]
   })
 
@@ -107,7 +112,7 @@ export default function Speaking({ nav }) {
   }
 
   const restart = () => {
-    setTopic(pick(SPEAKING_TOPICS, 1)[0])
+    setTopic(pick(ALL_TOPICS, 1)[0])
     setPhase('intro')
     setT1(''); setT2(''); setFb1(null); setFb2(null); setLive('')
   }
@@ -115,7 +120,7 @@ export default function Speaking({ nav }) {
   return (
     <Screen title="口說流暢度" sub="目標是說完整的句子 — 小文法錯就放過它">
       <div className="card">
-        <span className="tag">{TYPE_LABEL[topic.type]}</span>
+        <span className="tag">{TYPE_LABEL[topic.type]}{topic.topicName ? `・${topic.topicName}` : ''}</span>
         <p className="big-question">{topic.q}</p>
 
         {phase === 'intro' && (

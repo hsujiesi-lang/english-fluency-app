@@ -14,20 +14,17 @@ export default function Home({ nav, phrases }) {
   const dailyKey = store.todayStr() + (new Date().getHours() >= 20 ? ':pm' : ':am')
   const dailyDone = !!store.get('dailyAnswers', {})[dailyKey]
 
-  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000)
-  const picMode = dayOfYear % 2 === 0 ? '寫作版' : '口說版'
   const steps = [
-    { id: 1, label: '早安 / 晚安法 1 題', mins: 2, done: dailyDone, go: null },
+    { id: 1, label: 'Phrasal verb 兩段式練習', mins: 6, done: (act.phrasal || 0) >= 5, go: () => nav('phrasal') },
     { id: 2, label: '每日短句：聽讀 5 ＋ 中翻英 5', mins: 5, done: (act.phrases || 0) >= 10, go: () => nav('phrases') },
-    { id: 3, label: '口說流暢度 1 題（含重講）', mins: 7, done: (act.speaking || 0) >= 2, go: () => nav('speaking') },
-    { id: 4, label: `圖片描述 1 題（今日：${picMode}）`, mins: 8, done: (act.picture || 0) >= 1, go: () => nav('picture') },
-    { id: 5, label: '錯誤獵人 8 題', mins: 5, done: (act.hunter || 0) >= 8, go: () => nav('hunter') },
     {
-      id: 6, label: `錯誤庫 / 單字庫到期複習${dueErr + dueVoc > 0 ? `（${dueErr + dueVoc} 項）` : ''}`,
-      mins: 3,
-      done: dueErr + dueVoc === 0 || (act.errorBank || 0) + (act.vocab || 0) > 0,
-      go: () => nav('me', { tab: dueErr > 0 ? 'errors' : 'vocab' }),
+      id: 3, label: `Review 錯誤文法${dueErr > 0 ? `（${dueErr} 項到期）` : ''}`,
+      mins: 4,
+      done: dueErr === 0 || (act.errorBank || 0) > 0,
+      go: () => nav('me', { tab: 'errors' }),
     },
+    { id: 4, label: 'Speaking：主題對談 1 題（自由聊）', mins: 8, done: (act.talk || 0) >= 1, go: () => nav('talk') },
+    { id: 5, label: 'Speaking：口說流暢度（用主題對談的題目）', mins: 7, done: (act.speaking || 0) >= 2, go: () => nav('speaking') },
   ]
   const doneCount = steps.filter((s) => s.done).length
 
@@ -57,6 +54,15 @@ export default function Home({ nav, phrases }) {
             <span className="tag">{s.mins} 分</span>
           </div>
         ))}
+      </div>
+
+      <div className="card">
+        <h3>🚃 通勤時間</h3>
+        <p style={{ marginBottom: 8 }}>在電車上滑兩下就能練：</p>
+        <div className="btn-row" style={{ margin: 0 }}>
+          <button className="btn secondary" onClick={() => nav('writing', { section: 'articles' })}>📰 冠詞練習</button>
+          <button className="btn secondary" onClick={() => nav('writing', { section: 'prep' })}>📍 介係詞練習</button>
+        </div>
       </div>
 
       <div className="card" onClick={() => nav('output')} style={{ cursor: 'pointer' }}>
