@@ -25,20 +25,123 @@ const getPinned = () => store.get('pvPinned', [])
 const togglePin = (verb) => store.update('pvPinned', [], (p) =>
   p.includes(verb) ? p.filter((v) => v !== verb) : [...p, verb])
 
-export default function Phrasal({ nav }) {
-  const [tab, setTab] = useState('list')
+const BATCH_SIZE = 20
+
+// 每日批次：照列表順序 20 個一批，每個新的一天自動輪到下一批
+function getTodayBatch(all) {
+  const today = store.todayStr()
+  const saved = store.get('pvBatch', null)
+  let offset
+  if (saved && saved.date === today) {
+    offset = saved.offset
+  } else if (saved) {
+    offset = saved.offset + BATCH_SIZE >= all.length ? 0 : saved.offset + BATCH_SIZE
+  } else {
+    offset = 0
+  }
+  if (!saved || saved.date !== today) store.set('pvBatch', { date: today, offset })
+  return {
+    offset,
+    items: all.slice(offset, offset + BATCH_SIZE),
+    dayNo: Math.floor(offset / BATCH_SIZE) + 1,
+    totalDays: Math.ceil(all.length / BATCH_SIZE),
+  }
+}
+
+export default function Phrasal({ nav, params }) {
+  const [tab, setTab] = useState(params?.tab || 'today')
+  const [practicePool, setPracticePool] = useState(null)
   const all = usePhrasalData()
+  useEffect(() => { if (params?.tab) setTab(params.tab) }, [params])
 
   return (
-    <Screen title="Phrasal Verbs" sub="妳 Notion 整理的 118 個 — 列表查閱＋兩段式練習">
+    <Screen title="Phrasal Verbs" sub="每天 20 個 — 列表、播放、兩段式練習">
       <div className="tabs">
+        <button className={tab === 'today' ? 'active' : ''} onClick={() => { setPracticePool(null); setTab('today') }}>📅 今日 20</button>
         <button className={tab === 'list' ? 'active' : ''} onClick={() => setTab('list')}>📖 總列表</button>
-        <button className={tab === 'practice' ? 'active' : ''} onClick={() => setTab('practice')}>✏️ 練習</button>
+        <button className={tab === 'practice' ? 'active' : ''} onClick={() => { setPracticePool(null); setTab('practice') }}>✏️ 隨機練習</button>
       </div>
-      {!all ? <Spinner label="載入…" /> : tab === 'list'
-        ? <PvList all={all} />
-        : <PvPractice key="practice" all={all} />}
+      {!all ? <Spinner label="載入…" /> : (
+        <>
+          {tab === 'today' && (
+            <TodayBatch all={all} onPractice={(items) => { setPracticePool(items); setTab('practice') }} />
+          )}
+          {tab === 'list' && <PvList all={all} />}
+          {tab === 'practice' && <PvPractice key={practicePool ? 'batch' : 'random'} all={all} pool={practicePool} />}
+        </>
+      )}
     </Screen>
+  )
+}
+
+// ---- 今日批次 ----
+
+function TodayBatch({ all, onPractice }) {
+  const batch = getTodayBatch(all)
+  const [playing, setPlaying] = useState(false)
+  const [playIdx, setPlayIdx] = useState(-1)
+  const [pausedIdx, setPausedIdx] = useState(null)
+  const stopRef = React.useRef(false)
+  const sleepMs = (ms) => new Promise((r) => setTimeout(r, ms))
+
+  async function playAll(startIdx = 0) {
+    setPlaying(true); setPausedIdx(null); stopRef.current = false
+    let k = startIdx
+    for (; k < batch.items.length; k++) {
+      if (stopRef.current) break
+      setPlayIdx(k)
+      document.getElementById('today-pv-' + k)?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+      await Promise.race([speakForms(batch.items[k]), sleepMs(15000)])
+      if (stopRef.current) break
+      await sleepMs(600)
+    }
+    setPlaying(false); setPlayIdx(-1)
+    setPausedIdx(stopRef.current && k < batch.items.length ? k : null)
+  }
+  const pauseAll = () => { stopRef.current = true; speech.stopSpeaking() }
+  useEffect(() => () => { stopRef.current = true; speech.stopSpeaking() }, [])
+
+  return (
+    <>
+      <div className="card" style={{ padding: '12px 16px' }}>
+        <h3 style={{ margin: 0 }}>📅 今日批次：第 {batch.offset + 1}–{batch.offset + batch.items.length} 個
+          <span className="tag" style={{ marginLeft: 8 }}>Day {batch.dayNo} / {batch.totalDays}</span>
+        </h3>
+        <p style={{ margin: '6px 0 10px' }}>明天自動換下一批；背完點下面練習驗收</p>
+        <div className="btn-row" style={{ margin: 0 }}>
+          {!playing ? (
+            <>
+              <button className="btn good" onClick={() => playAll(pausedIdx ?? 0)}>
+                {pausedIdx != null ? `▶️ 繼續（第 ${pausedIdx + 1} 個）` : '▶️ 播放三態'}
+              </button>
+              {pausedIdx != null && <button className="btn secondary" style={{ flex: '0 0 auto' }} onClick={() => setPausedIdx(null)}>⏮</button>}
+            </>
+          ) : (
+            <button className="btn bad" onClick={pauseAll}>⏸ 暫停（{playIdx + 1} / {batch.items.length}）</button>
+          )}
+          <button className="btn" onClick={() => { pauseAll(); onPractice(batch.items) }}>✏️ 練這 {batch.items.length} 個</button>
+        </div>
+      </div>
+      {batch.items.map((d, k) => {
+        const forms = verbForms(d.verb)
+        const isNow = playing && playIdx === k
+        return (
+          <div className="list-item" key={d.verb} id={'today-pv-' + k}
+            style={{ outline: isNow ? '2.5px solid var(--brand)' : 'none', background: isNow ? 'var(--brand-soft)' : 'var(--card)' }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <b style={{ color: 'var(--brand)' }}>{batch.offset + k + 1}. {d.verb}</b>
+              {d.priority && <span className="tag warn" style={{ marginLeft: 4 }}>一直忘</span>}
+              <span style={{ marginLeft: 8, fontSize: 14 }}>{d.zhMeaning}</span>
+              {forms && forms.past !== forms.base && (
+                <div style={{ fontSize: 12, color: 'var(--warn)' }}>三態:{forms.base} → {forms.past} → {forms.pp}</div>
+              )}
+              {d.examples?.[0] && <div style={{ fontSize: 12, fontStyle: 'italic', color: 'var(--muted)' }}>{d.examples[0]}</div>}
+            </div>
+            <button className="btn ghost small" style={{ padding: '4px 6px' }} onClick={() => speakForms(d)}>🔊</button>
+          </div>
+        )
+      })}
+    </>
   )
 }
 
@@ -181,7 +284,7 @@ function PvList({ all }) {
 
 // ---- 兩段式練習 ----
 
-function PvPractice({ all }) {
+function PvPractice({ all, pool }) {
   const [items, setItems] = useState(null)
   const [i, setI] = useState(0)
   const [stage, setStage] = useState(1) // 1: 中→英 | 2: 造句
@@ -195,11 +298,17 @@ function PvPractice({ all }) {
   const [done, setDone] = useState(false)
 
   const startRound = () => {
-    // 釘選和「一直忘」優先，其餘隨機
-    const pinned = getPinned()
-    const starred = all.filter((d) => pinned.includes(d.verb) || d.priority)
-    const rest = all.filter((d) => !starred.includes(d))
-    const chosen = [...pick(starred, 3), ...pick(rest, ROUND)].slice(0, ROUND)
+    let chosen
+    if (pool) {
+      // 指定題庫（今日批次）→ 全部都練
+      chosen = [...pool]
+    } else {
+      // 隨機模式：釘選和「一直忘」優先，其餘隨機
+      const pinned = getPinned()
+      const starred = all.filter((d) => pinned.includes(d.verb) || d.priority)
+      const rest = all.filter((d) => !starred.includes(d))
+      chosen = [...pick(starred, 3), ...pick(rest, ROUND)].slice(0, ROUND)
+    }
     setItems(shuffle(chosen))
     setI(0); setStage(1); setInput(''); setSentence('')
     setR1(null); setR2(null); setScore(0); setWrongs([]); setDone(false)

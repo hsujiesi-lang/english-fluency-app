@@ -12,6 +12,7 @@ const IRREGULAR = {
   hold: ['held', 'held'], wind: ['wound', 'wound'], stick: ['stuck', 'stuck'],
   see: ['saw', 'seen'], pay: ['paid', 'paid'], make: ['made', 'made'],
   be: ['was/were', 'been'], hand: ['handed', 'handed'],
+  find: ['found', 'found'], hang: ['hung', 'hung'],
 }
 
 // 完整片語優先覆蓋（處理 lie 的兩種變化）

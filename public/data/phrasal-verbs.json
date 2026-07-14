@@ -1111,5 +1111,95 @@
    "She was inspired by the lecture.",
    "He has been inspired by many great thinkers."
   ]
+ },
+ {
+  "verb": "find out",
+  "zhMeaning": "發現、查明（真相/消息）",
+  "examples": [
+   "I just found out my exam results.",
+   "Can you find out what time the library closes?",
+   "She found out about the surprise party."
+  ]
+ },
+ {
+  "verb": "look up",
+  "zhMeaning": "查（單字/資料）",
+  "examples": [
+   "I looked up the word in the dictionary.",
+   "Look it up online if you are not sure.",
+   "He looked up the tram timetable."
+  ]
+ },
+ {
+  "verb": "get along with",
+  "zhMeaning": "和…處得來",
+  "examples": [
+   "I get along with my flatmates really well.",
+   "Do you get along with your group members?",
+   "She gets along with everyone in the tutorial."
+  ]
+ },
+ {
+  "verb": "get over",
+  "zhMeaning": "克服、走出（低潮/生病/分手）",
+  "examples": [
+   "It took me a month to get over the flu.",
+   "She finally got over the breakup.",
+   "You will get over the nerves after a few presentations."
+  ]
+ },
+ {
+  "verb": "go through",
+  "zhMeaning": "經歷；仔細檢查",
+  "examples": [
+   "She went through a hard time last semester.",
+   "Let me go through my notes before the exam.",
+   "We went through the contract line by line."
+  ]
+ },
+ {
+  "verb": "take over",
+  "zhMeaning": "接管、接手",
+  "examples": [
+   "She took over the project when he left.",
+   "Can you take over the presentation slides?",
+   "A bigger company has taken over the café."
+  ]
+ },
+ {
+  "verb": "move on",
+  "zhMeaning": "向前走、翻篇；換下一個",
+  "examples": [
+   "It is time to move on to the next question.",
+   "He finally moved on after the breakup.",
+   "Let us move on — we are running out of time."
+  ]
+ },
+ {
+  "verb": "calm down",
+  "zhMeaning": "冷靜下來",
+  "examples": [
+   "Take a deep breath and calm down.",
+   "She calmed down after a cup of tea.",
+   "The crowd calmed down when the speaker returned."
+  ]
+ },
+ {
+  "verb": "show off",
+  "zhMeaning": "炫耀",
+  "examples": [
+   "He loves showing off his new phone.",
+   "Stop showing off in front of the tutor.",
+   "She showed off her cooking skills at the party."
+  ]
+ },
+ {
+  "verb": "hang out",
+  "zhMeaning": "和朋友消磨時間、廝混",
+  "examples": [
+   "We hung out at the beach all afternoon.",
+   "Do you want to hang out this weekend?",
+   "They have been hanging out a lot lately."
+  ]
  }
 ]

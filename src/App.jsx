@@ -50,7 +50,7 @@ export default function App() {
       {screen === 'home' && <Home nav={nav} phrases={phrases} />}
       {screen === 'output' && <Output nav={nav} />}
       {screen === 'grammar' && <Grammar nav={nav} />}
-      {screen === 'phrasal' && <Phrasal nav={nav} />}
+      {screen === 'phrasal' && <Phrasal nav={nav} params={params} />}
       {screen === 'talk' && <Talk nav={nav} />}
       {screen === 'phrases' && <DailyPhrases nav={nav} phrases={phrases} params={params} />}
       {screen === 'speaking' && <Speaking nav={nav} />}

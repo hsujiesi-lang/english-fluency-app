@@ -15,7 +15,7 @@ export default function Home({ nav, phrases }) {
   const dailyDone = !!store.get('dailyAnswers', {})[dailyKey]
 
   const steps = [
-    { id: 1, label: 'Phrasal verb 兩段式練習', mins: 6, done: (act.phrasal || 0) >= 5, go: () => nav('phrasal') },
+    { id: 1, label: 'Phrasal verb 今日 20 個（背＋練）', mins: 8, done: (act.phrasal || 0) >= 10, go: () => nav('phrasal', { tab: 'today' }) },
     { id: 2, label: '每日短句：聽讀 5 ＋ 中翻英 5', mins: 5, done: (act.phrases || 0) >= 10, go: () => nav('phrases') },
     {
       id: 3, label: `Review 錯誤文法${dueErr > 0 ? `（${dueErr} 項到期）` : ''}`,
