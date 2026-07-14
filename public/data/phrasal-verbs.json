@@ -33,6 +33,20 @@
    "Can you pick up the pen?",
    "I need to pick up my friend.",
    "She picked up English fast."
+  ],
+  "senses": [
+   {
+    "zh": "撿起",
+    "example": "Can you pick up the pen?"
+   },
+   {
+    "zh": "接人",
+    "example": "I need to pick up my friend."
+   },
+   {
+    "zh": "學會",
+    "example": "She picked up English fast."
+   }
   ]
  },
  {
@@ -87,6 +101,16 @@
    "Please take off your shoes.",
    "The plane took off on time.",
    "He took off his jacket."
+  ],
+  "senses": [
+   {
+    "zh": "脫掉",
+    "example": "Please take off your shoes."
+   },
+   {
+    "zh": "起飛",
+    "example": "The plane took off on time."
+   }
   ]
  },
  {
@@ -96,6 +120,16 @@
    "She put on her coat.",
    "Don’t put on too much makeup.",
    "He put on some music."
+  ],
+  "senses": [
+   {
+    "zh": "穿上",
+    "example": "She put on her coat."
+   },
+   {
+    "zh": "播放",
+    "example": "He put on some music."
+   }
   ]
  },
  {
@@ -105,15 +139,39 @@
    "My car broke down.",
    "She broke down and cried.",
    "The machine broke down again."
+  ],
+  "senses": [
+   {
+    "zh": "故障",
+    "example": "My car broke down."
+   },
+   {
+    "zh": "情緒崩潰",
+    "example": "She broke down and cried."
+   }
   ]
  },
  {
   "verb": "work out",
-  "zhMeaning": "運動／解決",
+  "zhMeaning": "運動／解決／順利發展",
   "examples": [
    "I work out every week.",
    "Everything will work out.",
    "They worked out the problem."
+  ],
+  "senses": [
+   {
+    "zh": "運動",
+    "example": "I work out every week."
+   },
+   {
+    "zh": "解決",
+    "example": "They worked out the problem."
+   },
+   {
+    "zh": "順利發展",
+    "example": "Everything will work out."
+   }
   ]
  },
  {
@@ -132,6 +190,16 @@
    "He didn’t turn up today.",
    "Turn up the volume.",
    "She turned up at the party."
+  ],
+  "senses": [
+   {
+    "zh": "出現",
+    "example": "He didn’t turn up today."
+   },
+   {
+    "zh": "調大音量",
+    "example": "Turn up the volume."
+   }
   ]
  },
  {
@@ -141,6 +209,16 @@
    "She turned down the job.",
    "Turn down the music.",
    "He turned down my offer."
+  ],
+  "senses": [
+   {
+    "zh": "拒絕",
+    "example": "She turned down the job."
+   },
+   {
+    "zh": "調小音量",
+    "example": "Turn down the music."
+   }
   ]
  },
  {
@@ -150,6 +228,16 @@
    "I get up early.",
    "She got up and left.",
    "He can’t get up without coffee."
+  ],
+  "senses": [
+   {
+    "zh": "起床",
+    "example": "I get up early."
+   },
+   {
+    "zh": "站起來",
+    "example": "She got up and left."
+   }
   ]
  },
  {
@@ -348,6 +436,16 @@
    "I ran into my tutor at the café.",
    "She ran into some trouble.",
    "They have run into difficulties before."
+  ],
+  "senses": [
+   {
+    "zh": "偶然遇到（人）",
+    "example": "I ran into my tutor at the café."
+   },
+   {
+    "zh": "碰到（困難）",
+    "example": "She ran into some trouble."
+   }
   ]
  },
  {
@@ -357,6 +455,16 @@
    "We need to set up a meeting.",
    "He set up his own business.",
    "They have set up a new system."
+  ],
+  "senses": [
+   {
+    "zh": "建立",
+    "example": "He set up his own business."
+   },
+   {
+    "zh": "安排",
+    "example": "We need to set up a meeting."
+   }
   ]
  },
  {
@@ -366,6 +474,16 @@
    "She brought up an important question.",
    "He was brought up by his grandparents.",
    "They have brought up this issue before."
+  ],
+  "senses": [
+   {
+    "zh": "提出（話題）",
+    "example": "She brought up an important question."
+   },
+   {
+    "zh": "養育",
+    "example": "He was brought up by his grandparents."
+   }
   ]
  },
  {
@@ -376,7 +494,17 @@
    "She caught up with her studies after the break.",
    "We have caught up with each other over coffee."
   ],
-  "priority": true
+  "priority": true,
+  "senses": [
+   {
+    "zh": "追上（進度）",
+    "example": "She caught up with her studies after the break."
+   },
+   {
+    "zh": "敘舊",
+    "example": "We have caught up with each other over coffee."
+   }
+  ]
  },
  {
   "verb": "catch someone up on",
@@ -385,6 +513,16 @@
    "Can you catch me up on what I missed in class?",
    "I'll catch you up on all the news over coffee.",
    "She caught him up on the project status."
+  ],
+  "senses": [
+   {
+    "zh": "跟某人補上近況",
+    "example": "I'll catch you up on all the news over coffee."
+   },
+   {
+    "zh": "讓某人跟上進度",
+    "example": "Can you catch me up on what I missed in class?"
+   }
   ]
  },
  {
@@ -412,6 +550,16 @@
    "I came across an interesting article.",
    "She came across her old teacher yesterday.",
    "He has come across this idea before."
+  ],
+  "senses": [
+   {
+    "zh": "偶然遇到（人）",
+    "example": "She came across her old teacher yesterday."
+   },
+   {
+    "zh": "偶然發現（物）",
+    "example": "I came across an interesting article."
+   }
   ]
  },
  {
@@ -458,15 +606,39 @@
    "She wants to take up a new hobby.",
    "The course took up most of his time.",
    "He has taken up yoga recently."
+  ],
+  "senses": [
+   {
+    "zh": "開始從事",
+    "example": "She wants to take up a new hobby."
+   },
+   {
+    "zh": "佔據（時間／空間）",
+    "example": "The course took up most of his time."
+   }
   ]
  },
  {
   "verb": "check out",
-  "zhMeaning": "查看；退房",
+  "zhMeaning": "查看／借（書）／退房",
   "examples": [
    "You should check out this article.",
    "She checked out the library book.",
    "They have checked out of the hotel."
+  ],
+  "senses": [
+   {
+    "zh": "查看",
+    "example": "You should check out this article."
+   },
+   {
+    "zh": "借（書）",
+    "example": "She checked out the library book."
+   },
+   {
+    "zh": "退房",
+    "example": "They have checked out of the hotel."
+   }
   ]
  },
  {
@@ -485,6 +657,16 @@
    "Let’s go over the notes together.",
    "She went over her essay carefully.",
    "He has gone over the details twice."
+  ],
+  "senses": [
+   {
+    "zh": "複習",
+    "example": "Let’s go over the notes together."
+   },
+   {
+    "zh": "檢查",
+    "example": "She went over her essay carefully."
+   }
   ]
  },
  {
@@ -549,6 +731,16 @@
    "I’ll take care of the problem.",
    "She took care of her sister.",
    "He has taken care of everything already."
+  ],
+  "senses": [
+   {
+    "zh": "照顧",
+    "example": "She took care of her sister."
+   },
+   {
+    "zh": "處理",
+    "example": "I’ll take care of the problem."
+   }
   ]
  },
  {
@@ -776,6 +968,16 @@
    "Let’s sort out the schedule.",
    "He sorted out the problem quickly.",
    "They have sorted out all the details."
+  ],
+  "senses": [
+   {
+    "zh": "解決",
+    "example": "He sorted out the problem quickly."
+   },
+   {
+    "zh": "整理",
+    "example": "Let’s sort out the schedule."
+   }
   ]
  },
  {
@@ -794,6 +996,16 @@
    "Don’t hold back your opinions.",
    "He held back his anger.",
    "She has held back important information."
+  ],
+  "senses": [
+   {
+    "zh": "抑制（情緒）",
+    "example": "He held back his anger."
+   },
+   {
+    "zh": "保留不說",
+    "example": "Don’t hold back your opinions."
+   }
   ]
  },
  {
@@ -812,6 +1024,16 @@
    "I like to wind down before bed.",
    "The event wound down in the evening.",
    "He has wound down after a busy week."
+  ],
+  "senses": [
+   {
+    "zh": "放鬆",
+    "example": "I like to wind down before bed."
+   },
+   {
+    "zh": "逐漸結束",
+    "example": "The event wound down in the evening."
+   }
   ]
  },
  {
@@ -821,6 +1043,16 @@
    "Try to set aside some time to revise.",
    "She set aside money for tuition.",
    "He has set aside his personal feelings."
+  ],
+  "senses": [
+   {
+    "zh": "留出（時間／金錢）",
+    "example": "Try to set aside some time to revise."
+   },
+   {
+    "zh": "暫時擱置",
+    "example": "He has set aside his personal feelings."
+   }
   ]
  },
  {
@@ -830,6 +1062,16 @@
    "You should stick to your study plan.",
    "He stuck to the rules strictly.",
    "She has stuck to her original decision."
+  ],
+  "senses": [
+   {
+    "zh": "堅持",
+    "example": "You should stick to your study plan."
+   },
+   {
+    "zh": "遵守",
+    "example": "He stuck to the rules strictly."
+   }
   ]
  },
  {
@@ -874,7 +1116,18 @@
   "examples": [
    "Everything may fall apart without planning.",
    "The group fell apart under stress.",
-   "Their plan has fallen apart completely."
+   "Their plan has fallen apart completely.",
+   "She fell apart after hearing the bad news."
+  ],
+  "senses": [
+   {
+    "zh": "（計畫／關係）瓦解",
+    "example": "Their plan has fallen apart completely."
+   },
+   {
+    "zh": "（人）情緒崩潰",
+    "example": "She fell apart after hearing the bad news."
+   }
   ]
  },
  {
@@ -884,6 +1137,16 @@
    "She will pull through this semester.",
    "He pulled through after the illness.",
    "They have pulled through a difficult time."
+  ],
+  "senses": [
+   {
+    "zh": "渡過難關",
+    "example": "She will pull through this semester."
+   },
+   {
+    "zh": "康復",
+    "example": "He pulled through after the illness."
+   }
   ]
  },
  {
@@ -965,7 +1228,18 @@
   "examples": [
    "Take advantage of office hours.",
    "She took advantage of the opportunity.",
-   "They have taken advantage of student discounts."
+   "They have taken advantage of student discounts.",
+   "He took advantage of her kindness."
+  ],
+  "senses": [
+   {
+    "zh": "善用",
+    "example": "Take advantage of office hours."
+   },
+   {
+    "zh": "利用（偏負面）",
+    "example": "He took advantage of her kindness."
+   }
   ]
  },
  {
@@ -1019,7 +1293,18 @@
   "examples": [
    "I’ll get back to you later.",
    "She got back to the tutor yesterday.",
-   "He has gotten back to me already."
+   "He has gotten back to me already.",
+   "Let’s get back to the main topic."
+  ],
+  "senses": [
+   {
+    "zh": "回覆",
+    "example": "I’ll get back to you later."
+   },
+   {
+    "zh": "回到（話題／工作）",
+    "example": "Let’s get back to the main topic."
+   }
   ]
  },
  {
@@ -1155,6 +1440,16 @@
    "She went through a hard time last semester.",
    "Let me go through my notes before the exam.",
    "We went through the contract line by line."
+  ],
+  "senses": [
+   {
+    "zh": "經歷",
+    "example": "She went through a hard time last semester."
+   },
+   {
+    "zh": "仔細檢查",
+    "example": "We went through the contract line by line."
+   }
   ]
  },
  {
@@ -1173,6 +1468,16 @@
    "It is time to move on to the next question.",
    "He finally moved on after the breakup.",
    "Let us move on — we are running out of time."
+  ],
+  "senses": [
+   {
+    "zh": "翻篇（走出過去）",
+    "example": "He finally moved on after the breakup."
+   },
+   {
+    "zh": "換下一個",
+    "example": "It is time to move on to the next question."
+   }
   ]
  },
  {

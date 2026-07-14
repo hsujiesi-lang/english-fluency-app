@@ -135,7 +135,12 @@ function TodayBatch({ all, onPractice }) {
               {forms && forms.past !== forms.base && (
                 <div style={{ fontSize: 12, color: 'var(--warn)' }}>三態:{forms.base} → {forms.past} → {forms.pp}</div>
               )}
-              {d.examples?.[0] && <div style={{ fontSize: 12, fontStyle: 'italic', color: 'var(--muted)' }}>{d.examples[0]}</div>}
+              {d.senses ? d.senses.map((s, j) => (
+                <div key={j} style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>
+                  <span style={{ color: 'var(--brand)', fontStyle: 'normal' }}>{s.zh}</span>
+                  <i style={{ marginLeft: 6 }}>{s.example}</i>
+                </div>
+              )) : d.examples?.[0] && <div style={{ fontSize: 12, fontStyle: 'italic', color: 'var(--muted)' }}>{d.examples[0]}</div>}
             </div>
             <button className="btn ghost small" style={{ padding: '4px 6px' }} onClick={() => speakForms(d)}>🔊</button>
           </div>
@@ -218,7 +223,12 @@ function PvList({ all }) {
               三態：{forms.base} → {forms.past} → {forms.pp}
             </div>
           )}
-          {(d.examples || []).slice(0, 2).map((ex, k) => (
+          {d.senses ? d.senses.map((s, k) => (
+            <div key={k} style={{ fontSize: 12, marginTop: 2 }}>
+              <span style={{ color: 'var(--brand)' }}>{s.zh}</span>
+              <i style={{ marginLeft: 6, color: 'var(--muted)' }}>{s.example}</i>
+            </div>
+          )) : (d.examples || []).slice(0, 2).map((ex, k) => (
             <div key={k} style={{ fontSize: 12, fontStyle: 'italic', color: 'var(--muted)', marginTop: 2 }}>{ex}</div>
           ))}
           {PV_NOTES[d.verb] && <div style={{ fontSize: 12, color: 'var(--bad)', marginTop: 2 }}>💡 {PV_NOTES[d.verb]}</div>}
@@ -411,7 +421,9 @@ function PvPractice({ all, pool }) {
             <b>❌ 答案：</b><b>{item.verb}</b>
             {forms && forms.past !== forms.base && <p style={{ margin: '4px 0 0', fontSize: 14 }}>三態：{forms.base} → {forms.past} → {forms.pp}</p>}
             {PV_NOTES[item.verb] && <p style={{ margin: '4px 0 0' }}>💡 {PV_NOTES[item.verb]}</p>}
-            {(item.examples || []).slice(0, 1).map((ex, k) => <p key={k} style={{ margin: '4px 0 0', fontStyle: 'italic', fontSize: 14 }}>{ex}</p>)}
+            {item.senses ? item.senses.map((s, k) => (
+              <p key={k} style={{ margin: '4px 0 0', fontSize: 14 }}>{s.zh}：<i>{s.example}</i></p>
+            )) : (item.examples || []).slice(0, 1).map((ex, k) => <p key={k} style={{ margin: '4px 0 0', fontStyle: 'italic', fontSize: 14 }}>{ex}</p>)}
           </div>
           <button className="btn big" onClick={next}>下一題 →</button>
         </>
@@ -425,7 +437,10 @@ function PvPractice({ all, pool }) {
           </div>
           {!r2 ? (
             <>
-              <label className="field">第二關：用它造一個句子</label>
+              <label className="field">
+                第二關：用它造一個句子
+                {item.senses && <span style={{ fontWeight: 400 }}>（它有 {item.senses.length} 個意思：{item.senses.map((s) => s.zh).join('、')}——挑一個造句）</span>}
+              </label>
               <textarea className="input" rows={2} value={sentence} onChange={(e) => setSentence(e.target.value)}
                 onKeyDown={onDoubleEnter(submitStage2)}
                 placeholder={`Write a sentence with "${item.verb}"…（連按兩次 Enter 提交）`} />
