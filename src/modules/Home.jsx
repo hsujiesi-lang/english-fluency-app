@@ -14,18 +14,28 @@ export default function Home({ nav, phrases }) {
   const dailyKey = store.todayStr() + (new Date().getHours() >= 20 ? ':pm' : ':am')
   const dailyDone = !!store.get('dailyAnswers', {})[dailyKey]
 
+  // 手動打勾狀態（依日期儲存，每天重置）；沒打勾過的項目用活動紀錄自動判定
+  const today = store.todayStr()
+  const [checks, setChecks] = React.useState(() => store.get('dailyChecklist', {})[today] || {})
+
   const steps = [
-    { id: 1, label: 'Phrasal verb 今日 20 個（背＋練）', mins: 8, done: (act.phrasal || 0) >= 10, go: () => nav('phrasal', { tab: 'today' }) },
-    { id: 2, label: '每日短句：聽讀 5 ＋ 中翻英 5', mins: 5, done: (act.phrases || 0) >= 10, go: () => nav('phrases') },
+    { id: 1, label: 'Phrasal verb 今日 20 個（背＋練）', mins: 8, auto: (act.phrasal || 0) >= 10, go: () => nav('phrasal', { tab: 'today' }) },
+    { id: 2, label: '每日短句：聽讀 5 ＋ 中翻英 5', mins: 5, auto: (act.phrases || 0) >= 10, go: () => nav('phrases') },
     {
       id: 3, label: `Review 錯誤文法${dueErr > 0 ? `（${dueErr} 項到期）` : ''}`,
       mins: 4,
-      done: dueErr === 0 || (act.errorBank || 0) > 0,
+      auto: dueErr === 0 || (act.errorBank || 0) > 0,
       go: () => nav('me', { tab: 'errors' }),
     },
-    { id: 4, label: 'Speaking：主題對談 1 題（自由聊）', mins: 8, done: (act.talk || 0) >= 1, go: () => nav('talk') },
-    { id: 5, label: 'Speaking：口說流暢度（用主題對談的題目）', mins: 7, done: (act.speaking || 0) >= 2, go: () => nav('speaking') },
-  ]
+    { id: 4, label: 'Speaking：主題對談 1 題（自由聊）', mins: 8, auto: (act.talk || 0) >= 1, go: () => nav('talk') },
+    { id: 5, label: 'Speaking：口說流暢度（用主題對談的題目）', mins: 7, auto: (act.speaking || 0) >= 2, go: () => nav('speaking') },
+  ].map((s) => ({ ...s, done: s.id in checks ? checks[s.id] : s.auto }))
+
+  const toggle = (s) => {
+    const next = { ...checks, [s.id]: !s.done }
+    setChecks(next)
+    store.set('dailyChecklist', { [today]: next })
+  }
   const doneCount = steps.filter((s) => s.done).length
 
   return (
@@ -42,15 +52,17 @@ export default function Home({ nav, phrases }) {
         <h3>📋 今日 30 分鐘流程</h3>
         {steps.map((s) => (
           <div key={s.id}
-            onClick={s.done || !s.go ? undefined : s.go}
             style={{
               display: 'flex', alignItems: 'center', gap: 10, padding: '10px 0',
               borderBottom: s.id < steps.length ? '1px solid #f0f0f4' : 'none',
-              cursor: s.done || !s.go ? 'default' : 'pointer',
               opacity: s.done ? 0.55 : 1,
             }}>
-            <span style={{ fontSize: 20 }}>{s.done ? '✅' : '⬜'}</span>
-            <span style={{ flex: 1, fontSize: 15, textDecoration: s.done ? 'line-through' : 'none' }}>{s.label}</span>
+            <span onClick={() => toggle(s)} style={{ fontSize: 20, cursor: 'pointer', userSelect: 'none' }}>{s.done ? '✅' : '⬜'}</span>
+            <span
+              onClick={s.done || !s.go ? undefined : s.go}
+              style={{ flex: 1, fontSize: 15, textDecoration: s.done ? 'line-through' : 'none', cursor: s.done || !s.go ? 'default' : 'pointer' }}>
+              {s.label}
+            </span>
             <span className="tag">{s.mins} 分</span>
           </div>
         ))}
