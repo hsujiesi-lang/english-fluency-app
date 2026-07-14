@@ -141,6 +141,11 @@ function TodayBatch({ all, onPractice }) {
                   <i style={{ marginLeft: 6 }}>{s.example}</i>
                 </div>
               )) : d.examples?.[0] && <div style={{ fontSize: 12, fontStyle: 'italic', color: 'var(--muted)' }}>{d.examples[0]}</div>}
+              {d.objects && (
+                <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>
+                  <span style={{ color: 'var(--warn)' }}>常接</span> {d.objects.join('・')}
+                </div>
+              )}
             </div>
             <button className="btn ghost small" style={{ padding: '4px 6px' }} onClick={() => speakForms(d)}>🔊</button>
           </div>
@@ -231,6 +236,11 @@ function PvList({ all }) {
           )) : (d.examples || []).slice(0, 2).map((ex, k) => (
             <div key={k} style={{ fontSize: 12, fontStyle: 'italic', color: 'var(--muted)', marginTop: 2 }}>{ex}</div>
           ))}
+          {d.objects && (
+            <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>
+              <span style={{ color: 'var(--warn)' }}>常接</span> {d.objects.join('・')}
+            </div>
+          )}
           {PV_NOTES[d.verb] && <div style={{ fontSize: 12, color: 'var(--bad)', marginTop: 2 }}>💡 {PV_NOTES[d.verb]}</div>}
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -424,6 +434,7 @@ function PvPractice({ all, pool }) {
             {item.senses ? item.senses.map((s, k) => (
               <p key={k} style={{ margin: '4px 0 0', fontSize: 14 }}>{s.zh}：<i>{s.example}</i></p>
             )) : (item.examples || []).slice(0, 1).map((ex, k) => <p key={k} style={{ margin: '4px 0 0', fontStyle: 'italic', fontSize: 14 }}>{ex}</p>)}
+            {item.objects && <p style={{ margin: '4px 0 0', fontSize: 13 }}>常接：{item.objects.join('・')}</p>}
           </div>
           <button className="btn big" onClick={next}>下一題 →</button>
         </>
@@ -441,6 +452,9 @@ function PvPractice({ all, pool }) {
                 第二關：用它造一個句子
                 {item.senses && <span style={{ fontWeight: 400 }}>（它有 {item.senses.length} 個意思：{item.senses.map((s) => s.zh).join('、')}——挑一個造句）</span>}
               </label>
+              {item.objects && (
+                <p style={{ fontSize: 13, color: 'var(--muted)', margin: '0 0 6px' }}>常接：{item.objects.join('・')}</p>
+              )}
               <textarea className="input" rows={2} value={sentence} onChange={(e) => setSentence(e.target.value)}
                 onKeyDown={onDoubleEnter(submitStage2)}
                 placeholder={`Write a sentence with "${item.verb}"…（連按兩次 Enter 提交）`} />

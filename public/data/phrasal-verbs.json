@@ -47,6 +47,15 @@
     "zh": "學會",
     "example": "She picked up English fast."
    }
+  ],
+  "objects": [
+   "the pen",
+   "the phone",
+   "the kids",
+   "a friend",
+   "a package",
+   "a new skill",
+   "a habit"
   ]
  },
  {
@@ -56,6 +65,15 @@
    "Please put down your phone.",
    "He put down the box.",
    "Don’t put yourself down."
+  ],
+  "objects": [
+   "the phone",
+   "your bag",
+   "the box",
+   "the pen",
+   "your fork",
+   "the baby",
+   "your drink"
   ]
  },
  {
@@ -65,6 +83,15 @@
    "Please turn on the light.",
    "He turned on the TV.",
    "Can you turn on the AC?"
+  ],
+  "objects": [
+   "the light",
+   "the TV",
+   "the air conditioner",
+   "the heater",
+   "the computer",
+   "the tap",
+   "the music"
   ]
  },
  {
@@ -74,6 +101,15 @@
    "Turn off the lights before leaving.",
    "She turned off her phone.",
    "I always turn off the heater at night."
+  ],
+  "objects": [
+   "the light",
+   "the TV",
+   "the alarm",
+   "the engine",
+   "your phone",
+   "the stove",
+   "the Wi-Fi"
   ]
  },
  {
@@ -83,6 +119,15 @@
    "I’m looking for my keys.",
    "She is looking for a new place.",
    "We’ve been looking for him all day."
+  ],
+  "objects": [
+   "a job",
+   "my keys",
+   "an apartment",
+   "a parking spot",
+   "information",
+   "excuses",
+   "a new phone"
   ]
  },
  {
@@ -92,6 +137,15 @@
    "Can you look after my cat?",
    "She looks after her brother.",
    "Who will look after the plants?"
+  ],
+  "objects": [
+   "the kids",
+   "a dog",
+   "my grandma",
+   "the house",
+   "a patient",
+   "the plants",
+   "yourself"
   ]
  },
  {
@@ -111,6 +165,15 @@
     "zh": "起飛",
     "example": "The plane took off on time."
    }
+  ],
+  "objects": [
+   "your shoes",
+   "your coat",
+   "your jacket",
+   "your makeup",
+   "your glasses",
+   "your hat",
+   "a sticker"
   ]
  },
  {
@@ -130,6 +193,15 @@
     "zh": "播放",
     "example": "He put on some music."
    }
+  ],
+  "objects": [
+   "your coat",
+   "your shoes",
+   "makeup",
+   "sunscreen",
+   "music",
+   "a movie",
+   "weight"
   ]
  },
  {
@@ -181,6 +253,15 @@
    "He threw away the papers.",
    "Don’t throw away food.",
    "I threw away the receipt."
+  ],
+  "objects": [
+   "the trash",
+   "old clothes",
+   "the leftovers",
+   "the receipt",
+   "an opportunity",
+   "plastic bags",
+   "junk mail"
   ]
  },
  {
@@ -200,6 +281,15 @@
     "zh": "調大音量",
     "example": "Turn up the volume."
    }
+  ],
+  "objects": [
+   "the volume",
+   "the music",
+   "the heat",
+   "the TV",
+   "the radio",
+   "the brightness",
+   "the air conditioner"
   ]
  },
  {
@@ -219,6 +309,15 @@
     "zh": "調小音量",
     "example": "Turn down the music."
    }
+  ],
+  "objects": [
+   "the volume",
+   "the music",
+   "the heat",
+   "an offer",
+   "a job",
+   "an invitation",
+   "a request"
   ]
  },
  {
@@ -247,6 +346,15 @@
    "Don’t give up your dreams.",
    "He gave up smoking.",
    "I won’t give up easily."
+  ],
+  "objects": [
+   "smoking",
+   "sugar",
+   "coffee",
+   "my seat",
+   "hope",
+   "the idea",
+   "drinking"
   ]
  },
  {
@@ -256,6 +364,15 @@
    "We ran out of milk.",
    "She ran out of time.",
    "The milk ran out easily"
+  ],
+  "objects": [
+   "milk",
+   "time",
+   "money",
+   "patience",
+   "ideas",
+   "battery",
+   "coffee"
   ]
  },
  {
@@ -265,6 +382,15 @@
    "Please fill in the form.",
    "She filled in her details.",
    "Can you fill in for me tomorrow?"
+  ],
+  "objects": [
+   "a form",
+   "the blanks",
+   "an application",
+   "your details",
+   "a survey",
+   "the gaps",
+   "a questionnaire"
   ]
  },
  {
@@ -391,6 +517,15 @@
    "I don’t know how to deal with this problem.",
    "She dealt with the complaint calmly.",
    "He has dealt with similar situations before."
+  ],
+  "objects": [
+   "a problem",
+   "a complaint",
+   "stress",
+   "a difficult customer",
+   "an issue",
+   "pressure",
+   "paperwork"
   ]
  },
  {
@@ -400,6 +535,15 @@
    "I need to figure out the answer.",
    "She finally figured out the solution.",
    "They have figured out how it works."
+  ],
+  "objects": [
+   "the answer",
+   "a solution",
+   "the reason",
+   "how it works",
+   "what to do",
+   "the problem",
+   "the meaning"
   ]
  },
  {
@@ -409,6 +553,15 @@
    "The team will carry out the plan.",
    "They carried out the experiment yesterday.",
    "The task has been carried out successfully."
+  ],
+  "objects": [
+   "a plan",
+   "an experiment",
+   "a survey",
+   "research",
+   "an order",
+   "a task",
+   "an inspection"
   ]
  },
  {
@@ -418,6 +571,15 @@
    "Try to focus on your studies.",
    "He focused on finishing the report.",
    "She has focused on improving her English."
+  ],
+  "objects": [
+   "your studies",
+   "the task",
+   "the details",
+   "your goals",
+   "work",
+   "the main point",
+   "quality"
   ]
  },
  {
@@ -427,6 +589,15 @@
    "She pointed out my mistake.",
    "The teacher pointed out the key idea.",
    "He has pointed out several problems."
+  ],
+  "objects": [
+   "a mistake",
+   "the problem",
+   "the difference",
+   "an error",
+   "the risks",
+   "a fact",
+   "the obvious"
   ]
  },
  {
@@ -465,6 +636,15 @@
     "zh": "安排",
     "example": "We need to set up a meeting."
    }
+  ],
+  "objects": [
+   "a meeting",
+   "a business",
+   "an account",
+   "a system",
+   "a company",
+   "the equipment",
+   "an appointment"
   ]
  },
  {
@@ -484,6 +664,15 @@
     "zh": "養育",
     "example": "He was brought up by his grandparents."
    }
+  ],
+  "objects": [
+   "a topic",
+   "a question",
+   "an issue",
+   "children",
+   "the subject",
+   "a point",
+   "the past"
   ]
  },
  {
@@ -541,6 +730,15 @@
    "The school will look into the issue.",
    "She looked into the course requirements.",
    "They have looked into the problem carefully."
+  ],
+  "objects": [
+   "the issue",
+   "the problem",
+   "the matter",
+   "a complaint",
+   "the causes",
+   "the details",
+   "the options"
   ]
  },
  {
@@ -588,6 +786,15 @@
    "Don’t put off your homework.",
    "They put off the meeting.",
    "She has put off making a decision."
+  ],
+  "objects": [
+   "the meeting",
+   "homework",
+   "a decision",
+   "the appointment",
+   "the trip",
+   "chores",
+   "studying"
   ]
  },
  {
@@ -616,6 +823,15 @@
     "zh": "佔據（時間／空間）",
     "example": "The course took up most of his time."
    }
+  ],
+  "objects": [
+   "a hobby",
+   "yoga",
+   "running",
+   "painting",
+   "space",
+   "time",
+   "a new sport"
   ]
  },
  {
@@ -639,6 +855,15 @@
     "zh": "退房",
     "example": "They have checked out of the hotel."
    }
+  ],
+  "objects": [
+   "this article",
+   "a book",
+   "the website",
+   "a new café",
+   "the menu",
+   "the reviews",
+   "of the hotel"
   ]
  },
  {
@@ -667,6 +892,15 @@
     "zh": "檢查",
     "example": "She went over her essay carefully."
    }
+  ],
+  "objects": [
+   "the notes",
+   "your essay",
+   "the details",
+   "the plan",
+   "the report",
+   "the answers",
+   "the schedule"
   ]
  },
  {
@@ -676,6 +910,15 @@
    "Please hand in your assignment today.",
    "She handed in the report late.",
    "He has handed in all his work."
+  ],
+  "objects": [
+   "your homework",
+   "the assignment",
+   "the report",
+   "an essay",
+   "your resignation",
+   "the form",
+   "the keys"
   ]
  },
  {
@@ -694,6 +937,15 @@
    "I’m trying to cut down on sugar.",
    "He cut down on screen time.",
    "She has cut down on late nights."
+  ],
+  "objects": [
+   "sugar",
+   "coffee",
+   "screen time",
+   "spending",
+   "junk food",
+   "alcohol",
+   "meat"
   ]
  },
  {
@@ -741,6 +993,15 @@
     "zh": "處理",
     "example": "I’ll take care of the problem."
    }
+  ],
+  "objects": [
+   "the kids",
+   "the problem",
+   "the bill",
+   "your health",
+   "a pet",
+   "the paperwork",
+   "yourself"
   ]
  },
  {
@@ -840,6 +1101,15 @@
    "I plan to apply for a scholarship.",
    "She applied for an extension yesterday.",
    "He has applied for several internships."
+  ],
+  "objects": [
+   "a job",
+   "a visa",
+   "a scholarship",
+   "a loan",
+   "a position",
+   "a credit card",
+   "a permit"
   ]
  },
  {
@@ -940,7 +1210,16 @@
    "She followed up on the email yesterday.",
    "He has followed up on the issue several times."
   ],
-  "priority": true
+  "priority": true,
+  "objects": [
+   "the email",
+   "your request",
+   "the issue",
+   "the interview",
+   "a lead",
+   "the complaint",
+   "the report"
+  ]
  },
  {
   "verb": "step down",
@@ -978,6 +1257,15 @@
     "zh": "整理",
     "example": "Let’s sort out the schedule."
    }
+  ],
+  "objects": [
+   "the problem",
+   "the schedule",
+   "my desk",
+   "the mess",
+   "the details",
+   "your priorities",
+   "the paperwork"
   ]
  },
  {
@@ -987,6 +1275,15 @@
    "We need to come up with a solution.",
    "She came up with a great idea.",
    "They have come up with several options."
+  ],
+  "objects": [
+   "an idea",
+   "a plan",
+   "a solution",
+   "an excuse",
+   "a name",
+   "a better way",
+   "an answer"
   ]
  },
  {
@@ -1006,6 +1303,15 @@
     "zh": "保留不說",
     "example": "Don’t hold back your opinions."
    }
+  ],
+  "objects": [
+   "your tears",
+   "your anger",
+   "your opinions",
+   "information",
+   "a laugh",
+   "the truth",
+   "a sigh"
   ]
  },
  {
@@ -1053,6 +1359,15 @@
     "zh": "暫時擱置",
     "example": "He has set aside his personal feelings."
    }
+  ],
+  "objects": [
+   "some time",
+   "money",
+   "your feelings",
+   "savings",
+   "an hour",
+   "your differences",
+   "the weekend"
   ]
  },
  {
@@ -1072,6 +1387,15 @@
     "zh": "遵守",
     "example": "He stuck to the rules strictly."
    }
+  ],
+  "objects": [
+   "the plan",
+   "the rules",
+   "a budget",
+   "the schedule",
+   "your decision",
+   "the topic",
+   "a routine"
   ]
  },
  {
@@ -1099,6 +1423,15 @@
    "I can’t put up with the noise.",
    "She put up with the workload.",
    "He has put up with a lot of pressure."
+  ],
+  "objects": [
+   "the noise",
+   "his attitude",
+   "the pain",
+   "bad weather",
+   "the traffic",
+   "delays",
+   "rude customers"
   ]
  },
  {
@@ -1166,6 +1499,15 @@
    "Let’s wrap up the discussion.",
    "The lecturer wrapped up early.",
    "They have wrapped up the project successfully."
+  ],
+  "objects": [
+   "the meeting",
+   "the project",
+   "the discussion",
+   "a presentation",
+   "the semester",
+   "the lesson",
+   "work"
   ]
  },
  {
@@ -1193,6 +1535,15 @@
    "I plan to sign up for the workshop.",
    "She signed up for a short course.",
    "He has signed up for several activities."
+  ],
+  "objects": [
+   "a course",
+   "a gym membership",
+   "a newsletter",
+   "a class",
+   "an event",
+   "a free trial",
+   "volunteering"
   ]
  },
  {
@@ -1211,6 +1562,15 @@
    "I’ll pay for the printing.",
    "She paid for the course materials.",
    "He has paid for the application fee."
+  ],
+  "objects": [
+   "dinner",
+   "the tickets",
+   "rent",
+   "groceries",
+   "the repairs",
+   "tuition",
+   "my mistake"
   ]
  },
  {
@@ -1285,6 +1645,15 @@
    "Please reply to this email soon.",
    "She replied to the message politely.",
    "He has replied to all enquiries."
+  ],
+  "objects": [
+   "the email",
+   "a message",
+   "the invitation",
+   "the comments",
+   "the letter",
+   "my text",
+   "the post"
   ]
  },
  {
@@ -1305,6 +1674,15 @@
     "zh": "回到（話題／工作）",
     "example": "Let’s get back to the main topic."
    }
+  ],
+  "objects": [
+   "you",
+   "the topic",
+   "work",
+   "the email",
+   "my desk",
+   "normal",
+   "the point"
   ]
  },
  {
@@ -1332,6 +1710,15 @@
    "Please switch on the lights.",
    "He switched on the computer.",
    "She has switched on the heater."
+  ],
+  "objects": [
+   "the light",
+   "the kettle",
+   "the fan",
+   "the laptop",
+   "the heater",
+   "the machine",
+   "the TV"
   ]
  },
  {
@@ -1341,6 +1728,15 @@
    "Remember to switch off your phone.",
    "She switched off the TV.",
    "He has switched off all the lights."
+  ],
+  "objects": [
+   "the light",
+   "your phone",
+   "the machine",
+   "the engine",
+   "the alarm",
+   "notifications",
+   "the TV"
   ]
  },
  {
@@ -1413,6 +1809,15 @@
    "I looked up the word in the dictionary.",
    "Look it up online if you are not sure.",
    "He looked up the tram timetable."
+  ],
+  "objects": [
+   "a word",
+   "the address",
+   "the timetable",
+   "a recipe",
+   "the meaning",
+   "directions",
+   "the price"
   ]
  },
  {
@@ -1431,6 +1836,15 @@
    "It took me a month to get over the flu.",
    "She finally got over the breakup.",
    "You will get over the nerves after a few presentations."
+  ],
+  "objects": [
+   "the flu",
+   "a cold",
+   "a breakup",
+   "the shock",
+   "your fear",
+   "jet lag",
+   "the disappointment"
   ]
  },
  {
@@ -1450,6 +1864,15 @@
     "zh": "仔細檢查",
     "example": "We went through the contract line by line."
    }
+  ],
+  "objects": [
+   "a hard time",
+   "the notes",
+   "your bag",
+   "the contract",
+   "a divorce",
+   "the details",
+   "security"
   ]
  },
  {
@@ -1459,6 +1882,15 @@
    "She took over the project when he left.",
    "Can you take over the presentation slides?",
    "A bigger company has taken over the café."
+  ],
+  "objects": [
+   "the project",
+   "the business",
+   "the company",
+   "the presentation",
+   "the shift",
+   "his duties",
+   "the team"
   ]
  },
  {
