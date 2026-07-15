@@ -1938,5 +1938,38 @@
    "Do you want to hang out this weekend?",
    "They have been hanging out a lot lately."
   ]
+ },
+ {
+  "verb": "go on",
+  "zhMeaning": "去（旅行／約會等活動）／繼續／發生",
+  "examples": [
+   "We went on a trip to Japan last month.",
+   "She went on a date with him.",
+   "Please go on with your story.",
+   "What’s going on here?"
+  ],
+  "senses": [
+   {
+    "zh": "去（從事活動）",
+    "example": "We went on a trip to Japan last month."
+   },
+   {
+    "zh": "繼續",
+    "example": "Please go on with your story."
+   },
+   {
+    "zh": "發生",
+    "example": "What’s going on here?"
+   }
+  ],
+  "objects": [
+   "a trip",
+   "a date",
+   "a holiday",
+   "a journey",
+   "a picnic",
+   "a diet",
+   "an adventure"
+  ]
  }
 ]
