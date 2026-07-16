@@ -2,11 +2,10 @@
 // 練習：① 看中文打出 phrasal verb → ② 答對後用它造句 → AI 檢查拼字與文法
 
 import React, { useEffect, useState } from 'react'
-import { Screen, Spinner, pick, shuffle, useDoubleEnterNext, onDoubleEnter, WrongList } from '../lib/ui.jsx'
+import { Screen, Spinner, pick, shuffle, useDoubleEnterNext, WrongList } from '../lib/ui.jsx'
 import { PV_NOTES } from '../data/notionSeed.js'
 import { verbForms } from '../lib/verbForms.js'
 import * as speech from '../lib/speech.js'
-import * as claude from '../lib/claude.js'
 import * as banks from '../lib/banks.js'
 import * as store from '../lib/storage.js'
 
@@ -297,12 +296,8 @@ function PvList({ all }) {
 function PvPractice({ all, pool }) {
   const [items, setItems] = useState(null)
   const [i, setI] = useState(0)
-  const [stage, setStage] = useState(1) // 1: 中→英 | 2: 造句
   const [input, setInput] = useState('')
-  const [sentence, setSentence] = useState('')
-  const [r1, setR1] = useState(null) // stage1 result
-  const [r2, setR2] = useState(null) // stage2 feedback
-  const [checking, setChecking] = useState(false)
+  const [r1, setR1] = useState(null)
   const [score, setScore] = useState(0)
   const [wrongs, setWrongs] = useState([])
   const [done, setDone] = useState(false)
@@ -320,12 +315,12 @@ function PvPractice({ all, pool }) {
       chosen = [...pick(starred, 3), ...pick(rest, ROUND)].slice(0, ROUND)
     }
     setItems(shuffle(chosen))
-    setI(0); setStage(1); setInput(''); setSentence('')
-    setR1(null); setR2(null); setScore(0); setWrongs([]); setDone(false)
+    setI(0); setInput('')
+    setR1(null); setScore(0); setWrongs([]); setDone(false)
   }
   useEffect(startRound, [])
 
-  useDoubleEnterNext((!!r1 && !r1.ok) || !!r2, () => next())
+  useDoubleEnterNext(!!r1 && !done, () => next())
 
   if (!items) return <Spinner />
   const item = items[i]
@@ -333,55 +328,23 @@ function PvPractice({ all, pool }) {
 
   const normVerb = (s) => s.toLowerCase().split('+')[0].replace(/\(.*?\)/g, '').replace(/[^a-z\s]/g, ' ').replace(/\s+/g, ' ').trim()
 
-  const submitStage1 = () => {
+  const submit = () => {
     if (r1 || !input.trim()) return
     const ok = normVerb(input) === normVerb(item.verb)
       || normVerb(input) === item.verb.toLowerCase().replace(/[()]/g, '').replace(/\s+/g, ' ').trim().split('+')[0].trim()
     setR1({ ok })
     store.logActivity('phrasal')
     if (ok) {
-      setStage(2) // 答對 → 進入造句
+      setScore((n) => n + 1)
+      speech.speak(item.verb.split('+')[0].replace(/\(.*?\)/g, ''))
     } else {
       setWrongs((w) => [...w, { q: item.zhMeaning, your: input, right: item.verb, why: PV_NOTES[item.verb] || (item.examples || [])[0] }])
       banks.addError({ type: 'posError', originalText: `${item.zhMeaning} → ${input}`, correction: item.verb, sourceModule: 'phrasal', note: PV_NOTES[item.verb] || `${item.verb}＝${item.zhMeaning}` })
     }
   }
 
-  const submitStage2 = async () => {
-    const s = sentence.trim()
-    if (!s || checking || r2) return
-    // 本地基本檢查：句子必須用到這個 phrasal verb（含三態變化）
-    const lower = s.toLowerCase()
-    const base = normVerb(item.verb)
-    const usedForm = [base, forms?.past, forms?.pp].filter(Boolean)
-      .some((f) => lower.includes(f.toLowerCase().split('/')[0]))
-    if (!usedForm) {
-      setR2({ ok: false, feedback: `句子裡要用到「${item.verb}」（原形或過去式都可以）` })
-      return
-    }
-    if (!claude.hasApiKey()) {
-      setR2({ ok: true, feedback: '有用到目標片語！（設定 API 金鑰後可獲得拼字＋文法檢查）' })
-      setScore((n) => n + 1)
-      return
-    }
-    setChecking(true)
-    try {
-      const res = await claude.checkSentence(item.verb, 'phrasal verb', s)
-      setR2(res)
-      if (res.ok) setScore((n) => n + 1)
-      else {
-        setWrongs((w) => [...w, { q: `造句：${item.verb}`, your: s, right: res.betterVersion || item.examples?.[0] || '', why: res.feedback }])
-        banks.addError({ type: 'posError', originalText: s, correction: res.betterVersion || '', sourceModule: 'phrasal', note: res.feedback })
-      }
-    } catch (e) {
-      setR2({ ok: true, feedback: 'AI 檢查失敗（' + e.message.slice(0, 40) + '），以有用到片語判定通過' })
-      setScore((n) => n + 1)
-    }
-    setChecking(false)
-  }
-
   const next = () => {
-    setInput(''); setSentence(''); setR1(null); setR2(null); setStage(1)
+    setInput(''); setR1(null)
     if (i + 1 >= items.length) setDone(true)
     else setI(i + 1)
   }
@@ -400,61 +363,33 @@ function PvPractice({ all, pool }) {
   return (
     <div className="card">
       <p className="screen-sub" style={{ margin: '0 0 8px' }}>
-        {i + 1} / {items.length}　{stage === 1 ? '① 中→英' : '② 造句'}
+        {i + 1} / {items.length}　中→英
         {getPinned().includes(item.verb) && ' 📌'}{item.priority && ' ⚠️一直忘'}
       </p>
       <p className="big-question">{item.zhMeaning}</p>
 
-      {stage === 1 && !r1 && (
+      {!r1 ? (
         <>
           <input className="input" autoFocus autoCapitalize="off" autoCorrect="off" value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && submitStage1()}
+            onKeyDown={(e) => e.key === 'Enter' && submit()}
             placeholder="打出對應的 phrasal verb…" />
-          <div className="btn-row"><button className="btn" onClick={submitStage1} disabled={!input.trim()}>提交</button></div>
+          <div className="btn-row"><button className="btn" onClick={submit} disabled={!input.trim()}>提交</button></div>
         </>
-      )}
-
-      {r1 && !r1.ok && (
+      ) : (
         <>
-          <div className="feedback-block bad">
-            <b>❌ 答案：</b><b>{item.verb}</b>
+          <div className={'feedback-block ' + (r1.ok ? 'good' : 'bad')}>
+            <b>{r1.ok ? '✅ 正確！' : '❌ 答案：'}</b><b>{item.verb}</b>
             {forms && forms.past !== forms.base && <p style={{ margin: '4px 0 0', fontSize: 14 }}>三態：{forms.base} → {forms.past} → {forms.pp}</p>}
             {PV_NOTES[item.verb] && <p style={{ margin: '4px 0 0' }}>💡 {PV_NOTES[item.verb]}</p>}
-            {(item.examples || []).slice(0, 1).map((ex, k) => <p key={k} style={{ margin: '4px 0 0', fontStyle: 'italic', fontSize: 14 }}>{ex}</p>)}
+            {(item.examples || []).slice(0, 2).map((ex, k) => (
+              <p key={k} style={{ margin: '4px 0 0', fontStyle: 'italic', fontSize: 14 }}>{ex}</p>
+            ))}
           </div>
-          <button className="btn big" onClick={next}>下一題 →</button>
-        </>
-      )}
-
-      {stage === 2 && (
-        <>
-          <div className="feedback-block good">
-            ✅ <b>{item.verb}</b> 答對了！
-            {forms && forms.past !== forms.base && <span style={{ fontSize: 14 }}>（三態：{forms.base} → {forms.past} → {forms.pp}）</span>}
+          <div className="btn-row">
+            <button className="btn secondary" onClick={() => speakForms(item)}>🔊 聽三態</button>
+            <button className="btn" onClick={next}>下一題 →</button>
           </div>
-          {!r2 ? (
-            <>
-              <label className="field">第二關：用它造一個句子</label>
-              <textarea className="input" rows={2} value={sentence} onChange={(e) => setSentence(e.target.value)}
-                onKeyDown={onDoubleEnter(submitStage2)}
-                placeholder={`Write a sentence with "${item.verb}"…（連按兩次 Enter 提交）`} />
-              <div className="btn-row">
-                <button className="btn" onClick={submitStage2} disabled={!sentence.trim() || checking}>
-                  {checking ? 'AI 檢查中…' : '提交造句'}
-                </button>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="transcript">{sentence}</div>
-              <div className={'feedback-block ' + (r2.ok ? 'good' : 'bad')}>
-                <b>{r2.ok ? '✅ 通過！' : '❌ 有問題：'}</b> {r2.feedback}
-                {r2.betterVersion && <p style={{ margin: '4px 0 0' }}>✔ {r2.betterVersion}</p>}
-              </div>
-              <button className="btn big" onClick={next}>下一題 →</button>
-            </>
-          )}
         </>
       )}
     </div>
