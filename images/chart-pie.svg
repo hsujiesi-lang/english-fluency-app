@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#ffffff"/>
+  <text x="400" y="50" font-family="Helvetica, Arial" font-size="26" font-weight="bold" text-anchor="middle" fill="#1e1e2e">How Students Travel to Campus</text>
+  <!-- pie: tram 40%, walk 25%, train 20%, car 10%, bike 5% -->
+  <g transform="translate(300,320)">
+    <path d="M0,0 L0,-180 A180,180 0 0,1 171.2,-55.6 Z" fill="#4f46e5"/>
+    <path d="M0,0 L171.2,-55.6 A180,180 0 0,1 105.8,145.6 Z" fill="#16a34a"/>
+    <path d="M0,0 L105.8,145.6 A180,180 0 0,1 -105.8,145.6 Z" fill="#d97706"/>
+    <path d="M0,0 L-105.8,145.6 A180,180 0 0,1 -171.2,-55.6 Z" fill="#dc2626"/>
+    <path d="M0,0 L-171.2,-55.6 A180,180 0 0,1 0,-180 Z" fill="#0891b2"/>
+  </g>
+  <g font-family="Helvetica, Arial" font-size="18" fill="#1e1e2e">
+    <rect x="560" y="160" width="22" height="22" fill="#4f46e5"/><text x="592" y="177">Tram — 40%</text>
+    <rect x="560" y="200" width="22" height="22" fill="#16a34a"/><text x="592" y="217">Walking — 25%</text>
+    <rect x="560" y="240" width="22" height="22" fill="#d97706"/><text x="592" y="257">Train — 20%</text>
+    <rect x="560" y="280" width="22" height="22" fill="#dc2626"/><text x="592" y="297">Car — 10%</text>
+    <rect x="560" y="320" width="22" height="22" fill="#0891b2"/><text x="592" y="337">Bicycle — 5%</text>
+  </g>
+  <text x="400" y="570" font-family="Helvetica, Arial" font-size="14" fill="#666" text-anchor="middle">Survey of 1,000 University of Melbourne students, 2026</text>
+</svg>
