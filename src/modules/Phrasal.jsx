@@ -78,6 +78,8 @@ export default function Phrasal({ nav, params }) {
 
 function TodayBatch({ all, onPractice }) {
   const batch = getTodayBatch(all)
+  const [, force] = useState(0)
+  const pinned = getPinned()
   const [playing, setPlaying] = useState(false)
   const [playIdx, setPlayIdx] = useState(-1)
   const [pausedIdx, setPausedIdx] = useState(null)
@@ -125,9 +127,13 @@ function TodayBatch({ all, onPractice }) {
       {batch.items.map((d, k) => {
         const forms = verbForms(d.verb)
         const isNow = playing && playIdx === k
+        const isPinned = pinned.includes(d.verb)
         return (
           <div className="list-item" key={d.verb} id={'today-pv-' + k}
-            style={{ outline: isNow ? '2.5px solid var(--brand)' : 'none', background: isNow ? 'var(--brand-soft)' : 'var(--card)' }}>
+            style={{
+              outline: isNow ? '2.5px solid var(--brand)' : 'none',
+              background: isNow ? 'var(--brand-soft)' : isPinned ? 'var(--warn-soft)' : 'var(--card)',
+            }}>
             <div style={{ flex: 1, minWidth: 0 }}>
               <b style={{ color: 'var(--brand)' }}>{batch.offset + k + 1}. {d.verb}</b>
               {d.priority && <span className="tag warn" style={{ marginLeft: 4 }}>一直忘</span>}
@@ -137,7 +143,11 @@ function TodayBatch({ all, onPractice }) {
               )}
               {d.examples?.[0] && <div style={{ fontSize: 12, fontStyle: 'italic', color: 'var(--muted)' }}>{d.examples[0]}</div>}
             </div>
-            <button className="btn ghost small" style={{ padding: '4px 6px' }} onClick={() => speakForms(d)}>🔊</button>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <button className="btn ghost small" style={{ padding: '4px 6px', opacity: isPinned ? 1 : 0.35 }}
+                onClick={() => { togglePin(d.verb); force((n) => n + 1) }}>📌</button>
+              <button className="btn ghost small" style={{ padding: '4px 6px' }} onClick={() => speakForms(d)}>🔊</button>
+            </div>
           </div>
         )
       })}
